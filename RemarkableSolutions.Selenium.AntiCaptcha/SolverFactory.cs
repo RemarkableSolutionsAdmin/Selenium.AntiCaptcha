@@ -16,6 +16,10 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha
             {
                 case CaptchaType.ReCaptchaV2:
                     return new ReCaptchaV2Solver();
+                case CaptchaType.HCaptcha:
+                    return new HCaptchaSolver();
+                case CaptchaType.FunCaptcha:
+                    return new FunCaptchaSolver();                    
                 default:
                     throw new Exception("Not supported captchaType");
             }

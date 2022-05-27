@@ -14,7 +14,14 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha
         /// <param name="url"></param>
         /// <param name="siteKey"></param>
         /// <param name="submitElement"></param>
-        public static void SolveCaptcha(this IWebDriver driver, string clientKey, CaptchaType? captchaType = null, string? url = null, string? siteKey = null, IWebElement? submitElement = null)
+        public static void SolveCaptcha(
+            this IWebDriver driver, 
+            string clientKey, 
+            CaptchaType? captchaType = null, 
+            string? url = null, 
+            string? siteKey = null, 
+            IWebElement? responseElement = null, 
+            IWebElement? submitElement = null)
         {
             if (captchaType == null)
             {
@@ -22,7 +29,7 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha
             }
 
             var solver = SolverFactory.GetSolver(captchaType.Value);
-            solver.Solve(driver, clientKey, url, siteKey, submitElement);
+            solver.Solve(driver, clientKey, url, siteKey, responseElement, submitElement);
         }
 
         private static CaptchaType? IdentifyCaptcha(IWebDriver driver)

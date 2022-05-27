@@ -6,7 +6,8 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha.solutions
     internal abstract class Solver
     {
         protected abstract string GetSiteKey(IWebDriver driver);
-        internal abstract void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? submitElement);
+        protected abstract void FillResponseElement(IWebDriver driver, TaskResultResponse.SolutionData solution, IWebElement? responseElement);
+        internal abstract void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement, IWebElement? submitElement);
         protected static void AddCookies(IWebDriver driver, TaskResultResponse.SolutionData solution)
         {
             driver.Manage().Cookies.DeleteAllCookies();
