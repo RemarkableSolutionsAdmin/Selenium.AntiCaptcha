@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using RemarkableSolutions.Anticaptcha.Api.Responses;
 
-namespace RemarkableSolutions.Selenium.AntiCaptcha.solutions
+namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
 {
     internal class FunCaptchaSolver : Solver
     {
@@ -14,6 +14,8 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha.solutions
         {
             return driver.FindElement(By.Id("funcaptcha")).GetAttribute("data-pkey");
         }
+
+
 
         internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement, IWebElement? submitElement)
         {

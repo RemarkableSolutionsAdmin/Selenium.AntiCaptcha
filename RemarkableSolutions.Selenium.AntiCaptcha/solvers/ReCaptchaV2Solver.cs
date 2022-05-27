@@ -2,7 +2,7 @@
 using RemarkableSolutions.Anticaptcha.Api.Anticaptchas;
 using RemarkableSolutions.Anticaptcha.Api.Responses;
 
-namespace RemarkableSolutions.Selenium.AntiCaptcha.solutions
+namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
 {
     internal class ReCaptchaV2Solver : Solver
     {

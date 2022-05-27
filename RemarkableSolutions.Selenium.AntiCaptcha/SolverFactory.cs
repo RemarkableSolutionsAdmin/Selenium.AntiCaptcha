@@ -1,5 +1,5 @@
 ﻿using RemarkableSolutions.Selenium.AntiCaptcha.enums;
-using RemarkableSolutions.Selenium.AntiCaptcha.solutions;
+using RemarkableSolutions.Selenium.AntiCaptcha.solvers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +19,9 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha
                 case CaptchaType.HCaptcha:
                     return new HCaptchaSolver();
                 case CaptchaType.FunCaptcha:
-                    return new FunCaptchaSolver();                    
+                    return new FunCaptchaSolver();
+                case CaptchaType.GeeTest:
+                    return new GeeTestSolver();
                 default:
                     throw new Exception("Not supported captchaType");
             }

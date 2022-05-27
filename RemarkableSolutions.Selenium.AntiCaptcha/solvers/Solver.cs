@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using RemarkableSolutions.Anticaptcha.Api.Responses;
 
-namespace RemarkableSolutions.Selenium.AntiCaptcha.solutions
+namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
 {
     internal abstract class Solver
     {

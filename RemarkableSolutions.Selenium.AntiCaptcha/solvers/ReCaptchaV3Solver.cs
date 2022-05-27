@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RemarkableSolutions.Selenium.AntiCaptcha.solutions
+namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
 {
     internal class ReCaptchaV3Solver : Solver
     {

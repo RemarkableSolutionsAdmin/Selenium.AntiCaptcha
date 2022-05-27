@@ -10,8 +10,8 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha
         {
             using (var driver = new ChromeDriver())
             {
-                driver.Url = "http://http.myjino.ru/funcaptcha_test/";
-                driver.SolveCaptcha(Environment.GetEnvironmentVariable("ClientKey"), captchaType: CaptchaType.FunCaptcha, submitElement: driver.FindElement(By.ClassName("btn")));
+                driver.Url = "https://www.geetest.com/en/adaptive-captcha-demo";
+                driver.SolveCaptcha(Environment.GetEnvironmentVariable("ClientKey"), captchaType: CaptchaType.GeeTest);
             }
         }
 
