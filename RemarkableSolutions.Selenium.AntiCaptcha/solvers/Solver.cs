@@ -10,9 +10,9 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
         internal abstract void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement, IWebElement? submitElement);
         protected static void AddCookies(IWebDriver driver, TaskResultResponse.SolutionData solution)
         {
-            driver.Manage().Cookies.DeleteAllCookies();
-            if (solution.Cookies.Count > 0)
+            if (solution?.Cookies != null && solution.Cookies.Count > 0)
             {
+                driver.Manage().Cookies.DeleteAllCookies();
                 foreach (var cookie in solution.Cookies)
                 {
                     if (!string.IsNullOrEmpty(cookie.Key) && !string.IsNullOrEmpty(cookie.Value?.ToString()))
