@@ -25,7 +25,8 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
             return regex.Match(driver.PageSource).Groups[1].Value;
         }
 
-        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement, IWebElement? submitElement)
+        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
+            IWebElement? submitElement, IWebElement? imageElement)
         {
             siteKey ??= GetSiteKey(driver);
             var challenge = GetChallenge(driver);

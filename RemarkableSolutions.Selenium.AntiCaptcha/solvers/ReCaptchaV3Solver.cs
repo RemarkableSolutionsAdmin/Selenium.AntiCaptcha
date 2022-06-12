@@ -16,7 +16,8 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
             throw new NotImplementedException();
         }
 
-        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement, IWebElement? submitElement)
+        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
+            IWebElement? submitElement, IWebElement? imageElement)
         {
             throw new NotImplementedException();
         }

@@ -19,7 +19,8 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
 
         protected override string GetSiteKey(IWebDriver driver) => driver.FindElement(By.ClassName("h-captcha")).GetAttribute("data-sitekey");
 
-        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement, IWebElement? submitElement)
+        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
+            IWebElement? submitElement, IWebElement? imageElement)
         {
             siteKey ??= GetSiteKey(driver);
 

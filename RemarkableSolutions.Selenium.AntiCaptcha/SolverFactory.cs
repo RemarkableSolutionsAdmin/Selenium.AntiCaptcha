@@ -18,6 +18,8 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha
                     return new FunCaptchaSolver();
                 case CaptchaType.GeeTest:
                     return new GeeTestSolver();
+                case CaptchaType.ImageToText:
+                    return new ImageToTextSolver();
                 default:
                     throw new Exception("Not supported captchaType");
             }

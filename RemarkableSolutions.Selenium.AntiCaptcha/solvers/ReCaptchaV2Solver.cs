@@ -24,7 +24,8 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
             }
         }
 
-        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement, IWebElement? submitElement)
+        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
+            IWebElement? submitElement, IWebElement? imageElement)
         {
             siteKey ??= GetSiteKey(driver);
 

@@ -16,7 +16,8 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
             return driver.FindElement(By.Id("funcaptcha")).GetAttribute("data-pkey");
         }
         
-        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement, IWebElement? submitElement)
+        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
+            IWebElement? submitElement, IWebElement? imageElement)
         {
             throw new NotImplementedException();
         }
