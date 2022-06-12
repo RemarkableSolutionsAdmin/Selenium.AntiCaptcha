@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using System;
+using OpenQA.Selenium;
 using RemarkableSolutions.Selenium.AntiCaptcha.enums;
 
 namespace RemarkableSolutions.Selenium.AntiCaptcha

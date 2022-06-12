@@ -1,16 +1,12 @@
 ﻿using OpenQA.Selenium;
-using RemarkableSolutions.Anticaptcha.Api.Responses;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RemarkableSolutions.Anticaptcha.Api.Models;
 
 namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
 {
     internal class ReCaptchaV3Solver : Solver
     {
-        protected override void FillResponseElement(IWebDriver driver, TaskResultResponse.SolutionData solution, IWebElement? responseElement)
+        protected override void FillResponseElement(IWebDriver driver, SolutionData solution, IWebElement? responseElement)
         {
             throw new NotImplementedException();
         }

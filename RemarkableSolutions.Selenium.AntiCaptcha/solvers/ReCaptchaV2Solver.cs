@@ -1,6 +1,7 @@
-﻿using OpenQA.Selenium;
+﻿using System;
+using OpenQA.Selenium;
 using RemarkableSolutions.Anticaptcha.Api.Anticaptchas;
-using RemarkableSolutions.Anticaptcha.Api.Responses;
+using RemarkableSolutions.Anticaptcha.Api.Models;
 
 namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
 {
@@ -9,7 +10,7 @@ namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
 
         protected override string GetSiteKey(IWebDriver driver) => driver.FindElement(By.ClassName("g-recaptcha")).GetAttribute("data-sitekey");
 
-        protected override void FillResponseElement(IWebDriver driver, TaskResultResponse.SolutionData solution, IWebElement? responseElement)
+        protected override void FillResponseElement(IWebDriver driver, SolutionData solution, IWebElement? responseElement)
         {
             if (responseElement != null)
             {

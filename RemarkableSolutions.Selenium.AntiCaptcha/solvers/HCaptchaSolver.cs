@@ -1,17 +1,13 @@
 ﻿using OpenQA.Selenium;
 using RemarkableSolutions.Anticaptcha.Api.Anticaptchas;
-using RemarkableSolutions.Anticaptcha.Api.Responses;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RemarkableSolutions.Anticaptcha.Api.Models;
 
 namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
 {
     internal class HCaptchaSolver : Solver
     {
-        protected override void FillResponseElement(IWebDriver driver, TaskResultResponse.SolutionData solution, IWebElement? responseElement)
+        protected override void FillResponseElement(IWebDriver driver, SolutionData solution, IWebElement? responseElement)
         {
             if (responseElement == null)
             {

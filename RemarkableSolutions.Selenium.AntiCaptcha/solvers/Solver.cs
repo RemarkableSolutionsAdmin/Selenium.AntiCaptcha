@@ -1,14 +1,14 @@
 ﻿using OpenQA.Selenium;
-using RemarkableSolutions.Anticaptcha.Api.Responses;
+using RemarkableSolutions.Anticaptcha.Api.Models;
 
 namespace RemarkableSolutions.Selenium.AntiCaptcha.solvers
 {
     internal abstract class Solver
     {
         protected abstract string GetSiteKey(IWebDriver driver);
-        protected abstract void FillResponseElement(IWebDriver driver, TaskResultResponse.SolutionData solution, IWebElement? responseElement);
+        protected abstract void FillResponseElement(IWebDriver driver, SolutionData solution, IWebElement? responseElement);
         internal abstract void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement, IWebElement? submitElement);
-        protected static void AddCookies(IWebDriver driver, TaskResultResponse.SolutionData solution)
+        protected static void AddCookies(IWebDriver driver, SolutionData solution)
         {
             if (solution?.Cookies != null && solution.Cookies.Count > 0)
             {
