@@ -2,23 +2,37 @@
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
 using RemarkableSolutions.Selenium.AntiCaptcha.enums;
 
-namespace RemarkableSolutions.Selenium.AntiCaptcha
+namespace RemarkableSolutions.Selenium.AntiCaptcha.App
 {
-    public static partial class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
-            ImageToTextTest();
+            GeeTest();
         }
 
         public static void GeeTest()
         {
-            using (var driver = new ChromeDriver())
+            
+            using (var driver = new ChromeDriver(Environment.CurrentDirectory))
             {
                 driver.Url = "https://www.geetest.com/en/adaptive-captcha-demo";
+
+                var allButtonParents = driver.FindElements(By.XPath("//button/parent::*"));
+                foreach (var buttonParent in allButtonParents)
+                {
+                    var buttonText = buttonParent.Text;
+
+                    if (buttonText.Contains("Slide"))
+                    {
+                        buttonParent.Click();
+                    }
+                }
+                
+                
+                
                 driver.SolveCaptcha(Environment.GetEnvironmentVariable("ClientKey"), captchaType: CaptchaType.GeeTest);
             }
         }
