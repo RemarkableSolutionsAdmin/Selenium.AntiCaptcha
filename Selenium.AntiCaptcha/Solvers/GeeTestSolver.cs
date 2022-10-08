@@ -23,8 +23,13 @@ namespace Selenium.AntiCaptcha.solvers
             return regex.Match(driver.PageSource).Groups[1].Value;
         }
 
-        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
-            IWebElement? submitElement, IWebElement? imageElement)
+        internal override void Solve(IWebDriver driver, 
+            string clientKey, 
+            string? url,
+            string? siteKey,
+            IWebElement? responseElement,
+            IWebElement? submitElement,
+            IWebElement? imageElement)
         {
             siteKey ??= GetSiteKey(driver);
             var challenge = GetChallenge(driver);

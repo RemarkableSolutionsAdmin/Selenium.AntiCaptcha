@@ -32,9 +32,24 @@ namespace Selenium.AntiCaptcha
 
         public static void GeeTest()
         {
-            using (var driver = new ChromeDriver())
+            
+            using (var driver = new ChromeDriver(Environment.CurrentDirectory))
             {
                 driver.Url = "https://www.geetest.com/en/adaptive-captcha-demo";
+
+                var allButtonParents = driver.FindElements(By.XPath("//button/parent::*"));
+                foreach (var buttonParent in allButtonParents)
+                {
+                    var buttonText = buttonParent.Text;
+
+                    if (buttonText.Contains("Slide"))
+                    {
+                        buttonParent.Click();
+                    }
+                }
+                
+                
+                
                 driver.SolveCaptcha(Environment.GetEnvironmentVariable("ClientKey"), captchaType: CaptchaType.GeeTest);
             }
         }
