@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32421.90
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.AntiCaptcha", "Selenium.AntiCaptcha\Selenium.AntiCaptcha.csproj", "{D50D160B-7A6A-454C-B938-24E0D629801E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.AntiCaptcha.Tests", "Selenium.AntiCaptcha.Tests\Selenium.AntiCaptcha.Tests.csproj", "{9D721CF4-8982-40EE-BC3C-EFE8E5D19DB5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D50D160B-7A6A-454C-B938-24E0D629801E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D50D160B-7A6A-454C-B938-24E0D629801E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D50D160B-7A6A-454C-B938-24E0D629801E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D50D160B-7A6A-454C-B938-24E0D629801E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D721CF4-8982-40EE-BC3C-EFE8E5D19DB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D721CF4-8982-40EE-BC3C-EFE8E5D19DB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D721CF4-8982-40EE-BC3C-EFE8E5D19DB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D721CF4-8982-40EE-BC3C-EFE8E5D19DB5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4481D7D5-A2DC-4F28-AB1E-369F4B6CBFD0}
+	EndGlobalSection
+EndGlobal

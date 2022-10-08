@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Selenium.AntiCaptcha</AssemblyName>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Selenium.AntiCaptcha</Title>
+    <Description>Selenium extension methods for captcha solving using Anti-Captcha.com api</Description>
+    <Copyright>Copyright (c) Remarkable Solutions 2022</Copyright>
+    <PackageProjectUrl>https://github.com/RemarkableSolutionsAdmin/Selenium.AntiCaptcha</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/RemarkableSolutionsAdmin/Selenium.AntiCaptcha</RepositoryUrl>
+    <PackageTags>Selenium Anti-Captcha captcha RemarkableSolutions</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AntiCaptchaApi.Net" Version="1.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.1.1" />
+  </ItemGroup>
+
+</Project>
