@@ -1,6 +1,9 @@
 ﻿using System.Net;
 using OpenQA.Selenium;
-using AntiCaptcha.Api.Models;
+using AntiCaptchaApi.Models.Solutions;
+using AntiCaptchaApi;
+using AntiCaptchaApi.Requests;
+using AntiCaptchaApi.Enums;
 
 namespace Selenium.AntiCaptcha.solvers
 {
@@ -11,7 +14,7 @@ namespace Selenium.AntiCaptcha.solvers
             return string.Empty;
         }
 
-        protected override void FillResponseElement(IWebDriver driver, SolutionData solution, IWebElement? responseElement)
+        protected override void FillResponseElement(IWebDriver driver, RawSolution solution, IWebElement? responseElement)
         {
             if (responseElement == null)
             {
@@ -25,12 +28,9 @@ namespace Selenium.AntiCaptcha.solvers
         internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
             IWebElement? submitElement, IWebElement? imageElement)
         {
+            var client = new AnticaptchaClient(clientKey);
             siteKey ??= GetSiteKey(driver);
 
-            var anticaptchaTask = new ImageToTextTask()
-            {
-                ClientKey = clientKey,
-            };
             if (imageElement == null)
             {
                 throw new ArgumentException("No image found in the arguments. Please provide one.,");
@@ -38,23 +38,25 @@ namespace Selenium.AntiCaptcha.solvers
 
             var elementSrc = imageElement.GetAttribute("src");
 
-            byte[] file = null;
 
+            byte[] file = null;
             using (WebClient webClient = new())
             {
                 file = webClient.DownloadData(elementSrc);
             }
 
             var base64String = Convert.ToBase64String(file);
-
-            anticaptchaTask.BodyBase64 = base64String;
-
-            anticaptchaTask.CreateTask();
-            var result = anticaptchaTask.WaitForTaskResult();
-
-            if (result.Success)
+            var anticaptchaRequest = new ImageToTextRequest
             {
-                FillResponseElement(driver, anticaptchaTask.GetTaskSolution(), responseElement);
+                BodyBase64 = base64String
+            };
+
+            var creationTaskResult = client.CreateCaptchaTask(anticaptchaRequest);
+            var result = client.WaitForRawTaskResult<RawSolution>(creationTaskResult.TaskId.Value);
+            
+            if (result.Status == TaskStatusType.Ready)
+            {
+                FillResponseElement(driver, result.Solution, responseElement);
 
             }
 

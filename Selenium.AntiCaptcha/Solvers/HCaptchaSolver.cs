@@ -3,12 +3,14 @@ using AntiCaptchaApi;
 using AntiCaptchaApi.Models;
 using AntiCaptchaApi.Requests;
 using AntiCaptchaApi.Requests.Abstractions;
+using AntiCaptchaApi.Models.Solutions;
+using AntiCaptchaApi.Enums;
 
 namespace Selenium.AntiCaptcha.solvers
 {
     internal class HCaptchaSolver : Solver
     {
-        protected override void FillResponseElement(IWebDriver driver, SolutionData solution, IWebElement? responseElement)
+        protected override void FillResponseElement(IWebDriver driver, RawSolution solution, IWebElement? responseElement)
         {
             if (responseElement == null)
             {
@@ -23,22 +25,22 @@ namespace Selenium.AntiCaptcha.solvers
         internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
             IWebElement? submitElement, IWebElement? imageElement)
         {
+            var client = new AnticaptchaClient(clientKey);
             siteKey ??= GetSiteKey(driver);
 
-            var captchaRequest = new HWebsiteCaptchaProxylessRequest
+            var captchaRequest = new HCaptchaProxylessRequest
             {
-                ClientKey = clientKey,
-                WebsiteUrl = new Uri(url ?? driver.Url),
+                WebsiteUrl = url ?? driver.Url,
                 WebsiteKey = siteKey
             };
 
 
-            var creationTaskResult = AnticaptchaManager.CreateCaptchaTask(captchaRequest);
-            var result = AnticaptchaManager.WaitForTaskResult(creationTaskResult.TaskId.Value);
+            var creationTaskResult = client.CreateCaptchaTask(captchaRequest);
+            var result = client.WaitForRawTaskResult<RawSolution>(creationTaskResult.TaskId.Value);
 
-            if (result.Success)
+            if (result.Status == TaskStatusType.Ready)
             {
-                FillResponseElement(driver, anticaptchaTask.GetTaskSolution(), responseElement);
+                FillResponseElement(driver, result.Solution, responseElement);
 
             }
 

@@ -1,5 +1,8 @@
 ﻿using OpenQA.Selenium;
-using AntiCaptchaApi.Models;
+using AntiCaptchaApi.Models.Solutions;
+using AntiCaptchaApi;
+using AntiCaptchaApi.Requests;
+using AntiCaptchaApi.Enums;
 
 namespace Selenium.AntiCaptcha.solvers
 {
@@ -8,7 +11,7 @@ namespace Selenium.AntiCaptcha.solvers
 
         protected override string GetSiteKey(IWebDriver driver) => driver.FindElement(By.ClassName("g-recaptcha")).GetAttribute("data-sitekey");
 
-        protected override void FillResponseElement(IWebDriver driver, SolutionData solution, IWebElement? responseElement)
+        protected override void FillResponseElement(IWebDriver driver, RawSolution solution, IWebElement? responseElement)
         {
             if (responseElement != null)
             {
@@ -25,21 +28,21 @@ namespace Selenium.AntiCaptcha.solvers
         internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
             IWebElement? submitElement, IWebElement? imageElement)
         {
+            var client = new AnticaptchaClient(clientKey);
             siteKey ??= GetSiteKey(driver);
 
-            var anticaptchaTask = new RecaptchaV2ProxylessTask
+            var anticaptchaRequest = new RecaptchaV2ProxylessRequest
             {
-                ClientKey = clientKey,
-                WebsiteUrl = new Uri(url ?? driver.Url),
+                WebsiteUrl = url ?? driver.Url,
                 WebsiteKey = siteKey
             };
 
-            anticaptchaTask.CreateTask();
-            var result = anticaptchaTask.WaitForTaskResult();
+            var creationTaskResult = client.CreateCaptchaTask(anticaptchaRequest);
+            var result = client.WaitForRawTaskResult<RawSolution>(creationTaskResult.TaskId.Value);
 
-            if (result.Success)
+            if (result.Status == TaskStatusType.Ready)
             {
-                var solution = anticaptchaTask.GetTaskSolution();
+                var solution = result.Solution;
                 AddCookies(driver, solution);
                 FillResponseElement(driver, solution, responseElement);
             }

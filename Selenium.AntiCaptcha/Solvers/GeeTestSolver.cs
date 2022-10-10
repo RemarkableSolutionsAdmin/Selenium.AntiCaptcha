@@ -1,4 +1,7 @@
-﻿using AntiCaptchaApi.Requests;
+﻿using AntiCaptchaApi;
+using AntiCaptchaApi.Enums;
+using AntiCaptchaApi.Models.Solutions;
+using AntiCaptchaApi.Requests;
 using OpenQA.Selenium;
 using System.Text.RegularExpressions;
 
@@ -6,7 +9,7 @@ namespace Selenium.AntiCaptcha.solvers
 {
     internal class GeeTestSolver : Solver
     {
-        protected override void FillResponseElement(IWebDriver driver, SolutionData solution, IWebElement? responseElement)
+        protected override void FillResponseElement(IWebDriver driver, RawSolution solution, IWebElement? responseElement)
         {
             throw new NotImplementedException();
         }
@@ -26,29 +29,29 @@ namespace Selenium.AntiCaptcha.solvers
         internal override void Solve(IWebDriver driver, 
             string clientKey, 
             string? url,
-            string? siteKey,
+            string? gt,
             IWebElement? responseElement,
             IWebElement? submitElement,
             IWebElement? imageElement)
         {
-            siteKey ??= GetSiteKey(driver);
+            var client = new AnticaptchaClient(clientKey);
+            gt ??= GetSiteKey(driver);
             var challenge = GetChallenge(driver);
 
             var captchaRequest = new GeeTestV3ProxylessRequest
             {
-                ClientKey = clientKey,
-                WebsiteUrl = new Uri(url ?? driver.Url),
-                WebsiteKey = siteKey,
-                WebsiteChallenge = challenge,
-                GeetestApiServerSubdomain = "api.geetest.com"
+                WebsiteUrl = url ?? driver.Url,
+                Challenge = challenge,
+                GeetestApiServerSubdomain = "api.geetest.com",
+                Gt = gt
             };
 
-            var creationTaskResult = AnticaptchaManager.CreateCaptchaTask(captchaRequest);
-            var result = AnticaptchaManager.WaitForTaskResult(creationTaskResult.TaskId.Value);
+            var creationTaskResult = client.CreateCaptchaTask(captchaRequest);
+            var result = client.WaitForRawTaskResult<RawSolution>(creationTaskResult.TaskId.Value);
 
-            if (result.Status == Anticaptcha.Api.Responses.TaskStatusType.Ready)
+            if (result.Status == TaskStatusType.Ready)
             {
-                var solution = anticaptchaTask.GetTaskSolution();
+                var solution = result.Solution;
                 AddCookies(driver, solution);
                 FillResponseElement(driver, solution, responseElement);
             }

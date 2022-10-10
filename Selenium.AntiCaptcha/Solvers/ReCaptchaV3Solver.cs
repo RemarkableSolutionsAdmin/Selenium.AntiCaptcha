@@ -1,12 +1,13 @@
 ﻿using OpenQA.Selenium;
 using System;
 using AntiCaptchaApi.Models;
+using AntiCaptchaApi.Models.Solutions;
 
 namespace Selenium.AntiCaptcha.solvers
 {
     internal class ReCaptchaV3Solver : Solver
     {
-        protected override void FillResponseElement(IWebDriver driver, SolutionData solution, IWebElement? responseElement)
+        protected override void FillResponseElement(IWebDriver driver, RawSolution solution, IWebElement? responseElement)
         {
             throw new NotImplementedException();
         }

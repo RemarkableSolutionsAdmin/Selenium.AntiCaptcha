@@ -1,12 +1,13 @@
 ﻿using System;
 using OpenQA.Selenium;
 using AntiCaptchaApi.Models;
+using AntiCaptchaApi.Models.Solutions;
 
 namespace Selenium.AntiCaptcha.solvers
 {
     internal class FunCaptchaSolver : Solver
     {
-        protected override void FillResponseElement(IWebDriver driver, SolutionData solution, IWebElement? responseElement)
+        protected override void FillResponseElement(IWebDriver driver, RawSolution solution, IWebElement? responseElement)
         {
             throw new NotImplementedException();
         }

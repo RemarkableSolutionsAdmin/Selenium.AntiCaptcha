@@ -1,14 +1,15 @@
 ﻿using OpenQA.Selenium;
 using AntiCaptchaApi.Models;
+using AntiCaptchaApi.Models.Solutions;
 
 namespace Selenium.AntiCaptcha.solvers
 {
     internal abstract class Solver
     {
         protected abstract string GetSiteKey(IWebDriver driver);
-        protected abstract void FillResponseElement(IWebDriver driver, SolutionData solution, IWebElement? responseElement);
+        protected abstract void FillResponseElement(IWebDriver driver, RawSolution solution, IWebElement? responseElement);
         internal abstract void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement, IWebElement? submitElement, IWebElement? imageElement);
-        protected static void AddCookies(IWebDriver driver, SolutionData solution)
+        protected static void AddCookies(IWebDriver driver, RawSolution solution)
         {
             if (solution?.Cookies != null && solution.Cookies.Count > 0)
             {
