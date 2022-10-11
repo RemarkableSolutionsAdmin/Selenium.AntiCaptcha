@@ -9,16 +9,26 @@ namespace Selenium.AntiCaptcha.Tests
 {
     public class RecaptchaV2SolverTests : SolverTestsBase
     {
+        private const string Uri = "http://antigate.com/logintest.php";
         [Fact]
-        public void ReCaptchaV2()
+        public void ReCaptchaV2WithCaptchaTypeSpecified()
         {
             using (var driver = new ChromeDriver())
             {
                 driver.Url = "http://antigate.com/logintest.php";
                 var result = driver.SolveCaptcha<RecaptchaSolution>(ClientKey, captchaType: CaptchaType.ReCaptchaV2, submitElement: driver.FindElement(By.ClassName("btn")));
-                Assert.False(result.IsErrorResponse);
-                Assert.NotNull(result.Solution);
-                Assert.True(result.Solution.IsValid());
+                AssertSolveCaptchaResult(result);
+            }
+        }
+        
+        [Fact]
+        public void ReCaptchaV2WithoutCaptchaTypeSpecified()
+        {
+            using (var driver = new ChromeDriver())
+            {
+                driver.Url = "http://antigate.com/logintest.php";
+                var result = driver.SolveCaptcha<RecaptchaSolution>(ClientKey, submitElement: driver.FindElement(By.ClassName("btn")));
+                AssertSolveCaptchaResult(result);
             }
         }
     }

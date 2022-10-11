@@ -21,7 +21,7 @@ public class BinanceLoginTests
             passEl.SendKeys($"{RandText(10)}1!");
             var aggrToTerms = driver.FindElement(By.XPath("//label"));
             aggrToTerms.Click();
-            driver.SolveCaptcha<RawSolution>(Environment.GetEnvironmentVariable("ClientKey"), captchaType: CaptchaType.GeeTest);
+            driver.SolveCaptcha<RawSolution>(Environment.GetEnvironmentVariable("ClientKey"), captchaType: CaptchaType.GeeTestV3);
         }
     }
     

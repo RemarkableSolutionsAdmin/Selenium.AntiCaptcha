@@ -28,7 +28,7 @@ namespace Selenium.AntiCaptcha
                 case CaptchaType.FunCaptcha:
                     solver = new FunCaptchaSolver() as Solver<TRequest, TSolution>;
                     break;
-                case CaptchaType.GeeTest:
+                case CaptchaType.GeeTestV3:
                     solver = new GeeTestV3Solver() as Solver<TRequest, TSolution>;
                     break;
                 case CaptchaType.ImageToText:

@@ -3,13 +3,19 @@
     public enum CaptchaType
     {
         ReCaptchaV2,
+        ReCaptchaV2Proxyless,
         ReCaptchaV2Enterprise,
-        ReCaptchaV3,
+        ReCaptchaV2EnterpriseProxyless,
+        ReCaptchaV3Proxyless,
         HCaptcha,
         HCaptchaProxyless,
         FunCaptcha,
+        FunCaptchaProxyless,
         ImageToText,
-        GeeTest,
-        GeeTestV4
+        GeeTestV3,
+        GeeTestV3Proxyless,
+        GeeTestV4,
+        GeeTestV4Proxyless,
+        AntiGate
     }
 }

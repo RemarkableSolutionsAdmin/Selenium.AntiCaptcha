@@ -24,7 +24,7 @@ public class GeeSolverTests : SolverTestsBase
             Assert.NotNull(slideButton);
             slideButton.Click();
 
-            var result = driver.SolveCaptcha<GeeTestV3Solution>(ClientKey, captchaType: CaptchaType.GeeTest);
+            var result = driver.SolveCaptcha<GeeTestV3Solution>(ClientKey, captchaType: CaptchaType.GeeTestV3);
             
             Assert.False(result.IsErrorResponse);
             Assert.NotNull(result.Solution);

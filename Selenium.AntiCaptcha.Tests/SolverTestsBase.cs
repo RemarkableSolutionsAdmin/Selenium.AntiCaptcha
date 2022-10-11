@@ -1,5 +1,10 @@
 ﻿using AntiCaptchaApi.Net.Enums;
 using AntiCaptchaApi.Net.Models;
+using AntiCaptchaApi.Net.Models.Solutions;
+using AntiCaptchaApi.Net.Responses;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using Selenium.AntiCaptcha.enums;
 
 namespace Selenium.AntiCaptcha.Tests;
 
@@ -30,5 +35,13 @@ public abstract class SolverTestsBase
             ProxyLogin = ProxyLogin,
             ProxyPassword = ProxyPassword
         };
+    }
+
+    protected void AssertSolveCaptchaResult<TSolution>(TaskResultResponse<TSolution> result)
+        where TSolution : BaseSolution, new()
+    {
+        Assert.False(result.IsErrorResponse);
+        Assert.NotNull(result.Solution);
+        Assert.True(result.Solution.IsValid());
     }
 }
