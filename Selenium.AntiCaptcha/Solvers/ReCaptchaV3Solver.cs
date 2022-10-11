@@ -1,23 +1,24 @@
 ﻿using OpenQA.Selenium;
-using System;
-using AntiCaptchaApi.Models;
-using AntiCaptchaApi.Models.Solutions;
+using AntiCaptchaApi.Net.Models.Solutions;
+using AntiCaptchaApi.Net.Responses;
 
 namespace Selenium.AntiCaptcha.solvers
 {
-    internal class ReCaptchaV3Solver : Solver
+    internal class ReCaptchaV3Solver : Solver<RecaptchaSolution>
     {
-        protected override void FillResponseElement(IWebDriver driver, RawSolution solution, IWebElement? responseElement)
-        {
-            throw new NotImplementedException();
-        }
 
         protected override string GetSiteKey(IWebDriver driver)
         {
             throw new NotImplementedException();
         }
 
-        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
+        protected override void FillResponseElement(IWebDriver driver, RecaptchaSolution solution, IWebElement? responseElement)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override TaskResultResponse<RecaptchaSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey,
+            IWebElement? responseElement,
             IWebElement? submitElement, IWebElement? imageElement)
         {
             throw new NotImplementedException();

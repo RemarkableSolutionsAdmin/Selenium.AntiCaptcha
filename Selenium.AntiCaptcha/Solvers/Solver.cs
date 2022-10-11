@@ -1,25 +1,30 @@
 ﻿using OpenQA.Selenium;
-using AntiCaptchaApi.Models;
-using AntiCaptchaApi.Models.Solutions;
+using AntiCaptchaApi.Net.Models.Solutions;
+using AntiCaptchaApi.Net.Responses;
+using Newtonsoft.Json.Linq;
 
 namespace Selenium.AntiCaptcha.solvers
 {
-    internal abstract class Solver
+    internal abstract class Solver<TSolution> where TSolution: BaseSolution, new()
     {
-        protected abstract string GetSiteKey(IWebDriver driver);
-        protected abstract void FillResponseElement(IWebDriver driver, RawSolution solution, IWebElement? responseElement);
-        internal abstract void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement, IWebElement? submitElement, IWebElement? imageElement);
-        protected static void AddCookies(IWebDriver driver, RawSolution solution)
+    protected abstract string GetSiteKey(IWebDriver driver);
+
+    protected abstract void FillResponseElement(IWebDriver driver, TSolution solution, IWebElement? responseElement);
+
+    internal abstract TaskResultResponse<TSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
+        IWebElement? submitElement, IWebElement? imageElement);
+
+    protected static void AddCookies(IWebDriver driver, JObject Cookies)
+    {
+        if (Cookies != null && Cookies.Count > 0)
         {
-            if (solution?.Cookies != null && solution.Cookies.Count > 0)
+            driver.Manage().Cookies.DeleteAllCookies();
+            foreach (var cookie in Cookies)
             {
-                driver.Manage().Cookies.DeleteAllCookies();
-                foreach (var cookie in solution.Cookies)
-                {
-                    if (!string.IsNullOrEmpty(cookie.Key) && !string.IsNullOrEmpty(cookie.Value?.ToString()))
-                        driver.Manage().Cookies.AddCookie(new Cookie(cookie.Key, cookie.Value.ToString()));
-                }
+                if (!string.IsNullOrEmpty(cookie.Key) && !string.IsNullOrEmpty(cookie.Value?.ToString()))
+                    driver.Manage().Cookies.AddCookie(new Cookie(cookie.Key, cookie.Value.ToString()));
             }
         }
+    }
     }
 }

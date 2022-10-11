@@ -1,20 +1,21 @@
 ﻿using System.Net;
 using OpenQA.Selenium;
-using AntiCaptchaApi.Models.Solutions;
-using AntiCaptchaApi;
-using AntiCaptchaApi.Requests;
-using AntiCaptchaApi.Enums;
+using AntiCaptchaApi.Net;
+using AntiCaptchaApi.Net.Enums;
+using AntiCaptchaApi.Net.Models.Solutions;
+using AntiCaptchaApi.Net.Requests;
+using AntiCaptchaApi.Net.Responses;
 
 namespace Selenium.AntiCaptcha.solvers
 {
-    internal class ImageToTextSolver : Solver
+    internal class ImageToTextSolver : Solver<ImageToTextSolution>
     {
         protected override string GetSiteKey(IWebDriver driver)
         {
             return string.Empty;
         }
 
-        protected override void FillResponseElement(IWebDriver driver, RawSolution solution, IWebElement? responseElement)
+        protected override void FillResponseElement(IWebDriver driver, ImageToTextSolution solution, IWebElement? responseElement)
         {
             if (responseElement == null)
             {
@@ -25,7 +26,8 @@ namespace Selenium.AntiCaptcha.solvers
             responseElement.SendKeys(solution.Text);
         }
 
-        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
+        internal override TaskResultResponse<ImageToTextSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey,
+            IWebElement? responseElement,
             IWebElement? submitElement, IWebElement? imageElement)
         {
             var client = new AnticaptchaClient(clientKey);
@@ -52,18 +54,19 @@ namespace Selenium.AntiCaptcha.solvers
             };
 
             var creationTaskResult = client.CreateCaptchaTask(anticaptchaRequest);
-            var result = client.WaitForRawTaskResult<RawSolution>(creationTaskResult.TaskId.Value);
+            var result = client.WaitForTaskResult<ImageToTextSolution>(creationTaskResult.TaskId.Value);
             
             if (result.Status == TaskStatusType.Ready)
             {
                 FillResponseElement(driver, result.Solution, responseElement);
-
             }
 
             if (submitElement != null)
             {
                 submitElement.Click();
             }
+
+            return result;
         }
     }
 }

@@ -1,16 +1,15 @@
 ﻿using OpenQA.Selenium;
-using AntiCaptchaApi;
-using AntiCaptchaApi.Models;
-using AntiCaptchaApi.Requests;
-using AntiCaptchaApi.Requests.Abstractions;
-using AntiCaptchaApi.Models.Solutions;
-using AntiCaptchaApi.Enums;
+using AntiCaptchaApi.Net;
+using AntiCaptchaApi.Net.Enums;
+using AntiCaptchaApi.Net.Models.Solutions;
+using AntiCaptchaApi.Net.Requests;
+using AntiCaptchaApi.Net.Responses;
 
 namespace Selenium.AntiCaptcha.solvers
 {
-    internal class HCaptchaSolver : Solver
+    internal class HCaptchaSolver : Solver<HCaptchaSolution>
     {
-        protected override void FillResponseElement(IWebDriver driver, RawSolution solution, IWebElement? responseElement)
+        protected override void FillResponseElement(IWebDriver driver, HCaptchaSolution solution, IWebElement? responseElement)
         {
             if (responseElement == null)
             {
@@ -22,7 +21,8 @@ namespace Selenium.AntiCaptcha.solvers
 
         protected override string GetSiteKey(IWebDriver driver) => driver.FindElement(By.ClassName("h-captcha")).GetAttribute("data-sitekey");
 
-        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
+        internal override TaskResultResponse<HCaptchaSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey,
+            IWebElement? responseElement,
             IWebElement? submitElement, IWebElement? imageElement)
         {
             var client = new AnticaptchaClient(clientKey);
@@ -36,7 +36,7 @@ namespace Selenium.AntiCaptcha.solvers
 
 
             var creationTaskResult = client.CreateCaptchaTask(captchaRequest);
-            var result = client.WaitForRawTaskResult<RawSolution>(creationTaskResult.TaskId.Value);
+            var result = client.WaitForTaskResult<HCaptchaSolution>(creationTaskResult.TaskId.Value);
 
             if (result.Status == TaskStatusType.Ready)
             {
@@ -48,6 +48,7 @@ namespace Selenium.AntiCaptcha.solvers
             {
                 submitElement.Click();
             }
+            return result;
         }
     }
 }

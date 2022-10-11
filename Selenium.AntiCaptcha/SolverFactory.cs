@@ -1,28 +1,43 @@
 ﻿using Selenium.AntiCaptcha.enums;
 using Selenium.AntiCaptcha.solvers;
-using System;
+using AntiCaptchaApi.Net.Models.Solutions;
 
 namespace Selenium.AntiCaptcha
 {
     internal static class SolverFactory
     {
-        internal static Solver GetSolver(CaptchaType captchaType)
+        internal static Solver<TSolution>? GetSolver<TSolution>(CaptchaType captchaType)
+            where TSolution : BaseSolution, new()
         {
+            Solver<TSolution>? solver;
+            
             switch (captchaType)
             {
                 case CaptchaType.ReCaptchaV2:
-                    return new ReCaptchaV2Solver();
+                    solver = new ReCaptchaV2Solver() as Solver<TSolution>;
+                    break;
                 case CaptchaType.HCaptcha:
-                    return new HCaptchaSolver();
+                    solver = new HCaptchaSolver() as Solver<TSolution>;
+                    break;
                 case CaptchaType.FunCaptcha:
-                    return new FunCaptchaSolver();
+                    solver = new FunCaptchaSolver() as Solver<TSolution>;
+                    break;
                 case CaptchaType.GeeTest:
-                    return new GeeTestSolver();
+                    solver = new GeeTestV3Solver() as Solver<TSolution>;
+                    break;
                 case CaptchaType.ImageToText:
-                    return new ImageToTextSolver();
+                    solver = new ImageToTextSolver() as Solver<TSolution>;
+                    break;
                 default:
                     throw new Exception("Not supported captchaType");
             }
+
+            if (solver == null)
+            {
+                throw new Exception("Not supported solver.");
+            }
+            
+            return solver;
         }
     }
 }

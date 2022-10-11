@@ -1,17 +1,18 @@
 ﻿using OpenQA.Selenium;
-using AntiCaptchaApi.Models.Solutions;
-using AntiCaptchaApi;
-using AntiCaptchaApi.Requests;
-using AntiCaptchaApi.Enums;
+using AntiCaptchaApi.Net;
+using AntiCaptchaApi.Net.Enums;
+using AntiCaptchaApi.Net.Models.Solutions;
+using AntiCaptchaApi.Net.Requests;
+using AntiCaptchaApi.Net.Responses;
 
 namespace Selenium.AntiCaptcha.solvers
 {
-    internal class ReCaptchaV2Solver : Solver
+    internal class ReCaptchaV2Solver : Solver <RecaptchaSolution>
     {
 
         protected override string GetSiteKey(IWebDriver driver) => driver.FindElement(By.ClassName("g-recaptcha")).GetAttribute("data-sitekey");
 
-        protected override void FillResponseElement(IWebDriver driver, RawSolution solution, IWebElement? responseElement)
+        protected override void FillResponseElement(IWebDriver driver, RecaptchaSolution solution, IWebElement? responseElement)
         {
             if (responseElement != null)
             {
@@ -25,7 +26,8 @@ namespace Selenium.AntiCaptcha.solvers
             }
         }
 
-        internal override void Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
+        internal override TaskResultResponse<RecaptchaSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey,
+            IWebElement? responseElement,
             IWebElement? submitElement, IWebElement? imageElement)
         {
             var client = new AnticaptchaClient(clientKey);
@@ -38,12 +40,12 @@ namespace Selenium.AntiCaptcha.solvers
             };
 
             var creationTaskResult = client.CreateCaptchaTask(anticaptchaRequest);
-            var result = client.WaitForRawTaskResult<RawSolution>(creationTaskResult.TaskId.Value);
+            var result = client.WaitForTaskResult<RecaptchaSolution>(creationTaskResult.TaskId.Value);
 
             if (result.Status == TaskStatusType.Ready)
             {
                 var solution = result.Solution;
-                AddCookies(driver, solution);
+                //AddCookies(driver, solution.Cookies);
                 FillResponseElement(driver, solution, responseElement);
             }
 
@@ -51,6 +53,7 @@ namespace Selenium.AntiCaptcha.solvers
             {
                 submitElement.Click();
             }
+            return result;
         }
     }
 }

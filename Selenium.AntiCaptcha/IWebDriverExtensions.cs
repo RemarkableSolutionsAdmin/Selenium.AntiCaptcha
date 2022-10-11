@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AntiCaptchaApi.Net.Models.Solutions;
+using AntiCaptchaApi.Net.Responses;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.enums;
 
@@ -31,8 +32,28 @@ namespace Selenium.AntiCaptcha
                 captchaType = IdentifyCaptcha(driver);
             }
 
-            var solver = SolverFactory.GetSolver(captchaType.Value);
+            var solver = SolverFactory.GetSolver<RawSolution>(captchaType.Value);
             solver.Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement);
+        }
+        
+        public static TaskResultResponse<TSolution> SolveCaptchaWithResult<TSolution>(
+            this IWebDriver driver, 
+            string clientKey, 
+            CaptchaType? captchaType = null, 
+            string? url = null, 
+            string? siteKey = null, 
+            IWebElement? responseElement = null, 
+            IWebElement? submitElement = null,
+            IWebElement? imageElement = null)
+        where TSolution : BaseSolution, new()
+        {
+            if (captchaType == null)
+            {
+                captchaType = IdentifyCaptcha(driver);
+            }
+
+            var solver = SolverFactory.GetSolver<TSolution>(captchaType.Value);
+            return solver?.Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement);
         }
 
         private static CaptchaType? IdentifyCaptcha(IWebDriver driver)
