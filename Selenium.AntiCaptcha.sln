@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.AntiCaptcha", "Selenium.AntiCaptcha\Selenium.AntiCaptcha.csproj", "{D50D160B-7A6A-454C-B938-24E0D629801E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.AntiCaptcha.Tests", "Selenium.AntiCaptcha.Tests\Selenium.AntiCaptcha.Tests.csproj", "{9D721CF4-8982-40EE-BC3C-EFE8E5D19DB5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selenium.Anticaptcha.Tests", "Selenium.Anticaptcha.Tests\Selenium.Anticaptcha.Tests.csproj", "{AD96407F-550B-4BB0-AEF5-7953D6662D3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{D50D160B-7A6A-454C-B938-24E0D629801E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D50D160B-7A6A-454C-B938-24E0D629801E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D50D160B-7A6A-454C-B938-24E0D629801E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9D721CF4-8982-40EE-BC3C-EFE8E5D19DB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D721CF4-8982-40EE-BC3C-EFE8E5D19DB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D721CF4-8982-40EE-BC3C-EFE8E5D19DB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D721CF4-8982-40EE-BC3C-EFE8E5D19DB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD96407F-550B-4BB0-AEF5-7953D6662D3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD96407F-550B-4BB0-AEF5-7953D6662D3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD96407F-550B-4BB0-AEF5-7953D6662D3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD96407F-550B-4BB0-AEF5-7953D6662D3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

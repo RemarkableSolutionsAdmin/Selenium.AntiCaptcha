@@ -1,11 +1,12 @@
-﻿using OpenQA.Selenium;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using Selenium.AntiCaptcha.enums;
+using Xunit;
 
-namespace Selenium.AntiCaptcha
+namespace Selenium.AntiCaptcha.Tests
 {
     //TODO: Change into real tests
-    public static partial class SolverTests
+    public class SolverTests
     {
         private static void BinanceLogin()
         {
@@ -30,7 +31,8 @@ namespace Selenium.AntiCaptcha
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        public static void GeeTest()
+        [Fact]
+        public void GeeTest()
         {
             
             using (var driver = new ChromeDriver(Environment.CurrentDirectory))
