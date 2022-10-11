@@ -51,15 +51,6 @@ namespace Selenium.AntiCaptcha.Tests
                 driver.SolveCaptcha(Environment.GetEnvironmentVariable("ClientKey"), captchaType: CaptchaType.ReCaptchaV2, submitElement: driver.FindElement(By.ClassName("btn")));
             }
         }
-
-        public static void HCaptcha()
-        {
-            using (var driver = new ChromeDriver())
-            {
-                driver.Url = "https://democaptcha.com/demo-form-eng/hcaptcha.html";
-                driver.SolveCaptcha(Environment.GetEnvironmentVariable("ClientKey"), captchaType: CaptchaType.HCaptcha, submitElement: driver.FindElement(By.ClassName("btn")));
-            }
-        }
     }
 }
 

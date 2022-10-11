@@ -16,6 +16,9 @@ namespace Selenium.AntiCaptcha
                 case CaptchaType.ReCaptchaV2:
                     solver = new ReCaptchaV2Solver() as Solver<TSolution>;
                     break;
+                case CaptchaType.HCaptchaProxyless:
+                    solver = new HCaptchaProxylessSolver() as Solver<TSolution>;
+                    break;
                 case CaptchaType.HCaptcha:
                     solver = new HCaptchaSolver() as Solver<TSolution>;
                     break;

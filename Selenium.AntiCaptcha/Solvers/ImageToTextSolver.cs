@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using AntiCaptchaApi.Net;
 using AntiCaptchaApi.Net.Enums;
+using AntiCaptchaApi.Net.Models;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
 using AntiCaptchaApi.Net.Responses;
@@ -10,7 +11,7 @@ namespace Selenium.AntiCaptcha.solvers
 {
     internal class ImageToTextSolver : Solver<ImageToTextSolution>
     {
-        protected override string GetSiteKey(IWebDriver driver)
+        protected override string GetSiteKey(IWebDriver driver, int waitingTime = 1000)
         {
             return string.Empty;
         }
@@ -28,7 +29,7 @@ namespace Selenium.AntiCaptcha.solvers
 
         internal override TaskResultResponse<ImageToTextSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey,
             IWebElement? responseElement,
-            IWebElement? submitElement, IWebElement? imageElement)
+            IWebElement? submitElement, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
         {
             var client = new AnticaptchaClient(clientKey);
             siteKey ??= GetSiteKey(driver);

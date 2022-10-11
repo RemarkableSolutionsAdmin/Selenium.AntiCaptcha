@@ -6,6 +6,7 @@
         ReCaptchaV2Enterprise,
         ReCaptchaV3,
         HCaptcha,
+        HCaptchaProxyless,
         FunCaptcha,
         ImageToText,
         GeeTest,

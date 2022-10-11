@@ -1,4 +1,5 @@
-﻿using AntiCaptchaApi.Net.Models.Solutions;
+﻿using AntiCaptchaApi.Net.Models;
+using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Responses;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.enums;
@@ -25,7 +26,8 @@ namespace Selenium.AntiCaptcha
             string? siteKey = null, 
             IWebElement? responseElement = null, 
             IWebElement? submitElement = null,
-            IWebElement? imageElement = null)
+            IWebElement? imageElement = null,
+            string userAgent = null)
         {
             if (captchaType == null)
             {
@@ -33,7 +35,7 @@ namespace Selenium.AntiCaptcha
             }
 
             var solver = SolverFactory.GetSolver<RawSolution>(captchaType.Value);
-            solver.Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement);
+            solver.Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement, null, null);
         }
         
         public static TaskResultResponse<TSolution> SolveCaptchaWithResult<TSolution>(
@@ -44,7 +46,9 @@ namespace Selenium.AntiCaptcha
             string? siteKey = null, 
             IWebElement? responseElement = null, 
             IWebElement? submitElement = null,
-            IWebElement? imageElement = null)
+            IWebElement? imageElement = null,
+            string? userAgent = null,
+            ProxyConfig proxyConfig = null)
         where TSolution : BaseSolution, new()
         {
             if (captchaType == null)
@@ -53,7 +57,7 @@ namespace Selenium.AntiCaptcha
             }
 
             var solver = SolverFactory.GetSolver<TSolution>(captchaType.Value);
-            return solver?.Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement);
+            return solver?.Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement, userAgent, proxyConfig);
         }
 
         private static CaptchaType? IdentifyCaptcha(IWebDriver driver)

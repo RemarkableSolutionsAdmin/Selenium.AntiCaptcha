@@ -1,18 +1,22 @@
-﻿using OpenQA.Selenium;
+﻿using AntiCaptchaApi.Net.Models;
+using OpenQA.Selenium;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Responses;
 using Newtonsoft.Json.Linq;
 
-namespace Selenium.AntiCaptcha.solvers
+namespace Selenium.AntiCaptcha.solvers;
+
+
+
+internal abstract class Solver<TSolution> where TSolution: BaseSolution, new()
 {
-    internal abstract class Solver<TSolution> where TSolution: BaseSolution, new()
-    {
-    protected abstract string GetSiteKey(IWebDriver driver);
+    protected abstract string GetSiteKey(IWebDriver driver, int waitingTime = 1000);
 
     protected abstract void FillResponseElement(IWebDriver driver, TSolution solution, IWebElement? responseElement);
 
-    internal abstract TaskResultResponse<TSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
-        IWebElement? submitElement, IWebElement? imageElement);
+    internal abstract TaskResultResponse<TSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey,
+        IWebElement? responseElement,
+        IWebElement? submitElement, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig);
 
     protected static void AddCookies(IWebDriver driver, JObject Cookies)
     {
@@ -25,6 +29,5 @@ namespace Selenium.AntiCaptcha.solvers
                     driver.Manage().Cookies.AddCookie(new Cookie(cookie.Key, cookie.Value.ToString()));
             }
         }
-    }
     }
 }

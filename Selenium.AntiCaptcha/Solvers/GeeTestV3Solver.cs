@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using AntiCaptchaApi.Net;
 using AntiCaptchaApi.Net.Enums;
+using AntiCaptchaApi.Net.Models;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
 using AntiCaptchaApi.Net.Responses;
@@ -10,7 +11,7 @@ namespace Selenium.AntiCaptcha.solvers
 {
     internal class GeeTestV3Solver : Solver<GeeTestV3Solution>
     {
-        protected override string GetSiteKey(IWebDriver driver)
+        protected override string GetSiteKey(IWebDriver driver, int waitingTime = 1000)
         {
             var regex = new Regex("gt=(.*?)&");
             var gt = regex.Match(driver.PageSource).Groups[1].Value;
@@ -42,7 +43,7 @@ namespace Selenium.AntiCaptcha.solvers
             string? gt,
             IWebElement? responseElement,
             IWebElement? submitElement,
-            IWebElement? imageElement)
+            IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
         {
             var client = new AnticaptchaClient(clientKey);
             gt ??= GetSiteKey(driver);
@@ -56,11 +57,7 @@ namespace Selenium.AntiCaptcha.solvers
             };
 
             var result = client.SolveCaptcha<GeeTestV3ProxylessRequest, GeeTestV3Solution>(captchaRequest);
-
-            if (submitElement != null)
-            {
-                submitElement.Click();
-            }
+            submitElement?.Click();
             return result;
         }
     }
