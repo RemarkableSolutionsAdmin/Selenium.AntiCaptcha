@@ -9,7 +9,7 @@ using AntiCaptchaApi.Net.Responses;
 
 namespace Selenium.AntiCaptcha.solvers
 {
-    internal class GeeTestV3Solver : Solver<GeeTestV3Solution>
+    internal class GeeTestV3Solver : Solver<GeeTestV3ProxylessRequest, GeeTestV3Solution>
     {
         protected override string GetSiteKey(IWebDriver driver, int waitingTime = 1000)
         {
@@ -26,6 +26,18 @@ namespace Selenium.AntiCaptcha.solvers
             return captchaRegexGroups[1].Value;
         }
 
+        protected override GeeTestV3ProxylessRequest BuildRequest(IWebDriver driver, string? url, string? siteKey, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
+        {
+            siteKey ??= GetSiteKey(driver);
+            var challenge = GetChallenge(driver);
+            return  new GeeTestV3ProxylessRequest
+            {
+                WebsiteUrl = url ?? driver.Url,
+                Challenge = challenge,
+                Gt = siteKey
+            };
+        }
+
         protected override void FillResponseElement(IWebDriver driver, GeeTestV3Solution solution, IWebElement? responseElement)
         {
             throw new NotImplementedException();
@@ -35,30 +47,6 @@ namespace Selenium.AntiCaptcha.solvers
         {
             var regex = new Regex("challenge=(.*?)&");
             return regex.Match(driver.PageSource).Groups[1].Value;
-        }
-
-        internal override TaskResultResponse<GeeTestV3Solution> Solve(IWebDriver driver,
-            string clientKey,
-            string? url,
-            string? gt,
-            IWebElement? responseElement,
-            IWebElement? submitElement,
-            IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
-        {
-            var client = new AnticaptchaClient(clientKey);
-            gt ??= GetSiteKey(driver);
-            var challenge = GetChallenge(driver);
-
-            var captchaRequest = new GeeTestV3ProxylessRequest
-            {
-                WebsiteUrl = url ?? driver.Url,
-                Challenge = challenge,
-                Gt = gt
-            };
-
-            var result = client.SolveCaptcha<GeeTestV3ProxylessRequest, GeeTestV3Solution>(captchaRequest);
-            submitElement?.Click();
-            return result;
         }
     }
 }

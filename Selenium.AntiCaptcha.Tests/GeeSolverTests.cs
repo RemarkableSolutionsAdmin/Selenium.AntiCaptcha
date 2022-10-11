@@ -1,5 +1,6 @@
 ﻿
 using AntiCaptchaApi.Net.Models.Solutions;
+using AntiCaptchaApi.Net.Responses;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using Selenium.AntiCaptcha.enums;
@@ -23,9 +24,10 @@ public class GeeSolverTests : SolverTestsBase
             Assert.NotNull(slideButton);
             slideButton.Click();
 
-            var result = driver.SolveCaptchaWithResult<GeeTestV3Solution>(ClientKey, captchaType: CaptchaType.GeeTest);
+            var result = driver.SolveCaptcha<GeeTestV3Solution>(ClientKey, captchaType: CaptchaType.GeeTest);
             
-            Assert.True(result.HasNoErrors);
+            Assert.False(result.IsErrorResponse);
+            Assert.NotNull(result.Solution);
             Assert.True(result.Solution.IsValid());
         }
     }

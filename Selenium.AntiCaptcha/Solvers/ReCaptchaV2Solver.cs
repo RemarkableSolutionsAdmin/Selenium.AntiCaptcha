@@ -8,10 +8,20 @@ using AntiCaptchaApi.Net.Responses;
 
 namespace Selenium.AntiCaptcha.solvers
 {
-    internal class ReCaptchaV2Solver : Solver <RecaptchaSolution>
+    internal class ReCaptchaV2Solver : Solver <RecaptchaV2ProxylessRequest, RecaptchaSolution>
     {
 
-        protected override string GetSiteKey(IWebDriver driver, int waitingTime = 1000) => driver.FindElement(By.ClassName("g-recaptcha")).GetAttribute("data-sitekey");
+        protected override string GetSiteKey(IWebDriver driver, int waitingTime = 1000) => driver
+            .FindElement(By.ClassName("g-recaptcha")).GetAttribute("data-sitekey");
+
+        protected override RecaptchaV2ProxylessRequest BuildRequest(IWebDriver driver, string? url, string? siteKey, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
+        {
+            return new RecaptchaV2ProxylessRequest
+            {
+                WebsiteUrl = url ?? driver.Url,
+                WebsiteKey = siteKey
+            };
+        }
 
         protected override void FillResponseElement(IWebDriver driver, RecaptchaSolution solution, IWebElement? responseElement)
         {
