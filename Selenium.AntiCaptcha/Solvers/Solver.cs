@@ -43,8 +43,11 @@ internal abstract class Solver<TRequest, TSolution>
 
     protected abstract TRequest BuildRequest(IWebDriver driver, string? url, string? siteKey,
         IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig);
-    
-    protected abstract void FillResponseElement(IWebDriver driver, TSolution solution, IWebElement? responseElement);
+
+    protected virtual void FillResponseElement(IWebDriver driver, TSolution solution, IWebElement? responseElement)
+    {
+        
+    }
 
     internal virtual TaskResultResponse<TSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey,
         IWebElement? responseElement,

@@ -7,11 +7,11 @@ using Selenium.AntiCaptcha.Internal.Extensions;
 
 namespace Selenium.AntiCaptcha.Internal;
 
-internal static class CaptchaTypeIdentifier
+internal static class AllCaptchaTypesIdentifier
 {
     private static readonly List<ICaptchaIdentifier> CaptchaIdentifiers = new()
     {
-        new GeeTestIdentifier(), new RecaptchaIdentifier()
+        new GeeTestIdentifier(), new RecaptchaIdentifier(), new HCaptchaIdentifier()
     };
 
     internal static CaptchaType? IdentifyCaptcha<TSolution>(IWebDriver driver, IWebElement? imageElement, ProxyConfig? proxyConfig)
@@ -30,10 +30,8 @@ internal static class CaptchaTypeIdentifier
             }
         }
         
-            
         if (imageElement != null)
             return CaptchaType.ImageToText;
-
-        return null;
+        return result;
     } 
 }

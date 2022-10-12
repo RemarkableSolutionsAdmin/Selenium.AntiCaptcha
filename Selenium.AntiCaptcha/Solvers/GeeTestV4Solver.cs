@@ -9,7 +9,7 @@ using AntiCaptchaApi.Net.Responses;
 
 namespace Selenium.AntiCaptcha.solvers
 {
-    internal class GeeTestV3Solver : Solver<GeeTestV3ProxylessRequest, GeeTestV3Solution>
+    internal class GeeTestV4Solver : Solver<GeeTestV4ProxylessRequest, GeeTestV4Solution>
     {
         protected override string GetSiteKey(IWebDriver driver, int waitingTime = 1000)
         {
@@ -26,17 +26,18 @@ namespace Selenium.AntiCaptcha.solvers
             return captchaRegexGroups[1].Value;
         }
 
-        protected override GeeTestV3ProxylessRequest BuildRequest(IWebDriver driver, string? url, string? siteKey, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
+        protected override GeeTestV4ProxylessRequest BuildRequest(IWebDriver driver, string? url, string? siteKey, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
         {
             siteKey ??= GetSiteKey(driver);
             var challenge = GetChallenge(driver);
-            return  new GeeTestV3ProxylessRequest
+            return  new GeeTestV4ProxylessRequest
             {
                 WebsiteUrl = url ?? driver.Url,
                 Challenge = challenge,
                 Gt = siteKey
             };
         }
+
         private string GetChallenge(IWebDriver driver)
         {
             var regex = new Regex("challenge=(.*?)&");

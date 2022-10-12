@@ -23,7 +23,7 @@
 
     <ItemGroup>
       <AdditionalFiles Include="chromedriver.exe">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </AdditionalFiles>
     </ItemGroup>
 

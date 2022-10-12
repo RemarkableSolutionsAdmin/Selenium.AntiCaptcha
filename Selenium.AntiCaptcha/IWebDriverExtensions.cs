@@ -38,21 +38,18 @@ namespace Selenium.AntiCaptcha
             IWebElement? imageElement = null,
             string? userAgent = null,
             ProxyConfig? proxyConfig = null)
-        where TSolution : BaseSolution, new()
+                where TSolution : BaseSolution, new()
         {
-            if (captchaType == null)
-            {
-                captchaType = CaptchaTypeIdentifier.IdentifyCaptcha<TSolution>(driver, imageElement, proxyConfig);
-            }
+            captchaType ??= AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(driver, imageElement, proxyConfig);
             
             if(!captchaType.HasValue)
             {
-                throw new ArgumentNullException(nameof(captchaType));
+                throw new ArgumentNullException(nameof(captchaType), "Could not identify the captcha type from arguments. Please provide captchaType.");
             }
             
             ValidateSolutionOutputToCaptchaType<TSolution>(captchaType.Value);
 
-            switch (captchaType)
+            switch (captchaType.Value)
             {
                 case CaptchaType.ReCaptchaV2:
                     return new ReCaptchaV2Solver().Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement,
@@ -71,12 +68,13 @@ namespace Selenium.AntiCaptcha
                             userAgent, proxyConfig)
                         as TaskResultResponse<TSolution>;
                 case CaptchaType.GeeTestV3:
-                    return new GeeTestV3Solver().Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement,
-                            userAgent, proxyConfig)
+                    return new GeeTestV3Solver().Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement, userAgent, proxyConfig) 
+                        as TaskResultResponse<TSolution>;
+                case CaptchaType.GeeTestV4:
+                    return new GeeTestV4Solver().Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement, userAgent, proxyConfig) 
                         as TaskResultResponse<TSolution>;
                 case CaptchaType.ImageToText:
-                    return new ImageToTextSolver().Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement,
-                            userAgent, proxyConfig)
+                    return new ImageToTextSolver().Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement, userAgent, proxyConfig)
                         as TaskResultResponse<TSolution>;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(captchaType), captchaType, null);

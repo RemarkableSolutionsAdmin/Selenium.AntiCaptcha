@@ -1,24 +1,25 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha;
+using Selenium.AntiCaptcha.enums;
 using Selenium.Anticaptcha.Tests.TestCore;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests;
 
-public class GeeAnticaptchaTest : AnticaptchaTestBase
+public class GeeV4SolverTests : AnticaptchaTestBase
 {
-    [Fact]
-    public void GeeTest()
+    [Theory]
+    [InlineData(TestUris.GeeTest.V4.W1)]
+    public void GeeV4Test(string websiteUrl)
     {
         Driver.Url = "https://www.geetest.com/en/demo";
         var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
         var slideButton = FindSlideButton(allButtonParents);
-                
-            
+        
         Assert.NotNull(slideButton);
         slideButton.Click();
 
-        var result = Driver.SolveCaptcha<GeeTestV3Solution>(ClientKey);
+        var result = Driver.SolveCaptcha<GeeTestV4Solution>(ClientKey, CaptchaType.GeeTestV4);
             
         Assert.False(result.IsErrorResponse);
         Assert.NotNull(result.Solution);
@@ -50,7 +51,7 @@ public class GeeAnticaptchaTest : AnticaptchaTestBase
     }
 
 
-    public GeeAnticaptchaTest(WebDriverFixture fixture) : base(fixture)
+    public GeeV4SolverTests(WebDriverFixture fixture) : base(fixture)
     {
     }
 }

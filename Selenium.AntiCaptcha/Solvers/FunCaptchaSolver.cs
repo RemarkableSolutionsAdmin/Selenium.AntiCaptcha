@@ -17,12 +17,7 @@ namespace Selenium.AntiCaptcha.solvers
         {
             throw new NotImplementedException();
         }
-
-        protected override void FillResponseElement(IWebDriver driver, FunCaptchaSolution solution, IWebElement? responseElement)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         internal override TaskResultResponse<FunCaptchaSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey,
             IWebElement? responseElement,
             IWebElement? submitElement, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)

@@ -37,7 +37,6 @@ public class AnticaptchaIdentifierTests : AnticaptchaTestBase
     [Theory]
     [InlineData(TestUris.Recaptcha.V3.EnterpriseW1, CaptchaType.ReCaptchaV3Enterprise)]
     [InlineData(TestUris.Recaptcha.V2.W1, CaptchaType.ReCaptchaV2)]
-    [InlineData(TestUris.GeeTest.V4.W1, CaptchaType.GeeTestV4)]
     public void ShouldReturnProperRecaptchaType_WithProxy(string websiteUrl, CaptchaType expectedType)
     {
         TestIdentifier<RecaptchaSolution>(websiteUrl, expectedType, TestEnvironment.GetCurrentTestProxyConfig());
@@ -48,7 +47,7 @@ public class AnticaptchaIdentifierTests : AnticaptchaTestBase
         where TSolution : BaseSolution, new()
     {
         fixture.Driver.Url = websiteUrl;
-        var type = CaptchaTypeIdentifier.IdentifyCaptcha<TSolution>(Driver, null, proxyConfig);
+        var type = AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(Driver, null, proxyConfig);
         Assert.NotNull(type);
         Assert.Equal(expectedType, type.Value);
     }

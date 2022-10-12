@@ -8,7 +8,7 @@ public abstract class BaseCaptchaIdentifier : ICaptchaIdentifier
 {
     protected readonly List<CaptchaType> IdentifableTypes = new();
     
-    public virtual bool IsIdentifiable(CaptchaType type)
+    public bool IsIdentifiable(CaptchaType type)
     {
         return IdentifableTypes.Contains(type);
     }
