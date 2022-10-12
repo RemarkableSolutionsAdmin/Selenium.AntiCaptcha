@@ -1,8 +1,9 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
-using OpenQA.Selenium.Chrome;
+using Selenium.AntiCaptcha;
 using Selenium.AntiCaptcha.enums;
+using Selenium.Anticaptcha.Tests.TestCore;
 
-namespace Selenium.AntiCaptcha.Tests;
+namespace Selenium.Anticaptcha.Tests.FunctionalityTests;
 
 public class WebDriverExtensionsTests : AnticaptchaTestBase
 {

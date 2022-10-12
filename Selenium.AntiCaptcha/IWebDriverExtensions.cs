@@ -42,7 +42,7 @@ namespace Selenium.AntiCaptcha
         {
             if (captchaType == null)
             {
-                captchaType = AnticaptchaIdentifier.IdentifyCaptcha<TSolution>(driver, imageElement, proxyConfig);
+                captchaType = CaptchaTypeIdentifier.IdentifyCaptcha<TSolution>(driver, imageElement, proxyConfig);
             }
             
             if(!captchaType.HasValue)

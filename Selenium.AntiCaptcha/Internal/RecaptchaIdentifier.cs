@@ -1,25 +1,28 @@
-﻿using OpenQA.Selenium;
+﻿using AntiCaptchaApi.Net.Models;
+using OpenQA.Selenium;
 using Selenium.AntiCaptcha.enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 
 namespace Selenium.AntiCaptcha.Internal;
 
-internal static class RecaptchaIdentifier
+internal class RecaptchaIdentifier  : BaseCaptchaIdentifier
 {
-    private static List<CaptchaType> RecaptchaTypes = new()
+
+    private readonly List<CaptchaType> _recaptchaTypes = new()
     {
         CaptchaType.ReCaptchaV2Proxyless,
         CaptchaType.ReCaptchaV2EnterpriseProxyless,
         CaptchaType.ReCaptchaV2Enterprise,
         CaptchaType.ReCaptchaV3Proxyless,
-    }; 
-
-    public static bool IsRecaptcha(CaptchaType type)
+        CaptchaType.ReCaptchaV3Enterprise,
+    };
+    
+    public RecaptchaIdentifier()
     {
-        return RecaptchaTypes.Contains(type);
+        IdentifableTypes.AddRange(_recaptchaTypes);
     }
 
-    public static CaptchaType? SpecifyRecaptchaType(IWebDriver driver)
+    public override CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, ProxyConfig? proxyConfig)
     {
         var pageSource = driver.PageSource;
         var isEnterprise = IsRecaptchaEnterprise(pageSource);
@@ -32,20 +35,23 @@ internal static class RecaptchaIdentifier
 
         driver.SwitchTo().Frame(recaptchaFrame);
         
-        var isV3Recaptcha = IsV3Recaptcha(driver);
-        var isV2Recaptcha = IsV2Recaptcha(driver);
+        var isV3Recaptcha = IsV3(driver);
+        var isV2Recaptcha = IsV2(driver);
 
         if (isV2Recaptcha == isV3Recaptcha) //Should we throw an exception?
         {
             return null;
         }
 
+        CaptchaType result; 
         if (isV2Recaptcha)
-        {
-            return isEnterprise ? CaptchaType.ReCaptchaV2Enterprise : CaptchaType.ReCaptchaV2Proxyless;
+        { 
+            result = isEnterprise ? CaptchaType.ReCaptchaV2Enterprise : CaptchaType.ReCaptchaV2Proxyless;
+           return base.SpecifyCaptcha(result, driver, proxyConfig);
         }
 
-        return isEnterprise ? CaptchaType.ReCaptchaV3Enterprise : CaptchaType.ReCaptchaV3Proxyless;
+        result = isEnterprise ? CaptchaType.ReCaptchaV3Enterprise : CaptchaType.ReCaptchaV3Proxyless;
+        return base.SpecifyCaptcha(result, driver, proxyConfig);
     }
 
     private static IWebElement? GetRecaptchaIFrame(IWebDriver driver)
@@ -53,40 +59,23 @@ internal static class RecaptchaIdentifier
         return driver.FindByXPath("//iframe[contains(@src, 'recaptcha')]");
     }
 
-    private static bool IsV2Recaptcha(IWebDriver driver)
+    private static bool IsV2(IWebDriver driver)
     {
         var recaptchaV2ElementPaths = new List<string>()
         {
             "//div[@class='rc-anchor-content']"
         };
 
-        foreach (var path in recaptchaV2ElementPaths)
-        {
-            if (driver.FindByXPath(path) != null)
-            {
-                return true;
-            }
-        }
-        
-        return false;
+        return driver.DoesAtLeastOneOfTheElementsExist(recaptchaV2ElementPaths);
     }
     
-    private static bool IsV3Recaptcha(IWebDriver driver)
+    private static bool IsV3(IWebDriver driver)
     {
         var recaptchaV3ElementPaths = new List<string>()
         {
             "//div[@class='rc-anchor-invisible-text']"
         };
-
-        foreach (var path in recaptchaV3ElementPaths)
-        {
-            if (driver.FindByXPath(path) != null)
-            {
-                return true;
-            }
-        }
-        
-        return false;
+        return driver.DoesAtLeastOneOfTheElementsExist(recaptchaV3ElementPaths);
     }
 
     private static bool IsRecaptchaEnterprise(string pageSource)

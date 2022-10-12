@@ -1,4 +1,4 @@
-﻿namespace Selenium.AntiCaptcha.Tests;
+﻿namespace Selenium.Anticaptcha.Tests.TestCore;
 
 public static class TestUris
 {
@@ -13,6 +13,14 @@ public static class TestUris
         public static class V2
         {
             public const string W1 = "https://recaptcha-demo.appspot.com/recaptcha-v2-checkbox.php";
+        }
+    }
+
+    public static class GeeTest
+    {
+        public static class V4
+        {
+            public const string W1 = "https://www.geetest.com/en/demo";
         }
     }
 }

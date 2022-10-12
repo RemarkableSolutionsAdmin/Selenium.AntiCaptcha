@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
-namespace Selenium.AntiCaptcha.Tests;
+namespace Selenium.Anticaptcha.Tests.SolverTests;
 
 public class BinanceLoginTests
 {

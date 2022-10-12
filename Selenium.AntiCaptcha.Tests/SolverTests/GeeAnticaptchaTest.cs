@@ -1,10 +1,9 @@
-﻿
-using AntiCaptchaApi.Net.Models.Solutions;
+﻿using AntiCaptchaApi.Net.Models.Solutions;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
+using Selenium.AntiCaptcha;
+using Selenium.Anticaptcha.Tests.TestCore;
 
-
-namespace Selenium.AntiCaptcha.Tests;
+namespace Selenium.Anticaptcha.Tests.SolverTests;
 
 public class GeeAnticaptchaTest : AnticaptchaTestBase
 {

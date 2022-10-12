@@ -1,7 +1,8 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
-using OpenQA.Selenium.Chrome;
+using Selenium.AntiCaptcha;
+using Selenium.Anticaptcha.Tests.TestCore;
 
-namespace Selenium.AntiCaptcha.Tests;
+namespace Selenium.Anticaptcha.Tests.SolverTests;
 
 public class HCaptchaProxylessAnticaptchaTest : AnticaptchaTestBase
 {
@@ -19,7 +20,7 @@ public class HCaptchaProxylessAnticaptchaTest : AnticaptchaTestBase
     {
         Driver.Url = "https://entwickler.ebay.de/signin?tab=register";
         var result = Driver.SolveCaptcha<HCaptchaSolution>(clientKey: ClientKey,
-            proxyConfig: GetCurrentTestProxyConfig());
+            proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
         AssertSolveCaptchaResult(result);
     }
 
