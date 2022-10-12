@@ -15,8 +15,7 @@ public class ImageToTextSolverTest : SolverTestsBase
             driver.Url = "https://en.wikipedia.org/w/index.php?title=Special:CreateAccount&returnto=Main+Page";
             var result = driver.SolveCaptcha<ImageToTextSolution>(ClientKey,
                 imageElement: driver.FindElement(By.ClassName("fancycaptcha-image")),
-                responseElement: driver.FindElement(By.Id("mw-input-captchaWord")),
-                captchaType: CaptchaType.ImageToText);
+                responseElement: driver.FindElement(By.Id("mw-input-captchaWord")));
             
             AssertSolveCaptchaResult(result);
         }

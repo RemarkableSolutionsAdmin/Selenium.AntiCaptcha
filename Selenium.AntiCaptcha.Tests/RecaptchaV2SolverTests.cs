@@ -16,7 +16,7 @@ namespace Selenium.AntiCaptcha.Tests
             using (var driver = new ChromeDriver())
             {
                 driver.Url = "http://antigate.com/logintest.php";
-                var result = driver.SolveCaptcha<RecaptchaSolution>(ClientKey, captchaType: CaptchaType.ReCaptchaV2, submitElement: driver.FindElement(By.ClassName("btn")));
+                var result = driver.SolveCaptcha<RecaptchaSolution>(ClientKey, submitElement: driver.FindElement(By.ClassName("btn")));
                 AssertSolveCaptchaResult(result);
             }
         }

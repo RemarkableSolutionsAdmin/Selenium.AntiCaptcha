@@ -15,8 +15,7 @@ public class HCaptchaProxylessSolverTests : SolverTestsBase
         using (var driver = new ChromeDriver())
         {
             driver.Url = "https://entwickler.ebay.de/signin?tab=register";
-            var result = driver.SolveCaptcha<HCaptchaSolution>(clientKey: ClientKey,
-                captchaType: CaptchaType.HCaptchaProxyless);
+            var result = driver.SolveCaptcha<HCaptchaSolution>(clientKey: ClientKey);
             AssertSolveCaptchaResult(result);
         }
     }
