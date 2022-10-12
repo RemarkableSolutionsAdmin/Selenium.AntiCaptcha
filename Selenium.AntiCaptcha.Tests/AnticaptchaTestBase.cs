@@ -3,13 +3,20 @@ using AntiCaptchaApi.Net.Models;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Responses;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using Selenium.AntiCaptcha.enums;
 
 namespace Selenium.AntiCaptcha.Tests;
 
-public abstract class SolverTestsBase
+public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>
 {
+    protected WebDriverFixture fixture;
+
+    protected IWebDriver Driver => fixture.Driver;
+
+    public AnticaptchaTestBase(WebDriverFixture fixture)
+    {
+        this.fixture = fixture;
+    }
+    
     protected string ClientKey = Environment.GetEnvironmentVariable("ClientKey");
     internal const string UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116";
     internal static string ProxyAddress => Environment.GetEnvironmentVariable("ProxyAddress");
@@ -37,9 +44,10 @@ public abstract class SolverTestsBase
         };
     }
 
-    protected void AssertSolveCaptchaResult<TSolution>(TaskResultResponse<TSolution> result)
+    protected void AssertSolveCaptchaResult<TSolution>(TaskResultResponse<TSolution>? result)
         where TSolution : BaseSolution, new()
     {
+        Assert.NotNull(result);
         Assert.False(result.IsErrorResponse);
         Assert.NotNull(result.Solution);
         Assert.True(result.Solution.IsValid());

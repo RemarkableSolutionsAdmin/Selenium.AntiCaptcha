@@ -23,4 +23,9 @@
     <PackageReference Include="Selenium.WebDriver" Version="4.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Selenium.Anticaptcha.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 </Project>

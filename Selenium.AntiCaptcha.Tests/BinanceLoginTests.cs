@@ -1,7 +1,5 @@
-﻿using AntiCaptchaApi.Net.Models.Solutions;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using Selenium.AntiCaptcha.enums;
 
 namespace Selenium.AntiCaptcha.Tests;
 
