@@ -32,7 +32,6 @@ namespace Selenium.AntiCaptcha
             {
                 throw new ArgumentNullException(nameof(captchaType));
             }
-            //TODO: Raw solution currently does not work.
             //TODO: TSolution must be of right Type
             
             switch (captchaType.Value)
@@ -113,8 +112,6 @@ namespace Selenium.AntiCaptcha
         {
             switch (typeof(TSolution).Name)
             {
-                case nameof(RawSolution):
-                    return null;
                 case nameof(GeeTestV4Solution):
                     return CaptchaType.GeeTestV4Proxyless;
                 case nameof(GeeTestV3Solution):

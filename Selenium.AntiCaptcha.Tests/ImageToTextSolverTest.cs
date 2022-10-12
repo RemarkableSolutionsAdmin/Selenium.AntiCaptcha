@@ -13,7 +13,7 @@ public class ImageToTextSolverTest : SolverTestsBase
         using (var driver = new ChromeDriver())
         {
             driver.Url = "https://en.wikipedia.org/w/index.php?title=Special:CreateAccount&returnto=Main+Page";
-            var result = driver.SolveCaptcha<RawSolution>(ClientKey,
+            var result = driver.SolveCaptcha<ImageToTextSolution>(ClientKey,
                 imageElement: driver.FindElement(By.ClassName("fancycaptcha-image")),
                 responseElement: driver.FindElement(By.Id("mw-input-captchaWord")),
                 captchaType: CaptchaType.ImageToText);

@@ -6,7 +6,7 @@ using AntiCaptchaApi.Net.Responses;
 
 namespace Selenium.AntiCaptcha.solvers
 {
-    internal class FunCaptchaSolver : Solver<FunCaptchaRequest ,FunCaptchaSolution>
+    internal class FunCaptchaSolver : Solver<FunCaptchaRequest, FunCaptchaSolution>
     {
         protected override string GetSiteKey(IWebDriver driver, int waitingTime = 1000)
         {

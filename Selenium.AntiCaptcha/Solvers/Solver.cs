@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 namespace Selenium.AntiCaptcha.solvers;
 
 internal abstract class Solver<TRequest, TSolution>
-    where TRequest: CaptchaRequest
+    where TRequest: CaptchaRequest<TSolution>
     where TSolution: BaseSolution, new()
 {
     protected virtual string GetSiteKey(IWebDriver driver, int waitingTime = 1000)
@@ -53,13 +53,14 @@ internal abstract class Solver<TRequest, TSolution>
         var client = new AnticaptchaClient(clientKey);
         siteKey ??= GetSiteKey(driver);
         var request = BuildRequest(driver, url, siteKey, imageElement, userAgent, proxyConfig);
-        var result = client.SolveCaptcha<TRequest, TSolution>(request);
+        var result = client.SolveCaptcha(request);
 
         if (result.Status == TaskStatusType.Ready && result.Solution.IsValid())
         {
-            var jObject = (result.Solution as RawSolution)?.Cookies;
-            if (jObject != null)
-                AddCookies(driver, jObject);
+            //TODO! Cookies!
+            // var jObject = (result.Solution as RawSolution)?.Cookies;
+            // if (jObject != null)
+            //     AddCookies(driver, jObject);
 
             if (responseElement != null)
             {
