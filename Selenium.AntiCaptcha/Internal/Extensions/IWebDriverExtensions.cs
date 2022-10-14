@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using System.Text;
+using OpenQA.Selenium;
 
 namespace Selenium.AntiCaptcha.Internal.Extensions;
 
@@ -16,7 +17,49 @@ internal static class IWebDriverExtensions
         }
     }
 
+    public static List<IWebElement> FindManyByXPath(this IWebDriver driver, string xPath)
+    {
+        try
+        {
+            return driver.FindElements(By.XPath(xPath)).ToList();
+        }
+        catch (Exception e)
+        {
+            return new List<IWebElement>();
+        }
+    }
 
+    public static string GetAllPageSource(this IWebDriver driver)
+    {
+        var result = GatherAllPageSourcesInFrames(driver);
+        driver.SwitchTo().DefaultContent();
+        return result;
+    }
+
+    private static string GatherAllPageSourcesInFrames(IWebDriver driver)
+    {
+        var builder = new StringBuilder();
+
+        builder.Append(driver.PageSource);
+        var iframes = driver.FindManyByXPath("//iframe");
+        
+        foreach (var iframe in iframes)
+        {
+            try
+            {
+                driver.SwitchTo().Frame(iframe);
+                builder.Append(GatherAllPageSourcesInFrames(driver));
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+        
+        return builder.ToString();
+    }
+    
+    
     public static bool DoesAtLeastOneOfTheElementsExist(this IWebDriver driver, params string[] xPaths) =>
         xPaths.Any(xpath => driver.FindByXPath(xpath) != null);
     public static bool DoesAtLeastOneOfTheElementsExist(this IWebDriver driver, IEnumerable<string> xPaths) =>

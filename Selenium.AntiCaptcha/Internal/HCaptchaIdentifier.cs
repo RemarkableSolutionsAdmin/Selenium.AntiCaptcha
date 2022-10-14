@@ -1,10 +1,10 @@
 ﻿using AntiCaptchaApi.Net.Models;
 using OpenQA.Selenium;
-using Selenium.AntiCaptcha.enums;
+using Selenium.AntiCaptcha.Enums;
 
 namespace Selenium.AntiCaptcha.Internal;
 
-public class HCaptchaIdentifier : BaseCaptchaIdentifier
+public class HCaptchaIdentifier : ProxyCaptchaIdentifier
 {
     private static List<CaptchaType> HCaptchaTypes = new()
     {
@@ -15,13 +15,5 @@ public class HCaptchaIdentifier : BaseCaptchaIdentifier
     public HCaptchaIdentifier()
     {
         IdentifableTypes.AddRange(HCaptchaTypes);
-    }
-
-
-    public override CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, ProxyConfig? proxyConfig)
-    {
-
-        var x = "";
-        return base.SpecifyCaptcha(originalType, driver, proxyConfig);
     }
 }

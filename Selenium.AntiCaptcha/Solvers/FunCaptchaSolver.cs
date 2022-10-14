@@ -1,28 +1,27 @@
-﻿using AntiCaptchaApi.Net.Models;
-using OpenQA.Selenium;
+﻿using System.Text.RegularExpressions;
+using AntiCaptchaApi.Net.Models;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
-using AntiCaptchaApi.Net.Responses;
+using OpenQA.Selenium;
+using Selenium.AntiCaptcha.Internal.Extensions;
+using Selenium.AntiCaptcha.Solvers.Base;
 
-namespace Selenium.AntiCaptcha.solvers
+namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class FunCaptchaSolver : Solver<FunCaptchaRequest, FunCaptchaSolution>
+    internal class FunCaptchaSolver : FunCaptchaSolverBase<FunCaptchaRequest, FunCaptchaSolution>
     {
-        protected override string GetSiteKey(IWebDriver driver, int waitingTime = 1000)
-        {
-            return driver.FindElement(By.Id("funcaptcha")).GetAttribute("data-pkey");
-        }
 
         protected override FunCaptchaRequest BuildRequest(IWebDriver driver, string? url, string? siteKey, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
         {
-            throw new NotImplementedException();
-        }
-        
-        internal override TaskResultResponse<FunCaptchaSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey,
-            IWebElement? responseElement,
-            IWebElement? submitElement, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
-        {
-            throw new NotImplementedException();
+            return new FunCaptchaRequest
+            {
+                WebsiteUrl = url ?? driver.Url,
+                WebsitePublicKey = siteKey,
+                FunCaptchaApiJsSubdomain = null, // TODO.
+                Data = null, //TODO.
+                UserAgent = userAgent ?? Constants.AnticaptchaDefaultValues.UserAgent,
+                ProxyConfig = proxyConfig
+            };
         }
     }
 }

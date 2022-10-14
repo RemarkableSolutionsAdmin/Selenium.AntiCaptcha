@@ -1,11 +1,11 @@
 ﻿using AntiCaptchaApi.Net.Models;
 using OpenQA.Selenium;
-using Selenium.AntiCaptcha.enums;
+using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 
 namespace Selenium.AntiCaptcha.Internal;
 
-public class GeeTestIdentifier : BaseCaptchaIdentifier
+public class GeeTestIdentifier : ProxyCaptchaIdentifier
 {
     public GeeTestIdentifier()
     {
@@ -19,22 +19,31 @@ public class GeeTestIdentifier : BaseCaptchaIdentifier
         CaptchaType.GeeTestV4,
         CaptchaType.GeeTestV4Proxyless,
     };
-    
-    public override CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, ProxyConfig? proxyConfig)
+
+    public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig)
     {
-        if (!IsV4(driver)) //TODO! Need to find proper GeeTestV3 to check if this works.
+        var isV3 = IsV3(driver);
+        var isV4 = IsV4(driver);
+
+
+        if (isV3 == isV4)
         {
-            return IsV3(driver) ? base.SpecifyCaptcha(CaptchaType.GeeTestV3Proxyless, driver, proxyConfig) : null;
+            return null;
         }
         
-        return base.SpecifyCaptcha( CaptchaType.GeeTestV4Proxyless, driver, proxyConfig);
+        return base.SpecifyCaptcha(isV4 ? CaptchaType.GeeTestV4Proxyless : CaptchaType.GeeTestV3Proxyless, driver, proxyConfig);
+    }
+
+    public override CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, ProxyConfig? proxyConfig)
+    {
+        return Identify(driver, proxyConfig);
     }
     
     private static bool IsV3(IWebDriver driver)
     {
         var v3Paths = new List<string>()
         {
-            "//script[contains(@scr, 'https://static.geetest.com/v4/gt4.js')]"
+            "//script[contains(@src, 'https://api.geetest.com')]"
         };
 
         return driver.DoesAtLeastOneOfTheElementsExist(v3Paths.ToArray());
@@ -44,7 +53,7 @@ public class GeeTestIdentifier : BaseCaptchaIdentifier
     {
         var v4Paths = new List<string>()
         {
-            "//script[@src='https://static.geetest.com/v4/gt4.js']"
+            "//script[contains(@src, 'https://gcaptcha4.geetest.com')]"
         };
 
         return driver.DoesAtLeastOneOfTheElementsExist(v4Paths.ToArray());

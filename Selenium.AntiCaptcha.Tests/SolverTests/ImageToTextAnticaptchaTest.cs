@@ -8,9 +8,9 @@ namespace Selenium.Anticaptcha.Tests.SolverTests;
 public class ImageToTextAnticaptchaTest : AnticaptchaTestBase
 {
     [Fact]        
-    public void ImageToTextTest()
+    public void Solve_WithCaptchaTypeSpecified()
     {
-        Driver.Url = "https://en.wikipedia.org/w/index.php?title=Special:CreateAccount&returnto=Main+Page";
+        Driver.Url = TestUris.ImageToText.W1;
         var result = Driver.SolveCaptcha<ImageToTextSolution>(ClientKey,
             imageElement: Driver.FindElement(By.ClassName("fancycaptcha-image")),
             responseElement: Driver.FindElement(By.Id("mw-input-captchaWord")));
@@ -19,9 +19,9 @@ public class ImageToTextAnticaptchaTest : AnticaptchaTestBase
     }
     
     [Fact]        
-    public void ImageToTextTestWithoutCaptchaTypeSpecified()
+    public void Solve_WithoutCaptchaTypeSpecified()
     {
-        Driver.Url = "https://en.wikipedia.org/w/index.php?title=Special:CreateAccount&returnto=Main+Page";
+        Driver.Url = TestUris.ImageToText.W1;
         var result = Driver.SolveCaptcha<ImageToTextSolution>(ClientKey,
             imageElement: Driver.FindElement(By.ClassName("fancycaptcha-image")),
             responseElement: Driver.FindElement(By.Id("mw-input-captchaWord")));

@@ -24,6 +24,18 @@ public abstract class AnticaptchaTestBase
         where TSolution : BaseSolution, new()
     {
         Assert.NotNull(result);
+        if (!string.IsNullOrEmpty(result.ErrorDescription))
+        {
+            Assert.Empty(result.ErrorDescription);
+            Assert.NotNull(result.ErrorDescription);   
+        }
+
+        if (!string.IsNullOrEmpty(result.CreateTaskResponse.ErrorDescription))
+        {
+            Assert.Empty(result.CreateTaskResponse.ErrorDescription);
+            Assert.NotNull(result.CreateTaskResponse.ErrorDescription);
+        }
+        
         Assert.False(result.IsErrorResponse);
         Assert.NotNull(result.Solution);
         Assert.True(result.Solution.IsValid());

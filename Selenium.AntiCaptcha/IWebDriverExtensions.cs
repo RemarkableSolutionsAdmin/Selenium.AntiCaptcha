@@ -3,15 +3,17 @@ using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests.Abstractions;
 using AntiCaptchaApi.Net.Responses;
 using OpenQA.Selenium;
-using Selenium.AntiCaptcha.enums;
+using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal;
 using Selenium.AntiCaptcha.Internal.Helpers;
-using Selenium.AntiCaptcha.solvers;
 
 namespace Selenium.AntiCaptcha
 {
     public static class IWebDriverExtensions
     {
+        private static int IdentifyRetryThreshold = 3;
+        private static int IdentifyRetryWaitTimeMs = 2000;
+        
         public static void SolveCaptcha(
             this IWebDriver driver, 
             string clientKey, 
@@ -40,7 +42,7 @@ namespace Selenium.AntiCaptcha
             ProxyConfig? proxyConfig = null)
                 where TSolution : BaseSolution, new()
         {
-            captchaType ??= AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(driver, imageElement, proxyConfig);
+            captchaType ??= AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(driver, proxyConfig);
             
             if(!captchaType.HasValue)
             {
@@ -48,37 +50,10 @@ namespace Selenium.AntiCaptcha
             }
             
             ValidateSolutionOutputToCaptchaType<TSolution>(captchaType.Value);
+            var solver = SolverFactory.GetSolver<TSolution>(captchaType.Value);
 
-            switch (captchaType.Value)
-            {
-                case CaptchaType.ReCaptchaV2:
-                    return new ReCaptchaV2Solver().Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement,
-                            userAgent, proxyConfig)
-                        as TaskResultResponse<TSolution>;
-                case CaptchaType.HCaptchaProxyless:
-                    return new HCaptchaProxylessSolver().Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement,
-                            userAgent, proxyConfig)
-                        as TaskResultResponse<TSolution>;;
-                case CaptchaType.HCaptcha:
-                    return new HCaptchaSolver().Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement,
-                            userAgent, proxyConfig)
-                        as TaskResultResponse<TSolution>;
-                case CaptchaType.FunCaptcha:
-                    return new FunCaptchaSolver().Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement,
-                            userAgent, proxyConfig)
-                        as TaskResultResponse<TSolution>;
-                case CaptchaType.GeeTestV3:
-                    return new GeeTestV3Solver().Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement, userAgent, proxyConfig) 
-                        as TaskResultResponse<TSolution>;
-                case CaptchaType.GeeTestV4:
-                    return new GeeTestV4Solver().Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement, userAgent, proxyConfig) 
-                        as TaskResultResponse<TSolution>;
-                case CaptchaType.ImageToText:
-                    return new ImageToTextSolver().Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement, userAgent, proxyConfig)
-                        as TaskResultResponse<TSolution>;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(captchaType), captchaType, null);
-            }
+            return solver.Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement, userAgent, proxyConfig);
+
         }
 
         private static void ValidateSolutionOutputToCaptchaType<TSolution>(CaptchaType captchaType)

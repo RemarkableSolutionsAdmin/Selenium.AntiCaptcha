@@ -1,4 +1,4 @@
-﻿namespace Selenium.AntiCaptcha.enums
+﻿namespace Selenium.AntiCaptcha.Enums
 {
     public enum CaptchaType
     {

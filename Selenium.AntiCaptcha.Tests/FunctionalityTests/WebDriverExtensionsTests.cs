@@ -1,6 +1,6 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
 using Selenium.AntiCaptcha;
-using Selenium.AntiCaptcha.enums;
+using Selenium.AntiCaptcha.Enums;
 using Selenium.Anticaptcha.Tests.TestCore;
 
 namespace Selenium.Anticaptcha.Tests.FunctionalityTests;

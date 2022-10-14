@@ -1,5 +1,5 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
-using Selenium.AntiCaptcha.enums;
+using Selenium.AntiCaptcha.Enums;
 
 namespace Selenium.AntiCaptcha.Internal.Extensions;
 

@@ -6,11 +6,11 @@ using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class ReCaptchaV2Solver : RecaptchaSolverBase <RecaptchaV2Request, RecaptchaSolution>
+    internal class ReCaptchaV2EnterpriseSolver : RecaptchaSolverBase <RecaptchaV2EnterpriseRequest, RecaptchaSolution>
     {
-        protected override RecaptchaV2Request BuildRequest(IWebDriver driver, string? url, string? siteKey, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
+        protected override RecaptchaV2EnterpriseRequest BuildRequest(IWebDriver driver, string? url, string? siteKey, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
         {
-            return new RecaptchaV2Request
+            return new RecaptchaV2EnterpriseRequest
             {
                 WebsiteUrl = url ?? driver.Url,
                 WebsiteKey = siteKey,
@@ -18,6 +18,5 @@ namespace Selenium.AntiCaptcha.Solvers
                 ProxyConfig = proxyConfig,
             };
         }
-
     }
 }

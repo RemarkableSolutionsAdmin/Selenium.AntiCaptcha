@@ -1,16 +1,21 @@
 ﻿using AntiCaptchaApi.Net.Models;
 using OpenQA.Selenium;
-using Selenium.AntiCaptcha.enums;
+using Selenium.AntiCaptcha.Enums;
 
 namespace Selenium.AntiCaptcha.Internal;
 
-public abstract class BaseCaptchaIdentifier : ICaptchaIdentifier
+public abstract class ProxyCaptchaIdentifier : ICaptchaIdentifier
 {
     protected readonly List<CaptchaType> IdentifableTypes = new();
     
-    public bool IsIdentifiable(CaptchaType type)
+    public bool CanIdentify(CaptchaType type)
     {
         return IdentifableTypes.Contains(type);
+    }
+
+    public virtual CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig)
+    {
+        return null;
     }
 
     public virtual CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, ProxyConfig? proxyConfig)

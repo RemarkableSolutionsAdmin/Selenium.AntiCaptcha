@@ -2,30 +2,34 @@
 using AntiCaptchaApi.Net;
 using AntiCaptchaApi.Net.Enums;
 using AntiCaptchaApi.Net.Models;
-using OpenQA.Selenium;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests.Abstractions;
 using AntiCaptchaApi.Net.Responses;
 using Newtonsoft.Json.Linq;
+using OpenQA.Selenium;
+using Selenium.AntiCaptcha.Internal.Extensions;
 
-namespace Selenium.AntiCaptcha.solvers;
+namespace Selenium.AntiCaptcha.Solvers.Base;
 
-internal abstract class Solver<TRequest, TSolution>
+internal abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
     where TRequest: CaptchaRequest<TSolution>
     where TSolution: BaseSolution, new()
 {
-    protected virtual string GetSiteKey(IWebDriver driver, int waitingTime = 1000)
+    protected virtual string GetSiteKey(IWebDriver driver, int waitingTime = 1000, int tries = 3)
     {
-        Thread.Sleep(waitingTime);
+        if (tries <= 0)
+            return string.Empty;
         
+        Thread.Sleep(waitingTime);
+        var pageSource = driver.GetAllPageSource();
         var regex = new Regex("gt=(.*?)&");
-        var gt = regex.Match(driver.PageSource).Groups[1].Value;
+        var gt = regex.Match(pageSource).Groups[1].Value;
 
         if (!string.IsNullOrEmpty(gt))
             return gt;
         
         regex = new Regex("captcha_id=(.*?)&");
-        var captchaIdRegexGroups = regex.Match(driver.PageSource).Groups;
+        var captchaIdRegexGroups = regex.Match(pageSource).Groups;
         gt = captchaIdRegexGroups[1].Value;
 
         
@@ -33,25 +37,23 @@ internal abstract class Solver<TRequest, TSolution>
             return gt;
 
         regex = new Regex("sitekey=(.*?)&");
-        var siteKeyCaptchaGroups = regex.Match(driver.PageSource).Groups;
+        var siteKeyCaptchaGroups = regex.Match(pageSource).Groups;
         gt = siteKeyCaptchaGroups[1].Value;
 
         if (string.IsNullOrEmpty(gt))
-            GetSiteKey(driver, waitingTime);
+            GetSiteKey(driver, waitingTime, --tries);
         return gt;
     }
 
     protected abstract TRequest BuildRequest(IWebDriver driver, string? url, string? siteKey,
-        IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig);
+        IWebElement? imageElement, string? userAgent, ProxyConfig? proxyConfig);
 
     protected virtual void FillResponseElement(IWebDriver driver, TSolution solution, IWebElement? responseElement)
     {
         
     }
-
-    internal virtual TaskResultResponse<TSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey,
-        IWebElement? responseElement,
-        IWebElement? submitElement, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
+    public TaskResultResponse<TSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
+        IWebElement? submitElement, IWebElement? imageElement, string? userAgent, ProxyConfig? proxyConfig)
     {
         var client = new AnticaptchaClient(clientKey);
         siteKey ??= GetSiteKey(driver);
@@ -75,16 +77,15 @@ internal abstract class Solver<TRequest, TSolution>
         return result;
     }
 
-    protected static void AddCookies(IWebDriver driver, JObject Cookies)
+    private static void AddCookies(IWebDriver driver, JObject? cookies)
     {
-        if (Cookies != null && Cookies.Count > 0)
+        if (cookies is not { Count: > 0 }) 
+            return;
+        driver.Manage().Cookies.DeleteAllCookies();
+        foreach (var cookie in cookies)
         {
-            driver.Manage().Cookies.DeleteAllCookies();
-            foreach (var cookie in Cookies)
-            {
-                if (!string.IsNullOrEmpty(cookie.Key) && !string.IsNullOrEmpty(cookie.Value?.ToString()))
-                    driver.Manage().Cookies.AddCookie(new Cookie(cookie.Key, cookie.Value.ToString()));
-            }
+            if (!string.IsNullOrEmpty(cookie.Key) && !string.IsNullOrEmpty(cookie.Value?.ToString()))
+                driver.Manage().Cookies.AddCookie(new Cookie(cookie.Key, cookie.Value.ToString()));
         }
     }
 }

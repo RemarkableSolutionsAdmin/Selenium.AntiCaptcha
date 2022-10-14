@@ -6,7 +6,7 @@ using Selenium.Anticaptcha.Tests.TestCore;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests;
 
-public class GeeV4SolverTests : AnticaptchaTestBase
+public class GeeV4ProxylessSolverTests : AnticaptchaTestBase
 {
     [Fact]
     public void Solve_CaptchaTypeSpecified()
@@ -18,7 +18,7 @@ public class GeeV4SolverTests : AnticaptchaTestBase
         Assert.NotNull(slideButton);
         slideButton.Click();
         Thread.Sleep(1000);
-        var result = Driver.SolveCaptcha<GeeTestV4Solution>(ClientKey, CaptchaType.GeeTestV4, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+        var result = Driver.SolveCaptcha<GeeTestV4Solution>(ClientKey, CaptchaType.GeeTestV4Proxyless);
 
         AssertSolveCaptchaResult(result);
     }
@@ -33,7 +33,7 @@ public class GeeV4SolverTests : AnticaptchaTestBase
         Assert.NotNull(slideButton);
         slideButton.Click();
         Thread.Sleep(1000);
-        var result = Driver.SolveCaptcha<GeeTestV4Solution>(ClientKey, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+        var result = Driver.SolveCaptcha<GeeTestV4Solution>(ClientKey);
 
         AssertSolveCaptchaResult(result);
     }
@@ -63,7 +63,7 @@ public class GeeV4SolverTests : AnticaptchaTestBase
     }
 
 
-    public GeeV4SolverTests(WebDriverFixture fixture) : base(fixture)
+    public GeeV4ProxylessSolverTests(WebDriverFixture fixture) : base(fixture)
     {
     }
 }

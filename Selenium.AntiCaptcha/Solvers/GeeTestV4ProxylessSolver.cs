@@ -7,19 +7,17 @@ using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class GeeTestV4Solver : Solver<GeeTestV4Request, GeeTestV4Solution>
+    internal class GeeTestV4ProxylessSolver : Solver<GeeTestV4ProxylessRequest, GeeTestV4Solution>
     {
-        protected override GeeTestV4Request BuildRequest(IWebDriver driver, string? url, string? siteKey, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
+        protected override GeeTestV4ProxylessRequest BuildRequest(IWebDriver driver, string? url, string? siteKey, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
         {
             siteKey ??= GetSiteKey(driver);
             var challenge = GetChallenge(driver);
-            return  new GeeTestV4Request
+            return  new GeeTestV4ProxylessRequest
             {
                 WebsiteUrl = url ?? driver.Url,
                 Challenge = challenge,
                 Gt = siteKey,
-                ProxyConfig = proxyConfig,
-                UserAgent = userAgent ?? Constants.AnticaptchaDefaultValues.UserAgent
                 //TODO!
                 // InitParameters = new Dictionary<string, string>()
                 // {

@@ -9,7 +9,7 @@ public class HCaptchaProxylessAnticaptchaTest : AnticaptchaTestBase
     [Fact]
     public void HCaptchaWithCaptchaTypeSpecified()
     {
-        Driver.Url = "https://entwickler.ebay.de/signin?tab=register";
+        Driver.Url = TestUris.HCaptcha.W1;
         var result = Driver.SolveCaptcha<HCaptchaSolution>(clientKey: ClientKey);
         AssertSolveCaptchaResult(result);
     }
@@ -18,7 +18,7 @@ public class HCaptchaProxylessAnticaptchaTest : AnticaptchaTestBase
     [Fact]
     public void HCaptchaWithProxyWithoutCaptchaType()
     {
-        Driver.Url = "https://entwickler.ebay.de/signin?tab=register";
+        Driver.Url = TestUris.HCaptcha.W1;
         var result = Driver.SolveCaptcha<HCaptchaSolution>(clientKey: ClientKey,
             proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
         AssertSolveCaptchaResult(result);

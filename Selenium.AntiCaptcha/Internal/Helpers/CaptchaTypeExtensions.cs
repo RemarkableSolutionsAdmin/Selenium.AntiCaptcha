@@ -1,6 +1,6 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
-using Selenium.AntiCaptcha.enums;
+using Selenium.AntiCaptcha.Enums;
 
 namespace Selenium.AntiCaptcha.Internal.Helpers;
 
@@ -19,6 +19,8 @@ public static class CaptchaTypeExtensions
             case CaptchaType.ReCaptchaV2EnterpriseProxyless:
                 return typeof(RecaptchaSolution);
             case CaptchaType.ReCaptchaV3Proxyless:
+                return typeof(RecaptchaSolution);
+            case CaptchaType.ReCaptchaV3Enterprise:
                 return typeof(RecaptchaSolution);
             case CaptchaType.HCaptcha:
                 return typeof(HCaptchaSolution);
