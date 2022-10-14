@@ -60,7 +60,6 @@ internal abstract class Solver<TRequest, TSolution>
 
         if (result.Status == TaskStatusType.Ready && result.Solution.IsValid())
         {
-            //TODO! Cookies!
             var jObject = (result.Solution as AntiGateSolution)?.Cookies; //Should add interface to Solution which returns Cookies.
             if (jObject != null)
                 AddCookies(driver, jObject);

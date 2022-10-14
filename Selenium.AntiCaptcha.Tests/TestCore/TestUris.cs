@@ -20,6 +20,11 @@ public static class TestUris
     {
         public static class V4
         {
+            public const string W1 = "https://www.geetest.com/en/adaptive-captcha-demo";
+        }
+
+        public static class V3
+        {
             public const string W1 = "https://www.geetest.com/en/demo";
         }
     }

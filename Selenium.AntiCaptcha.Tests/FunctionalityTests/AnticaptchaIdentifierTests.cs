@@ -46,7 +46,7 @@ public class AnticaptchaIdentifierTests : AnticaptchaTestBase
     private void TestIdentifier<TSolution>(string websiteUrl, CaptchaType expectedType, ProxyConfig? proxyConfig)
         where TSolution : BaseSolution, new()
     {
-        fixture.Driver.Url = websiteUrl;
+        Fixture.Driver.Url = websiteUrl;
         var type = AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(Driver, null, proxyConfig);
         Assert.NotNull(type);
         Assert.Equal(expectedType, type.Value);

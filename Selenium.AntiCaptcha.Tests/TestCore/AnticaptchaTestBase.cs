@@ -9,18 +9,18 @@ namespace Selenium.Anticaptcha.Tests.TestCore;
 [Collection(TestEnvironment.DriverBasedTestCollection)]
 public abstract class AnticaptchaTestBase
 {
-    protected WebDriverFixture fixture;
+    protected readonly WebDriverFixture Fixture;
 
-    protected IWebDriver Driver => fixture.Driver;
+    protected IWebDriver Driver => Fixture.Driver;
 
-    public AnticaptchaTestBase(WebDriverFixture fixture)
+    protected AnticaptchaTestBase(WebDriverFixture fixture)
     {
-        this.fixture = fixture;
+        Fixture = fixture;
     }
     
-    protected string ClientKey = TestEnvironment.ClientKey;
+    protected readonly string ClientKey = TestEnvironment.ClientKey;
 
-    protected void AssertSolveCaptchaResult<TSolution>(TaskResultResponse<TSolution>? result)
+    protected static void AssertSolveCaptchaResult<TSolution>(TaskResultResponse<TSolution>? result)
         where TSolution : BaseSolution, new()
     {
         Assert.NotNull(result);

@@ -6,19 +6,19 @@ using Selenium.Anticaptcha.Tests.TestCore;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests;
 
-public class GeeV4SolverTests : AnticaptchaTestBase
+public class GeeV3SolverTests : AnticaptchaTestBase
 {
     [Fact]
-    public void GeeV4Test()
+    public void GeeV3Test()
     {
-        Driver.Url = TestUris.GeeTest.V4.W1;
+        Driver.Url = TestUris.GeeTest.V3.W1;
         var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
         var slideButton = FindSlideButton(allButtonParents);
         
         Assert.NotNull(slideButton);
-        slideButton.Click();
         Thread.Sleep(1000);
-        var result = Driver.SolveCaptcha<GeeTestV4Solution>(ClientKey, CaptchaType.GeeTestV4);
+        slideButton.Click();
+        var result = Driver.SolveCaptcha<GeeTestV3Solution>(ClientKey, CaptchaType.GeeTestV3);
         
         AssertSolveCaptchaResult(result);
     }
@@ -48,7 +48,7 @@ public class GeeV4SolverTests : AnticaptchaTestBase
     }
 
 
-    public GeeV4SolverTests(WebDriverFixture fixture) : base(fixture)
+    public GeeV3SolverTests(WebDriverFixture fixture) : base(fixture)
     {
     }
 }

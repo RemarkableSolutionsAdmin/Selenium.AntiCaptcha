@@ -34,7 +34,11 @@ namespace Selenium.AntiCaptcha.solvers
             {
                 WebsiteUrl = url ?? driver.Url,
                 Challenge = challenge,
-                Gt = siteKey
+                Gt = siteKey,
+                InitParameters = new Dictionary<string, string>()
+                {
+                    {"riskType", "slide"}
+                }
             };
         }
 
