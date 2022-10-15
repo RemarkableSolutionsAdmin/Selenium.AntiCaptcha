@@ -11,7 +11,7 @@ public class GeeV3SolverTests : AnticaptchaTestBase
     [Fact]
     public void GeeV3Test()
     {
-        Driver.Url = TestUris.GeeTest.V3.W2;
+        SetDriverUrl(TestUris.GeeTest.V3.W2);
         var result = Driver.SolveCaptcha<GeeTestV3Solution>(ClientKey, CaptchaType.GeeTestV3, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
         AssertSolveCaptchaResult(result);
     }

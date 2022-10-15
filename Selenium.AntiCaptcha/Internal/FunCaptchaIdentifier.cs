@@ -48,7 +48,7 @@ internal class FunCaptchaIdentifier : ProxyCaptchaIdentifier
                 return true;
             }
             
-            var frames = driver.FindManyByXPath("//iframe");
+            var frames = driver.FindManyByXPathCurrentFrame("//iframe");
 
             foreach (var frame in frames)
             {
@@ -75,7 +75,7 @@ internal class FunCaptchaIdentifier : ProxyCaptchaIdentifier
     {
         try
         {
-            var frames = driver.FindManyByXPath("//iframe");
+            var frames = driver.FindManyByXPathCurrentFrame("//iframe");
 
             foreach (var frame in frames)
             {

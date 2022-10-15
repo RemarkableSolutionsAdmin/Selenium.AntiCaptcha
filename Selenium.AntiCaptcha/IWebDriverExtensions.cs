@@ -5,6 +5,7 @@ using AntiCaptchaApi.Net.Responses;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal;
+using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Internal.Helpers;
 
 namespace Selenium.AntiCaptcha

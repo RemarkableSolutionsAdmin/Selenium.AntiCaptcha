@@ -3,11 +3,10 @@ using AntiCaptchaApi.Net.Models;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Responses;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Selenium.Anticaptcha.Tests.TestCore;
-
-[Collection(TestEnvironment.DriverBasedTestCollection)]
-public abstract class AnticaptchaTestBase
+public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>
 {
     private readonly WebDriverFixture _fixture;
     private static int _testInstanceCount;
@@ -19,12 +18,25 @@ public abstract class AnticaptchaTestBase
     protected AnticaptchaTestBase(WebDriverFixture fixture)
     {
         this._fixture = fixture;
-        Driver = _fixture.Drivers[_testInstanceCount++ % WebDriverFixture.DriversCount];
+        Driver = _fixture.Driver;
     }
 
 
     protected readonly string ClientKey = TestEnvironment.ClientKey;
 
+    protected void SetDriverUrl(string url)
+    {
+        try
+        {
+            Driver.Navigate().GoToUrl(url);
+        }
+        catch (WebDriverException e)
+        {
+            _fixture.RecreateWebDriver();
+            Driver.Url = url;
+        };
+    }
+    
     protected static void AssertSolveCaptchaResult<TSolution>(TaskResultResponse<TSolution>? result)
         where TSolution : BaseSolution, new()
     {

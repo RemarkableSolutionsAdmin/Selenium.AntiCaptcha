@@ -11,7 +11,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         [Fact]
         public void Solve_CaptchaTypeSpecified()
         {
-            Driver.Url = TestUris.AntiGate.W1;
+            SetDriverUrl(TestUris.AntiGate.W1);
             var result = Driver.SolveCaptcha<AntiGateSolution>(ClientKey, 
                 captchaType: CaptchaType.AntiGate,
                 proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
@@ -21,7 +21,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         [Fact]
         public void Solve_WithoutCaptchaTypeSpecified()
         {
-            Driver.Url = TestUris.AntiGate.W1;
+            SetDriverUrl(TestUris.AntiGate.W1);
             var result = Driver.SolveCaptcha<AntiGateSolution>(ClientKey,
                 proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
             AssertSolveCaptchaResult(result);

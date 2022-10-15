@@ -5,6 +5,26 @@ namespace Selenium.AntiCaptcha.Internal.Extensions;
 
 internal static class IWebDriverExtensions
 {
+    public static void ForEachFrame(this IWebDriver driver, Action? action)
+    {
+        try
+        {
+            action?.Invoke();
+            var frames = driver.GetCurrentFrames();
+            foreach (var frame in frames)
+            {
+                driver.SwitchTo().Frame(frame);
+                driver.ForEachFrame(action);
+            }
+
+            driver.SwitchTo().DefaultContent();
+        }
+        catch (Exception)
+        {
+            //ignore
+        }
+    }
+    
     public static IWebElement? FindByXPath(this IWebDriver driver, string xPath)
     {
         try
@@ -16,24 +36,55 @@ internal static class IWebDriverExtensions
             return null;
         }
     }
+
+    public static IEnumerable<IWebElement> GetCurrentFrames(this IWebDriver driver)
+    {
+        return driver.FindElements(By.XPath("//iframe"));
+    }
+
+    public static IWebElement? FindByXPathAllFrames(this IWebDriver driver, string xPath)
+    {
+        try
+        {
+            var result = driver.FindByXPath(xPath);
+
+            if (result != null)
+            {
+                return result;
+            }
+
+            var frames = driver.GetCurrentFrames();
+            foreach (var frame in frames)
+            {
+                driver.SwitchTo().Frame(frame);
+                result = driver.FindByXPathAllFrames(xPath);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+
+            return null;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+        finally
+        {
+            driver.SwitchTo().DefaultContent();
+        }
+    }
+    
     public static List<IWebElement> FindManyByXPathAllFrames(this IWebDriver driver, string xPath)
     {
         var result = new List<IWebElement>();
         try
         {
-            var frames = driver.FindElements(By.XPath("//iframe"));
-
-            foreach (var frame in frames)
-            {
-                driver.SwitchTo().Frame(frame);
-                result.AddRange(driver.FindManyByXPathAllFrames(xPath));
-            }
-            
-            result.AddRange(driver.FindManyByXPath(xPath));
-
+            driver.ForEachFrame(() => result.AddRange(driver.FindManyByXPathCurrentFrame(xPath)));
             return result;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return new List<IWebElement>();
         }
@@ -43,7 +94,7 @@ internal static class IWebDriverExtensions
         }
     }
 
-    public static List<IWebElement> FindManyByXPath(this IWebDriver driver, string xPath)
+    public static List<IWebElement> FindManyByXPathCurrentFrame(this IWebDriver driver, string xPath)
     {
         try
         {
@@ -67,7 +118,7 @@ internal static class IWebDriverExtensions
         var builder = new StringBuilder();
 
         builder.Append(driver.PageSource);
-        var iframes = driver.FindManyByXPath("//iframe");
+        var iframes = driver.FindManyByXPathCurrentFrame("//iframe");
         
         foreach (var iframe in iframes)
         {

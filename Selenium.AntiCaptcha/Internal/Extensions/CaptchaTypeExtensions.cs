@@ -1,8 +1,7 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
-using AntiCaptchaApi.Net.Requests;
 using Selenium.AntiCaptcha.Enums;
 
-namespace Selenium.AntiCaptcha.Internal.Helpers;
+namespace Selenium.AntiCaptcha.Internal.Extensions;
 
 public static class CaptchaTypeExtensions
 {

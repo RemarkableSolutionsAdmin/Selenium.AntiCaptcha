@@ -1,4 +1,5 @@
-﻿using AntiCaptchaApi.Net.Models;
+﻿using System.Text.RegularExpressions;
+using AntiCaptchaApi.Net.Models;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
@@ -22,48 +23,36 @@ public class GeeTestIdentifier : ProxyCaptchaIdentifier
 
     public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig, IWebElement? imageElement = null)
     {
-        var isV3 = IsV3(driver);
-        var isV4 = IsV4(driver);
+        var geeScriptElement = GetGeeScriptElement(driver);
 
-
-        if (isV3 == isV4)
-        {
+        if (geeScriptElement == null)
             return null;
-        }
+
+        var scriptSrcText = geeScriptElement.GetAttribute("src");
+
+        if (string.IsNullOrEmpty(scriptSrcText))
+            return null;
+
+        var areChallengeAndGtInScriptSource = scriptSrcText
+            .DoesContainRegex("challenge=", "gt=");
+
+        if (!areChallengeAndGtInScriptSource)
+            return null;
+
+        var hasV4OnlyAttribute = scriptSrcText.DoesContainRegex("captcha_id=\\w{32}");
         
-        return base.SpecifyCaptcha(isV4 ? CaptchaType.GeeTestV4Proxyless : CaptchaType.GeeTestV3Proxyless, driver, proxyConfig);
+
+        return base.SpecifyCaptcha(hasV4OnlyAttribute ? CaptchaType.GeeTestV4Proxyless : CaptchaType.GeeTestV3Proxyless, driver, proxyConfig);
     }
 
     public override CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, ProxyConfig? proxyConfig)
     {
         return Identify(driver, proxyConfig);
     }
-    
-    private static bool IsV3(IWebDriver driver)
-    {
-        var v3Paths = new List<string>()
-        {
-            "//script[contains(@src, 'https://api.geetest.com')]"
-        };
 
-        return driver.DoesAtLeastOneOfTheElementsExist(v3Paths.ToArray());
-    }
-    
-    private static bool IsV4(IWebDriver driver)
+    private static IWebElement? GetGeeScriptElement(IWebDriver driver)
     {
-        var v4Paths = new List<string>()
-        {
-            "//script[contains(@src, 'https://gcaptcha4.geetest.com')]"
-        };
-
-        return driver.DoesAtLeastOneOfTheElementsExist(v4Paths.ToArray());
-    }
-
-    private static bool IsRecaptchaEnterprise(string pageSource)
-    {
-        return pageSource.DoesContainRegex( 
-            @"https:\/\/recaptcha.net\/recaptcha\/enterprise",
-            @"https:\/\/www.google.com\/recaptcha\/enterprise");
+        return driver.FindByXPathAllFrames("//script[contains(@src, 'geetest.com') and contains(@src, 'challenge')]");
     }
 
 }

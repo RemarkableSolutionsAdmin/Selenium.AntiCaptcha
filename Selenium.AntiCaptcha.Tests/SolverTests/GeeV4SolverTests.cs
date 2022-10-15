@@ -11,7 +11,7 @@ public class GeeV4SolverTests : AnticaptchaTestBase
     [Fact]
     public void Solve_CaptchaTypeSpecified()
     {
-        Driver.Url = TestUris.GeeTest.V4.W1;
+        SetDriverUrl(TestUris.GeeTest.V4.W1);
         var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
         var slideButton = FindSlideButton(allButtonParents);
         
@@ -26,7 +26,7 @@ public class GeeV4SolverTests : AnticaptchaTestBase
     [Fact]
     public void Solve_WithoutCaptchaTypeSpecified()
     {
-        Driver.Url = TestUris.GeeTest.V4.W1;
+        SetDriverUrl(TestUris.GeeTest.V4.W1);
         var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
         var slideButton = FindSlideButton(allButtonParents);
         

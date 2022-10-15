@@ -10,7 +10,7 @@ public class ImageToTextAnticaptchaTest : AnticaptchaTestBase
     [Fact]        
     public void Solve_WithCaptchaTypeSpecified()
     {
-        Driver.Url = TestUris.ImageToText.W1;
+        SetDriverUrl(TestUris.ImageToText.W1);
         var result = Driver.SolveCaptcha<ImageToTextSolution>(ClientKey,
             imageElement: Driver.FindElement(By.ClassName("fancycaptcha-image")),
             responseElement: Driver.FindElement(By.Id("mw-input-captchaWord")));
@@ -21,7 +21,7 @@ public class ImageToTextAnticaptchaTest : AnticaptchaTestBase
     [Fact]        
     public void Solve_WithoutCaptchaTypeSpecified()
     {
-        Driver.Url = TestUris.ImageToText.W1;
+        SetDriverUrl(TestUris.ImageToText.W1);
         var result = Driver.SolveCaptcha<ImageToTextSolution>(ClientKey,
             imageElement: Driver.FindElement(By.ClassName("fancycaptcha-image")),
             responseElement: Driver.FindElement(By.Id("mw-input-captchaWord")));

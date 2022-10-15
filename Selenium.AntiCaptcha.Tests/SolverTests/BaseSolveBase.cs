@@ -21,7 +21,7 @@ public abstract class BaseSolveBase <TSolution> : AnticaptchaTestBase
     // [Fact]
     // public void Solve_WithCaptchaTypeSpecified(CaptchaSolverTest)
     // {
-    //     Driver.Url = TestUris.Recaptcha.V2.NonEnterprise.W2;
+    //     SetDriverUrl(websiteUrl); = TestUris.Recaptcha.V2.NonEnterprise.W2;
     //     var result = Driver.SolveCaptcha<TSolution>(ClientKey, captchaType: CaptchaType.ReCaptchaV2Proxyless);
     //     AssertSolveCaptchaResult(result);
     // }

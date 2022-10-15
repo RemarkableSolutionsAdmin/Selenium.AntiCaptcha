@@ -2,6 +2,7 @@
 using AntiCaptchaApi.Net.Models.Solutions;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal;
+using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Internal.Helpers;
 using Selenium.Anticaptcha.Tests.TestCore;
 
@@ -39,22 +40,6 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
                 TestNonGenericIdentifier(captchaUri.Uri, proxyType, TestEnvironment.GetCurrentTestProxyConfig());
             }
         }
-        
-        //TODO. No idea how to do it .
-        // [Theory]
-        // [InlineData(TestUris.ImageToText.W1, CaptchaType.ImageToText)]
-        // public void ShouldReturnProperImageToTextType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
-        // {
-        //     TestNonGenericIdentifier(websiteUrl, expectedType, null);
-        // }
-
-        // TODO: Find proper website uri
-        // [Theory]
-        // [InlineData(TestUris.AntiGate.W1, CaptchaType.AntiGate)]
-        // public void ShouldReturnProperAntiGateType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
-        // {
-        //     TestNonGenericIdentifier(websiteUrl, expectedType, null);
-        // }
     }
     
 
@@ -94,7 +79,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         }
 
         [Theory]
-        [InlineData(TestUris.Recaptcha.V3.NonEnterprise.W1, CaptchaType.ReCaptchaV3Enterprise)]
+        [InlineData(TestUris.Recaptcha.V3.Enterprise.W1, CaptchaType.ReCaptchaV3Enterprise)]
         [InlineData(TestUris.Recaptcha.V3.NonEnterprise.W1, CaptchaType.ReCaptchaV3Proxyless)]
         [InlineData(TestUris.Recaptcha.V2.NonEnterprise.W1, CaptchaType.ReCaptchaV2Proxyless)]
         public void ShouldReturnProperRecaptchaType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
@@ -164,7 +149,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
     
     protected void TestNonGenericIdentifier(CaptchaUri captchaUri, ProxyConfig? proxyConfig = null)
     {
-        Driver.Url = captchaUri.Uri;
+        SetDriverUrl(captchaUri.Uri);
         var identifiedTypes = AllCaptchaTypesIdentifier.Identify(Driver, proxyConfig);
         var testFailed = identifiedTypes.Count != 1 || identifiedTypes[0] != captchaUri.ExpectedType;
         
@@ -176,7 +161,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
 
     protected void TestNonGenericIdentifier(string websiteUrl, CaptchaType expectedType, ProxyConfig? proxyConfig)
     {
-        Driver.Url = websiteUrl;
+        SetDriverUrl(websiteUrl);
         var identifiedTypes = AllCaptchaTypesIdentifier.Identify(Driver, proxyConfig);
         var testFailed = identifiedTypes.Count != 1 || identifiedTypes[0] != expectedType;
         
@@ -189,10 +174,13 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
     protected void TestIdentifier<TSolution>(string websiteUrl, CaptchaType expectedType, ProxyConfig? proxyConfig = null)
         where TSolution : BaseSolution, new()
     {
-        Driver.Url = websiteUrl;
+        SetDriverUrl(websiteUrl);
         var type = AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(Driver, proxyConfig);
-        Assert.NotNull(type);
-        Assert.Equal(expectedType, type.Value);
+        var testFailed = type == null || type != expectedType;
+        Assert.False(testFailed,
+            $"Test non generic identifier failed for url: {websiteUrl}. \n" +
+            $"Expected type {expectedType}, but found {type}\n" +
+            $"ProxyConfig was {proxyConfig}");
     }
     public CaptchaIdentifierTests(WebDriverFixture fixture) : base(fixture) {}
 }
