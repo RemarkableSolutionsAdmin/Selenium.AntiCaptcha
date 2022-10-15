@@ -16,4 +16,9 @@ public class HCaptchaIdentifier : ProxyCaptchaIdentifier
     {
         IdentifableTypes.AddRange(HCaptchaTypes);
     }
+
+    public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig, IWebElement? imageElement = null)
+    {
+        return null; //todo!
+    }
 }

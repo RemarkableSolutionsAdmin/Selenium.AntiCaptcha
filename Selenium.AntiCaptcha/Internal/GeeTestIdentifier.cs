@@ -20,7 +20,7 @@ public class GeeTestIdentifier : ProxyCaptchaIdentifier
         CaptchaType.GeeTestV4Proxyless,
     };
 
-    public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig)
+    public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig, IWebElement? imageElement = null)
     {
         var isV3 = IsV3(driver);
         var isV4 = IsV4(driver);

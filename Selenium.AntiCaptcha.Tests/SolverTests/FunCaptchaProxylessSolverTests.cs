@@ -13,8 +13,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         {
             Driver.Url = TestUris.FunCaptcha.W1;
             var result = Driver.SolveCaptcha<FunCaptchaSolution>(ClientKey, 
-                captchaType: CaptchaType.FunCaptchaProxyless,
-                proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+                captchaType: CaptchaType.FunCaptchaProxyless);
             AssertSolveCaptchaResult(result);
         }
         
@@ -22,8 +21,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         public void Solve_WithoutCaptchaTypeSpecified()
         {
             Driver.Url = TestUris.FunCaptcha.W1;
-            var result = Driver.SolveCaptcha<FunCaptchaSolution>(ClientKey,
-                proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+            var result = Driver.SolveCaptcha<FunCaptchaSolution>(ClientKey);
             AssertSolveCaptchaResult(result);
         }
 

@@ -6,45 +6,87 @@ namespace Selenium.AntiCaptcha.Internal.Helpers;
 
 public static class CaptchaTypeExtensions
 {
+    private static readonly List<CaptchaType> ProxyCaptchaTypes = new()
+    {
+        CaptchaType.FunCaptcha,
+        CaptchaType.HCaptcha,
+        CaptchaType.GeeTestV3,
+        CaptchaType.GeeTestV4,
+        CaptchaType.ReCaptchaV2,
+        CaptchaType.ReCaptchaV2Enterprise,
+        CaptchaType.ReCaptchaV3Enterprise,
+    };
+    
+    
+    private static readonly List<CaptchaType> ProxylessCaptchaTypes = new()
+    {
+        CaptchaType.ReCaptchaV2Proxyless,
+        CaptchaType.ReCaptchaV2EnterpriseProxyless,
+        CaptchaType.ReCaptchaV3Proxyless,
+        CaptchaType.HCaptchaProxyless,
+        CaptchaType.FunCaptchaProxyless,
+        CaptchaType.ImageToText,
+        CaptchaType.GeeTestV3Proxyless,
+        CaptchaType.GeeTestV4Proxyless,
+        CaptchaType.AntiGate
+    };
+
+    public static CaptchaType ToProxyType(this CaptchaType type)
+    {
+        return type switch
+        {
+            CaptchaType.ReCaptchaV2Proxyless => CaptchaType.ReCaptchaV2,
+            CaptchaType.ReCaptchaV2EnterpriseProxyless => CaptchaType.ReCaptchaV2Enterprise,
+            CaptchaType.ReCaptchaV2Enterprise => CaptchaType.ReCaptchaV2Enterprise,
+            CaptchaType.ReCaptchaV3Proxyless => CaptchaType.ReCaptchaV3Enterprise,
+            CaptchaType.ReCaptchaV2 => CaptchaType.ReCaptchaV2,
+            CaptchaType.HCaptcha => CaptchaType.HCaptcha,
+            CaptchaType.HCaptchaProxyless => CaptchaType.HCaptcha,
+            CaptchaType.FunCaptcha => CaptchaType.FunCaptcha,
+            CaptchaType.FunCaptchaProxyless => CaptchaType.FunCaptcha,
+            CaptchaType.ImageToText => CaptchaType.ImageToText,
+            CaptchaType.GeeTestV3 => CaptchaType.GeeTestV3,
+            CaptchaType.GeeTestV4 => CaptchaType.GeeTestV4,
+            CaptchaType.GeeTestV3Proxyless => CaptchaType.GeeTestV3,
+            CaptchaType.GeeTestV4Proxyless => CaptchaType.GeeTestV4,
+            CaptchaType.AntiGate => CaptchaType.AntiGate,
+            CaptchaType.ReCaptchaV3Enterprise => CaptchaType.ReCaptchaV3Enterprise,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+    
+    public static bool IsProxyType(this CaptchaType captchaType)
+    {
+        return ProxyCaptchaTypes.Contains(captchaType);
+    }
+    
+    public static bool IsProxylessType(this CaptchaType captchaType)
+    {
+        return ProxylessCaptchaTypes.Contains(captchaType);
+    }
+    
     public static Type GetSolutionType(this CaptchaType captchaType)
     {
-        switch (captchaType)
+        return captchaType switch
         {
-            case CaptchaType.ReCaptchaV2:
-                return typeof(RecaptchaSolution);
-            case CaptchaType.ReCaptchaV2Proxyless:
-                return typeof(RecaptchaSolution);
-            case CaptchaType.ReCaptchaV2Enterprise:
-                return typeof(RecaptchaSolution);
-            case CaptchaType.ReCaptchaV2EnterpriseProxyless:
-                return typeof(RecaptchaSolution);
-            case CaptchaType.ReCaptchaV3Proxyless:
-                return typeof(RecaptchaSolution);
-            case CaptchaType.ReCaptchaV3Enterprise:
-                return typeof(RecaptchaSolution);
-            case CaptchaType.HCaptcha:
-                return typeof(HCaptchaSolution);
-            case CaptchaType.HCaptchaProxyless:
-                return typeof(HCaptchaSolution);
-            case CaptchaType.FunCaptcha:
-                return typeof(FunCaptchaSolution);
-            case CaptchaType.FunCaptchaProxyless:
-                return typeof(FunCaptchaSolution);
-            case CaptchaType.ImageToText:
-                return typeof(ImageToTextSolution);
-            case CaptchaType.GeeTestV3:
-                return typeof(GeeTestV3Solution);
-            case CaptchaType.GeeTestV3Proxyless:
-                return typeof(GeeTestV3Solution);
-            case CaptchaType.GeeTestV4:
-                return typeof(GeeTestV4Solution);
-            case CaptchaType.GeeTestV4Proxyless:
-                return typeof(GeeTestV4Solution);
-            case CaptchaType.AntiGate:
-                return typeof(AntiGateSolution);
-            default:
-                throw new ArgumentOutOfRangeException(nameof(captchaType), captchaType, null);
-        }
+            CaptchaType.ReCaptchaV2 => typeof(RecaptchaSolution),
+            CaptchaType.ReCaptchaV2Proxyless => typeof(RecaptchaSolution),
+            CaptchaType.ReCaptchaV2Enterprise => typeof(RecaptchaSolution),
+            CaptchaType.ReCaptchaV2EnterpriseProxyless => typeof(RecaptchaSolution),
+            CaptchaType.ReCaptchaV3Proxyless => typeof(RecaptchaSolution),
+            CaptchaType.ReCaptchaV3Enterprise => typeof(RecaptchaSolution),
+            CaptchaType.HCaptcha => typeof(HCaptchaSolution),
+            CaptchaType.HCaptchaProxyless => typeof(HCaptchaSolution),
+            CaptchaType.FunCaptcha => typeof(FunCaptchaSolution),
+            CaptchaType.FunCaptchaProxyless => typeof(FunCaptchaSolution),
+            CaptchaType.ImageToText => typeof(ImageToTextSolution),
+            CaptchaType.GeeTestV3 => typeof(GeeTestV3Solution),
+            CaptchaType.GeeTestV3Proxyless => typeof(GeeTestV3Solution),
+            CaptchaType.GeeTestV4 => typeof(GeeTestV4Solution),
+            CaptchaType.GeeTestV4Proxyless => typeof(GeeTestV4Solution),
+            CaptchaType.AntiGate => typeof(AntiGateSolution),
+            _ => throw new ArgumentOutOfRangeException(nameof(captchaType), captchaType, null)
+        };
     }
 
 }

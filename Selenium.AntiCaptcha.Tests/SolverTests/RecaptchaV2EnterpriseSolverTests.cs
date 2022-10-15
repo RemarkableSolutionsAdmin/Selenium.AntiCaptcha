@@ -11,7 +11,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         [Fact]
         public void Solve_WithCaptchaTypeSpecified()
         {
-            Driver.Url = TestUris.Recaptcha.V2.EnterpriseW1;
+            Driver.Url = TestUris.Recaptcha.V2.NonEnterprise.W1;
             var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey, captchaType: CaptchaType.ReCaptchaV2Enterprise, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
             AssertSolveCaptchaResult(result);
         }
@@ -19,7 +19,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         [Fact]
         public void Solve_WithoutCaptchaTypeSpecified()
         {
-            Driver.Url = TestUris.Recaptcha.V2.EnterpriseW1;
+            Driver.Url = TestUris.Recaptcha.V2.NonEnterprise.W1;
             var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
             AssertSolveCaptchaResult(result);
         }

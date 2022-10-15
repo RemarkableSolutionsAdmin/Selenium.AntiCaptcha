@@ -16,6 +16,32 @@ internal static class IWebDriverExtensions
             return null;
         }
     }
+    public static List<IWebElement> FindManyByXPathAllFrames(this IWebDriver driver, string xPath)
+    {
+        var result = new List<IWebElement>();
+        try
+        {
+            var frames = driver.FindElements(By.XPath("//iframe"));
+
+            foreach (var frame in frames)
+            {
+                driver.SwitchTo().Frame(frame);
+                result.AddRange(driver.FindManyByXPathAllFrames(xPath));
+            }
+            
+            result.AddRange(driver.FindManyByXPath(xPath));
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            return new List<IWebElement>();
+        }
+        finally
+        {
+            driver.SwitchTo().DefaultContent();
+        }
+    }
 
     public static List<IWebElement> FindManyByXPath(this IWebDriver driver, string xPath)
     {

@@ -24,7 +24,7 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
         IdentifableTypes.AddRange(_recaptchaTypes);
     }
 
-    public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig)
+    public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig, IWebElement? imageElement = null)
     {       
         try
         {

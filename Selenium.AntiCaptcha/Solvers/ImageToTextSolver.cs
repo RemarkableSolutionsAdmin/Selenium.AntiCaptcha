@@ -3,6 +3,7 @@ using AntiCaptchaApi.Net.Models;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
 using OpenQA.Selenium;
+using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
@@ -20,22 +21,11 @@ namespace Selenium.AntiCaptcha.Solvers
             {
                 throw new ArgumentException("No image found in the arguments. Please provide one.,");
             }
-
-            var elementSrc = imageElement.GetAttribute("src");
-
-
-            byte[]? file = null;
-            using (WebClient webClient = new())
+            
+            return new ImageToTextRequest
             {
-                file = webClient.DownloadData(elementSrc);
-            }
-
-            var base64String = Convert.ToBase64String(file);
-            var anticaptchaRequest = new ImageToTextRequest
-            {
-                BodyBase64 = base64String
+                BodyBase64 = imageElement.DownloadSourceAsBase64String(),
             };
-            return anticaptchaRequest;
         }
 
         protected override void FillResponseElement(IWebDriver driver, ImageToTextSolution solution, IWebElement? responseElement)

@@ -52,6 +52,8 @@ internal static class AllCaptchaTypesIdentifier
     }
     
     
+    
+    
     internal static bool CanIdentifyCaptcha(CaptchaType captchaType)
     {
         return CaptchaIdentifiers.Any(x => x.CanIdentify(captchaType));

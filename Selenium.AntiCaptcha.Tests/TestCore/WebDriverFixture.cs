@@ -6,15 +6,19 @@ namespace Selenium.Anticaptcha.Tests.TestCore;
 
 public class WebDriverFixture : IDisposable
 {
-    public IWebDriver Driver { get; }
+    public const int DriversCount = 3;
+    public List<IWebDriver> Drivers { get; } = new();
 
     public WebDriverFixture()
     {
-        Driver = new ChromeDriver(Environment.CurrentDirectory);
+        Drivers.AddRange(Enumerable.Repeat(new ChromeDriver(Environment.CurrentDirectory), DriversCount));
     }
 
     public void Dispose()
     {
-        Driver.Dispose();
+        foreach (var driver in Drivers)
+        {
+            driver?.Dispose();
+        }
     }
 }

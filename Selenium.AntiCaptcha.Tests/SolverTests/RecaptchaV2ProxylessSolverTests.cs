@@ -11,16 +11,16 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         [Fact]
         public void Solve_WithCaptchaTypeSpecified()
         {
-            Driver.Url = TestUris.Recaptcha.V2.W2;
+            Driver.Url = TestUris.Recaptcha.V2.NonEnterprise.W2;
             var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey, captchaType: CaptchaType.ReCaptchaV2Proxyless, 
                 submitElement: Driver.FindElement(By.ClassName("btn")));
             AssertSolveCaptchaResult(result);
         }
         
         [Fact]
-        public void Solve_outCaptchaTypeSpecified()
+        public void Solve_WithoutCaptchaTypeSpecified()
         {
-            Driver.Url = TestUris.Recaptcha.V2.W2;
+            Driver.Url = TestUris.Recaptcha.V2.NonEnterprise.W2;
             var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey, submitElement: Driver.FindElement(By.ClassName("btn")));
             AssertSolveCaptchaResult(result);
         }

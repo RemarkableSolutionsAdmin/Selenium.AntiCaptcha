@@ -8,7 +8,7 @@ using Selenium.AntiCaptcha.Internal.Helpers;
 
 namespace Selenium.AntiCaptcha.Internal;
 
-internal class FunCaptchaIdentifier  : ProxyCaptchaIdentifier
+internal class FunCaptchaIdentifier : ProxyCaptchaIdentifier
 {
 
     private readonly List<CaptchaType> _funcaptchaTypes = new()
@@ -16,7 +16,7 @@ internal class FunCaptchaIdentifier  : ProxyCaptchaIdentifier
         CaptchaType.FunCaptcha, CaptchaType.FunCaptchaProxyless
     };
 
-    public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig)
+    public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig, IWebElement? imageElement = null)
     {
 
         try
