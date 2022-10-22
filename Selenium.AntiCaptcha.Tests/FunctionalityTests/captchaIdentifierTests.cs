@@ -20,7 +20,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         
         [Theory]
         [MemberData(nameof(TestUris.TestableUris), MemberType = typeof(TestUris))]
-        public void TestAllProxylessCaptchaUris(CaptchaUri captchaUri)
+         public void TestAllProxylessCaptchaUris(CaptchaUri captchaUri)
         {
             if (captchaUri.ExpectedType.IsProxylessType())
             {

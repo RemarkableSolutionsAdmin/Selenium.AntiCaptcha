@@ -13,3 +13,10 @@ public interface ISolver<TSolution>
         IWebElement? responseElement,
         IWebElement? submitElement, IWebElement? imageElement, string? userAgent, ProxyConfig? proxyConfig);
 }
+
+public interface ISolver
+{
+    public TaskResultResponse Solve(IWebDriver driver, string clientKey, string? url, string? siteKey,
+        IWebElement? responseElement,
+        IWebElement? submitElement, IWebElement? imageElement, string? userAgent, ProxyConfig? proxyConfig);
+}

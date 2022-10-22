@@ -14,17 +14,27 @@ namespace Selenium.AntiCaptcha
     {
         private static int IdentifyRetryThreshold = 3;
         private static int IdentifyRetryWaitTimeMs = 2000;
-        
-        public static void SolveCaptcha(this IWebDriver driver, ProxyConfig? config)
+
+        public static BaseSolution SolveCaptcha(
+            this IWebDriver driver,
+            string clientKey,
+            CaptchaType? captchaType = null,
+            string? url = null,
+            string? siteKey = null,
+            IWebElement? responseElement = null,
+            IWebElement? submitElement = null,
+            IWebElement? imageElement = null,
+            string? userAgent = null,
+            ProxyConfig? proxyConfig = null)
         {
-            var identifiedCaptchaTypes = AllCaptchaTypesIdentifier.Identify(driver, config);
-            if (identifiedCaptchaTypes.Count != 1)
-            {    
+            var identifiedCaptchaTypes = AllCaptchaTypesIdentifier.Identify(driver, proxyConfig);
+            if (identifiedCaptchaTypes.Count == 1)
+            {
                 // var solutionType = AllCaptchaTypesIdentifier
-                // ValidateSolutionOutputToCaptchaType<TSolution>(captchaType.Value);
-                // var solver = SolverFactory.GetSolver<TSolution>(captchaType.Value);
-                //
-                // return solver.Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement, userAgent, proxyConfig);
+               // ValidateSolutionOutputToCaptchaType<TSolution>(captchaType.Value);
+                var solver = SolverFactory.GetSolver<>(captchaType.Value);
+
+                return solver.Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement, userAgent, proxyConfig);
             }
             else
             {

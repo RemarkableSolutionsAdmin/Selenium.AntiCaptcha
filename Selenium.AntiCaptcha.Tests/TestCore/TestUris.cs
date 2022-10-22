@@ -114,7 +114,7 @@ public static class TestUris
             public static IEnumerable<object[]> Uris()
             {
                 yield return new object[] { new CaptchaUri(W1, Type) };
-                yield return new object[] { new CaptchaUri(W2, Type) };
+                //yield return new object[] { new CaptchaUri(W2, Type) };
                 yield return new object[] { new CaptchaUri(W3, Type) };
             }
             public const string W1 = "https://www.geetest.com/en/demo";
@@ -150,7 +150,7 @@ public static class TestUris
         public const CaptchaType Type = CaptchaType.HCaptchaProxyless;         
         public static IEnumerable<object[]> Uris()
         {
-            yield return new object[] { new CaptchaUri(W1, Type) };
+            //yield return new object[] { new CaptchaUri(W1, Type) };
             yield return new object[] { new CaptchaUri(W2, Type) };
         }
         public const string W1 = "https://entwickler.ebay.de/signin?tab=register";

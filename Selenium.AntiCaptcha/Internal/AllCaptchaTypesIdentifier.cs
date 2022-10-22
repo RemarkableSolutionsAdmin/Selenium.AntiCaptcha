@@ -57,10 +57,8 @@ internal static class AllCaptchaTypesIdentifier
         return CaptchaIdentifiers.Any(x => x.CanIdentify(captchaType));
     }
 
-    internal static CaptchaType? IdentifyCaptcha(IWebDriver driver,  ProxyConfig? proxyConfig)
+    internal static CaptchaType? IdentifyCaptcha(IWebDriver driver,  ProxyConfig? proxyConfig, CaptchaType? result = null)
     {
-        CaptchaType? result = null;
-
         for (var i = 0; i < IdentifyRetryThreshold; i++)
         {
             foreach (var captchaIdentifier in CaptchaIdentifiers)
@@ -91,6 +89,6 @@ internal static class AllCaptchaTypesIdentifier
         if (!result.HasValue)
             return result;
 
-        return IdentifyCaptcha(driver, proxyConfig);
+        return IdentifyCaptcha(driver, proxyConfig, result);
     }
 }
