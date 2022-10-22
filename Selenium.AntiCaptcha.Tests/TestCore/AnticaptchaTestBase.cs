@@ -9,8 +9,6 @@ namespace Selenium.Anticaptcha.Tests.TestCore;
 public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>
 {
     private readonly WebDriverFixture _fixture;
-    private static int _testInstanceCount;
-    private readonly int _instanceNumber;
 
     protected readonly IWebDriver Driver; 
         
@@ -30,7 +28,7 @@ public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>
         {
             Driver.Navigate().GoToUrl(url);
         }
-        catch (WebDriverException e)
+        catch (WebDriverException)
         {
             _fixture.RecreateWebDriver();
             Driver.Url = url;

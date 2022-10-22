@@ -1,10 +1,24 @@
 ﻿using System.Text;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Selenium.AntiCaptcha.Internal.Extensions;
 
 internal static class IWebDriverExtensions
 {
+    //public static void Wait(this IWebDriver driver, IWebElement element, int timeout = 1000, int interval = 250)
+    //{
+    //    var fluentWait = new DefaultWait<IWebDriver>(driver);
+    //    fluentWait.Timeout = TimeSpan.FromMilliseconds(timeout);
+    //    fluentWait.PollingInterval = TimeSpan.FromMilliseconds(interval);
+    //    fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
+    //    fluentWait.Message = "Element not found";
+    //    if (driver.Manage().Timeouts().ImplicitWait == TimeSpan.Zero)
+    //    {
+    //        Thread.Sleep(timeout);
+    //    }
+    //}
+
     public static void ForEachFrame(this IWebDriver driver, Action? action)
     {
         try
@@ -31,7 +45,7 @@ internal static class IWebDriverExtensions
         {
             return driver.FindElement(By.XPath(xPath));
         }
-        catch (Exception e)
+        catch
         {
             return null;
         }

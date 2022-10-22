@@ -73,9 +73,11 @@ public static class TestUris
                 {
                     yield return new object[] { new CaptchaUri(W1, Type) };
                     yield return new object[] { new CaptchaUri(W2, Type) };
+                    yield return new object[] { new CaptchaUri(W3, Type) };
                 }
                 public const string W1 = "https://recaptcha-demo.appspot.com/recaptcha-v2-checkbox.php";
                 public const string W2 = "http://antigate.com/logintest.php";
+                public const string W3 = "https://rescan.io/join/";
             }
         }
     }

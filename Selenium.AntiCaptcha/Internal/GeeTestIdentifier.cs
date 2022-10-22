@@ -23,26 +23,25 @@ public class GeeTestIdentifier : ProxyCaptchaIdentifier
 
     public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig, IWebElement? imageElement = null)
     {
-        var geeScriptElement = GetGeeScriptElement(driver);
+        try
+        {
+            var geeScriptElement = GetGeeScriptElement(driver);
+            var scriptSrcText = geeScriptElement?.GetAttribute("src");
 
-        if (geeScriptElement == null)
+            var areChallengeAndGtInScriptSource = scriptSrcText
+                ?.DoesContainRegex("challenge=", "gt=");
+
+            if (!areChallengeAndGtInScriptSource.GetValueOrDefault())
+                return null;
+
+            var hasV4OnlyAttribute = scriptSrcText?.DoesContainRegex("captcha_id=\\w{32}");
+
+            return base.SpecifyCaptcha(hasV4OnlyAttribute.GetValueOrDefault() ? CaptchaType.GeeTestV4Proxyless : CaptchaType.GeeTestV3Proxyless, driver, proxyConfig);
+        }
+        catch
+        {
             return null;
-
-        var scriptSrcText = geeScriptElement.GetAttribute("src");
-
-        if (string.IsNullOrEmpty(scriptSrcText))
-            return null;
-
-        var areChallengeAndGtInScriptSource = scriptSrcText
-            .DoesContainRegex("challenge=", "gt=");
-
-        if (!areChallengeAndGtInScriptSource)
-            return null;
-
-        var hasV4OnlyAttribute = scriptSrcText.DoesContainRegex("captcha_id=\\w{32}");
-        
-
-        return base.SpecifyCaptcha(hasV4OnlyAttribute ? CaptchaType.GeeTestV4Proxyless : CaptchaType.GeeTestV3Proxyless, driver, proxyConfig);
+        }
     }
 
     public override CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, ProxyConfig? proxyConfig)

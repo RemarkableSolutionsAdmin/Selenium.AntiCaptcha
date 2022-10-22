@@ -29,7 +29,7 @@ internal class FunCaptchaIdentifier : ProxyCaptchaIdentifier
             
             return null;
         }
-        catch (Exception e)
+        catch
         {
             return null;
         }

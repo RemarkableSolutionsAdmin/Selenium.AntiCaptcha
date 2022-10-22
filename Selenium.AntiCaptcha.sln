@@ -5,11 +5,11 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.AntiCaptcha", "Selenium.AntiCaptcha\Selenium.AntiCaptcha.csproj", "{D50D160B-7A6A-454C-B938-24E0D629801E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selenium.Anticaptcha.Tests", "Selenium.Anticaptcha.Tests\Selenium.Anticaptcha.Tests.csproj", "{AD96407F-550B-4BB0-AEF5-7953D6662D3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.Anticaptcha.Tests", "Selenium.Anticaptcha.Tests\Selenium.Anticaptcha.Tests.csproj", "{AD96407F-550B-4BB0-AEF5-7953D6662D3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU 
+		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution

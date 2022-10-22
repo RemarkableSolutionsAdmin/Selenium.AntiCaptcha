@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 
 namespace Selenium.Anticaptcha.Tests.TestCore;
 
@@ -8,6 +9,8 @@ public class WebDriverFixture : IDisposable
 {
     public const int DriversCount = 3;
     public IWebDriver Driver { get; private set; }
+    public TimeSpan DefaultWait { get; set; } = TimeSpan.FromMilliseconds(1000);
+    public TimeSpan PollingInterval { get; set; } = TimeSpan.FromMilliseconds(100);
 
     public WebDriverFixture()
     {
