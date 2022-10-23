@@ -38,6 +38,36 @@ public class GeeV4SolverTests : AnticaptchaTestBase
         AssertSolveCaptchaResult(result);
     }
 
+    [Fact]
+    public void SolveNonGeneric_CaptchaTypeSpecified()
+    {
+        SetDriverUrl(TestUris.GeeTest.V4.W1);
+        var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
+        var slideButton = FindSlideButton(allButtonParents);
+        
+        Assert.NotNull(slideButton);
+        slideButton.Click();
+        Thread.Sleep(1000);
+        var result = Driver.SolveCaptcha(ClientKey, CaptchaType.GeeTestV4, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+
+        AssertSolveCaptchaResult(result);
+    }
+        
+    [Fact]
+    public void SolveNonGeneric_WithoutCaptchaTypeSpecified()
+    {
+        SetDriverUrl(TestUris.GeeTest.V4.W1);
+        var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
+        var slideButton = FindSlideButton(allButtonParents);
+        
+        Assert.NotNull(slideButton);
+        slideButton.Click();
+        Thread.Sleep(1000);
+        var result = Driver.SolveCaptcha(ClientKey, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+
+        AssertSolveCaptchaResult(result);
+    }
+
 
     private IWebElement FindSlideButton(IEnumerable<IWebElement> buttons)
     {

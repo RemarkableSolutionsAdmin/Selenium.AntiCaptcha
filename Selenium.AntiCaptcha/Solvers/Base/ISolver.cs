@@ -6,17 +6,12 @@ using OpenQA.Selenium;
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
 
-public interface ISolver<TSolution>
-    where TSolution: BaseSolution, new()
+public interface ISolver<TSolution> : ISolver
+    where TSolution : BaseSolution, new()
 {
     public TaskResultResponse<TSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey,
         IWebElement? responseElement,
         IWebElement? submitElement, IWebElement? imageElement, string? userAgent, ProxyConfig? proxyConfig);
 }
 
-public interface ISolver
-{
-    public TaskResultResponse Solve(IWebDriver driver, string clientKey, string? url, string? siteKey,
-        IWebElement? responseElement,
-        IWebElement? submitElement, IWebElement? imageElement, string? userAgent, ProxyConfig? proxyConfig);
-}
+public interface ISolver { }

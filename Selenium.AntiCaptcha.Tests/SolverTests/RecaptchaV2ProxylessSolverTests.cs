@@ -25,6 +25,23 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
             AssertSolveCaptchaResult(result);
         }
 
+         [Fact]
+        public void SolveNonGeneric_WithCaptchaTypeSpecified()
+        {
+            SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W2);
+            var result = Driver.SolveCaptcha(ClientKey, captchaType: CaptchaType.ReCaptchaV2Proxyless, 
+                submitElement: Driver.FindElement(By.ClassName("btn")));
+            AssertSolveCaptchaResult(result);
+        }
+        
+        [Fact]
+        public void SolveNonGeneric_WithoutCaptchaTypeSpecified()
+        {
+            SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W2);
+            var result = Driver.SolveCaptcha(ClientKey, submitElement: Driver.FindElement(By.ClassName("btn")));
+            AssertSolveCaptchaResult(result);
+        }
+
         public RecaptchaV2ProxylessSolverTests(WebDriverFixture fixture) : base(fixture)
         {
         }

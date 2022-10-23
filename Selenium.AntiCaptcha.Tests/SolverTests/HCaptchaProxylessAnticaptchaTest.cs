@@ -24,6 +24,24 @@ public class HCaptchaProxylessAnticaptchaTest : AnticaptchaTestBase
         AssertSolveCaptchaResult(result);
     }
 
+    [Fact]
+    public void SolveNonGeneric_HCaptchaWithCaptchaTypeSpecified()
+    {
+        SetDriverUrl(TestUris.HCaptcha.W1);
+        var result = Driver.SolveCaptcha(clientKey: ClientKey);
+        AssertSolveCaptchaResult(result);
+    }
+    
+    
+    [Fact]
+    public void SolveNonGeneric_HCaptchaWithProxyWithoutCaptchaType()
+    {
+        SetDriverUrl(TestUris.HCaptcha.W1);
+        var result = Driver.SolveCaptcha(clientKey: ClientKey,
+            proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+        AssertSolveCaptchaResult(result);
+    }
+
     public HCaptchaProxylessAnticaptchaTest(WebDriverFixture fixture) : base(fixture)
     {
     }

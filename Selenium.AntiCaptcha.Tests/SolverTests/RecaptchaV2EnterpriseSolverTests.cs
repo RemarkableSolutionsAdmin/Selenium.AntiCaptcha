@@ -23,6 +23,21 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
             var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
             AssertSolveCaptchaResult(result);
         }
+        [Fact]
+        public void SolveNonGeneric_WithCaptchaTypeSpecified()
+        {
+            SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W1);
+            var result = Driver.SolveCaptcha(ClientKey, captchaType: CaptchaType.ReCaptchaV2Enterprise, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+            AssertSolveCaptchaResult(result);
+        }
+        
+        [Fact]
+        public void SolveNonGeneric_WithoutCaptchaTypeSpecified()
+        {
+            SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W1);
+            var result = Driver.SolveCaptcha(ClientKey, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+            AssertSolveCaptchaResult(result);
+        }
 
         public RecaptchaV2EnterpriseSolverTests(WebDriverFixture fixture) : base(fixture)
         {

@@ -28,6 +28,27 @@ public class ImageToTextAnticaptchaTest : AnticaptchaTestBase
         AssertSolveCaptchaResult(result);
     }
 
+    [Fact]        
+    public void SolveNonGeneric_WithCaptchaTypeSpecified()
+    {
+        SetDriverUrl(TestUris.ImageToText.W1);
+        var result = Driver.SolveCaptcha(ClientKey,
+            imageElement: Driver.FindElement(By.ClassName("fancycaptcha-image")),
+            responseElement: Driver.FindElement(By.Id("mw-input-captchaWord")));
+            
+        AssertSolveCaptchaResult(result);
+    }
+    
+    [Fact]        
+    public void SolveNonGeneric_WithoutCaptchaTypeSpecified()
+    {
+        SetDriverUrl(TestUris.ImageToText.W1);
+        var result = Driver.SolveCaptcha(ClientKey,
+            imageElement: Driver.FindElement(By.ClassName("fancycaptcha-image")),
+            responseElement: Driver.FindElement(By.Id("mw-input-captchaWord")));
+        AssertSolveCaptchaResult(result);
+    }
+
     public ImageToTextAnticaptchaTest(WebDriverFixture fixture) : base(fixture)
     {
     }

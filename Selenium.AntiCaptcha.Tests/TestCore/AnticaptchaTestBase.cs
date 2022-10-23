@@ -2,6 +2,7 @@
 using AntiCaptchaApi.Net.Models;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Responses;
+using AntiCaptchaApi.Net.Responses.Abstractions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
@@ -54,5 +55,23 @@ public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>
         Assert.False(result.IsErrorResponse);
         Assert.NotNull(result.Solution);
         Assert.True(result.Solution.IsValid());
+    }
+
+    protected static void AssertSolveCaptchaResult(BaseResponse result)
+    {
+        if (result is TaskResultResponse<RecaptchaSolution>)
+            AssertSolveCaptchaResult((TaskResultResponse<RecaptchaSolution>?)result);
+        if (result is TaskResultResponse<HCaptchaSolution>)
+            AssertSolveCaptchaResult((TaskResultResponse<HCaptchaSolution>?)result);
+        if (result is TaskResultResponse<FunCaptchaSolution>)
+            AssertSolveCaptchaResult((TaskResultResponse<FunCaptchaSolution>?)result);
+        if (result is TaskResultResponse<GeeTestV3Solution>)
+            AssertSolveCaptchaResult((TaskResultResponse<GeeTestV3Solution>?)result);
+        if (result is TaskResultResponse<GeeTestV4Solution>)
+            AssertSolveCaptchaResult((TaskResultResponse<GeeTestV4Solution>?)result);
+        if (result is TaskResultResponse<AntiGateSolution>)
+            AssertSolveCaptchaResult((TaskResultResponse<AntiGateSolution>?)result);
+        if (result is TaskResultResponse<ImageToTextSolution>)
+            AssertSolveCaptchaResult((TaskResultResponse<ImageToTextSolution>?)result);
     }
 }

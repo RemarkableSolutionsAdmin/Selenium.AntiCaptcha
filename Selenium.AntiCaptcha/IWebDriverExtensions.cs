@@ -1,12 +1,11 @@
 ﻿using AntiCaptchaApi.Net.Models;
 using AntiCaptchaApi.Net.Models.Solutions;
-using AntiCaptchaApi.Net.Requests.Abstractions;
 using AntiCaptchaApi.Net.Responses;
+using AntiCaptchaApi.Net.Responses.Abstractions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal;
 using Selenium.AntiCaptcha.Internal.Extensions;
-using Selenium.AntiCaptcha.Internal.Helpers;
 
 namespace Selenium.AntiCaptcha
 {
@@ -15,7 +14,7 @@ namespace Selenium.AntiCaptcha
         private static int IdentifyRetryThreshold = 3;
         private static int IdentifyRetryWaitTimeMs = 2000;
 
-        public static BaseSolution SolveCaptcha(
+        public static BaseResponse SolveCaptcha(
             this IWebDriver driver,
             string clientKey,
             CaptchaType? captchaType = null,
@@ -27,29 +26,29 @@ namespace Selenium.AntiCaptcha
             string? userAgent = null,
             ProxyConfig? proxyConfig = null)
         {
-            var identifiedCaptchaTypes = AllCaptchaTypesIdentifier.Identify(driver, proxyConfig);
-            if (identifiedCaptchaTypes.Count == 1)
+            if (captchaType == null)
             {
-                // var solutionType = AllCaptchaTypesIdentifier
-               // ValidateSolutionOutputToCaptchaType<TSolution>(captchaType.Value);
-                var solver = SolverFactory.GetSolver<>(captchaType.Value);
+                var identifiedCaptchaTypes = AllCaptchaTypesIdentifier.Identify(driver, proxyConfig);
+                if (identifiedCaptchaTypes.Count != 1)
+                {
+                    throw new Exception("Unable to idenfity captcha");
+                }
+                captchaType = identifiedCaptchaTypes.First();
+            }
 
-                return solver.Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement, userAgent, proxyConfig);
-            }
-            else
-            {
-                //Throw something.
-            }
+            dynamic solver = SolverFactory.GetSolver(captchaType.Value);
+            return solver.Solve(driver, clientKey, url, siteKey, responseElement, submitElement, imageElement, userAgent, proxyConfig);
+
         }
 
 
         public static TaskResultResponse<TSolution>? SolveCaptcha<TSolution>(
-            this IWebDriver driver, 
-            string clientKey, 
-            CaptchaType? captchaType = null, 
-            string? url = null, 
-            string? siteKey = null, 
-            IWebElement? responseElement = null, 
+            this IWebDriver driver,
+            string clientKey,
+            CaptchaType? captchaType = null,
+            string? url = null,
+            string? siteKey = null,
+            IWebElement? responseElement = null,
             IWebElement? submitElement = null,
             IWebElement? imageElement = null,
             string? userAgent = null,
@@ -57,12 +56,12 @@ namespace Selenium.AntiCaptcha
                 where TSolution : BaseSolution, new()
         {
             captchaType ??= AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(driver, proxyConfig);
-            
-            if(!captchaType.HasValue)
+
+            if (!captchaType.HasValue)
             {
                 throw new ArgumentNullException(nameof(captchaType), "Could not identify the captcha type from arguments. Please provide captchaType.");
             }
-            
+
             ValidateSolutionOutputToCaptchaType<TSolution>(captchaType.Value);
             var solver = SolverFactory.GetSolver<TSolution>(captchaType.Value);
 
