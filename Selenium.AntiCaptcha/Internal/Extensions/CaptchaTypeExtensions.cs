@@ -12,8 +12,7 @@ public static class CaptchaTypeExtensions
         CaptchaType.GeeTestV3,
         CaptchaType.GeeTestV4,
         CaptchaType.ReCaptchaV2,
-        CaptchaType.ReCaptchaV2Enterprise,
-        CaptchaType.ReCaptchaV3Enterprise,
+        CaptchaType.ReCaptchaV2Enterprise
     };
     
     
@@ -22,6 +21,7 @@ public static class CaptchaTypeExtensions
         CaptchaType.ReCaptchaV2Proxyless,
         CaptchaType.ReCaptchaV2EnterpriseProxyless,
         CaptchaType.ReCaptchaV3Proxyless,
+        CaptchaType.ReCaptchaV3Enterprise,
         CaptchaType.HCaptchaProxyless,
         CaptchaType.FunCaptchaProxyless,
         CaptchaType.ImageToText,
@@ -30,6 +30,12 @@ public static class CaptchaTypeExtensions
         CaptchaType.AntiGate
     };
 
+    internal static bool IsProperlyDefined(this CaptchaType type)
+    {
+        return ProxyCaptchaTypes.Contains(type) || ProxylessCaptchaTypes.Contains(type);
+    }
+    
+    
     public static CaptchaType ToProxyType(this CaptchaType type)
     {
         return type switch

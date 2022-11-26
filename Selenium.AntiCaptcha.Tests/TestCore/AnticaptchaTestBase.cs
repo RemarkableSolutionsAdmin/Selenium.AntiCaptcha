@@ -5,14 +5,15 @@ using AntiCaptchaApi.Net.Responses;
 using AntiCaptchaApi.Net.Responses.Abstractions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using Selenium.AntiCaptcha.Internal.Extensions;
 
 namespace Selenium.Anticaptcha.Tests.TestCore;
 public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>
 {
     private readonly WebDriverFixture _fixture;
+    protected readonly IWebDriver Driver;
+    private const int MaxWaitingTimeInMilliseconds = 5000;
 
-    protected readonly IWebDriver Driver; 
-        
 
     protected AnticaptchaTestBase(WebDriverFixture fixture)
     {
@@ -23,11 +24,26 @@ public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>
 
     protected readonly string ClientKey = TestEnvironment.ClientKey;
 
+    private void WaitForLoad(int timeElapsedInMilliseconds)
+    {
+        while (true)
+        {
+            if (timeElapsedInMilliseconds > MaxWaitingTimeInMilliseconds) return;
+
+            if (Driver.FindByXPathAllFrames() != null) return;
+
+            Thread.Sleep(500);
+            
+            timeElapsedInMilliseconds += MaxWaitingTimeInMilliseconds;
+        }
+    }
+
     protected void SetDriverUrl(string url)
     {
         try
         {
             Driver.Navigate().GoToUrl(url);
+            WaitForLoad(0);
         }
         catch (WebDriverException)
         {
