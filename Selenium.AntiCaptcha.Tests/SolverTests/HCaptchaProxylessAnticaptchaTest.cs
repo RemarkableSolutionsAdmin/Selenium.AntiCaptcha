@@ -4,7 +4,7 @@ using Selenium.Anticaptcha.Tests.TestCore;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests;
 
-public class HCaptchaProxylessAnticaptchaTest : AnticaptchaTestBase
+public class HCaptchaProxylessAnticaptchaTest : SequentialAnticaptchaTestBase
 {
     [Fact]
     public void HCaptchaWithCaptchaTypeSpecified()

@@ -6,7 +6,7 @@ using Selenium.Anticaptcha.Tests.TestCore;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests;
 
-public class GeeV4ProxylessSolverTests : AnticaptchaTestBase
+public class GeeV4ProxylessSolverTests : SequentialAnticaptchaTestBase
 {
     [Fact]
     public void Solve_CaptchaTypeSpecified()

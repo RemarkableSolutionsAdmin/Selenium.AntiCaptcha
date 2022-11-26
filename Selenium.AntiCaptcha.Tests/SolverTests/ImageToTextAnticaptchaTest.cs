@@ -5,7 +5,7 @@ using Selenium.Anticaptcha.Tests.TestCore;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests;
 
-public class ImageToTextAnticaptchaTest : AnticaptchaTestBase
+public class ImageToTextAnticaptchaTest : SequentialAnticaptchaTestBase
 {
     [Fact]        
     public void Solve_WithCaptchaTypeSpecified()

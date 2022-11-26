@@ -8,7 +8,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests;
 
 public record CaptchaSolverTest(string Uri, CaptchaType ExpectedType);
 
-public abstract class BaseSolveBase <TSolution> : AnticaptchaTestBase
+public abstract class BaseSolveBase <TSolution> : SequentialAnticaptchaTestBase
     where TSolution: BaseSolution, new()
 {
     public static List<CaptchaSolverTest> CaptchaSolverTests = new List<CaptchaSolverTest>();
