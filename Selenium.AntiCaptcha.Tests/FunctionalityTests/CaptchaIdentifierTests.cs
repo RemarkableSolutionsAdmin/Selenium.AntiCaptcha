@@ -15,7 +15,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
     private void TestProxyCaptchaIdentification(CaptchaUri captchaUri)
     {                
         var proxyType = captchaUri.ExpectedType.ToProxyType();
-        if (captchaUri.ExpectedType.IsProxyType())
+        if (proxyType.IsProxyType())
         {
             TestNonGenericIdentifier(captchaUri with { ExpectedType = proxyType }, new SolverAdditionalArguments
             {
@@ -26,7 +26,6 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
 
     private void TestProxylessCaptchaIdentification(CaptchaUri captchaUri)
     {
-        var proxylessType = captchaUri.ExpectedType.ToProxyType();
         if (captchaUri.ExpectedType.IsProxylessType())
         {
             TestNonGenericIdentifier(captchaUri);
@@ -37,6 +36,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
     {
         public IdentificationWithoutSolutionTypeSpecified(WebDriverFixture fixture) : base(fixture)
         {
+            
         }
 
         public class Recaptcha : IdentificationWithoutSolutionTypeSpecified
@@ -258,7 +258,9 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
     {
         var solverAdditionalArguments = additionalArguments ?? new SolverAdditionalArguments();
         SetDriverUrl(captchaUri.Uri);
-        var identifiedTypes = AllCaptchaTypesIdentifier.Identify(Driver, solverAdditionalArguments);
+        var identifyTask = AllCaptchaTypesIdentifier.IdentifyAsync(Driver, solverAdditionalArguments);
+        Task.WaitAll(identifyTask);
+        var identifiedTypes = identifyTask.Result;
         var testFailed = identifiedTypes.Count != 1 || identifiedTypes[0] != captchaUri.ExpectedType;
         
         Assert.False(testFailed, GetTestFailReasonText(captchaUri, solverAdditionalArguments, string.Join(", ", identifiedTypes.Select(x => x.ToString()))));
@@ -284,7 +286,9 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
     {
         var solverAdditionalArguments = additionalArguments ?? new SolverAdditionalArguments();
         SetDriverUrl(captchaUri.Uri);
-        var type = AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(Driver, solverAdditionalArguments);
+        var identifyTask = AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(Driver, solverAdditionalArguments);
+        Task.WaitAll(identifyTask);
+        var type = identifyTask.Result; 
         var testFailed = type == null || type != captchaUri.ExpectedType;
         Assert.False(testFailed, GetTestFailReasonText(captchaUri, solverAdditionalArguments, type.ToString()));
     }

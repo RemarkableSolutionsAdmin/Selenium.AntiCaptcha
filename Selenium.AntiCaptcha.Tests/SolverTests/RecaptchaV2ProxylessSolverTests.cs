@@ -9,34 +9,34 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
     public class RecaptchaV2ProxylessSolverTests : SequentialAnticaptchaTestBase
     {
         [Fact]
-        public void Solve_WithCaptchaTypeSpecified()
+        public async Task Solve_WithCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W2);
-            var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey);
+            var result = await Driver.SolveCaptchaAsync<RecaptchaSolution>(ClientKey);
             AssertSolveCaptchaResult(result);
         }
         
         [Fact]
-        public void Solve_WithoutCaptchaTypeSpecified()
+        public async Task Solve_WithoutCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W2);
-            var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey);
+            var result = await Driver.SolveCaptchaAsync<RecaptchaSolution>(ClientKey);
             AssertSolveCaptchaResult(result);
         }
 
          [Fact]
-        public void SolveNonGeneric_WithCaptchaTypeSpecified()
+        public async Task SolveNonGeneric_WithCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W2);
-            var result = Driver.SolveCaptcha(ClientKey);
+            var result = await Driver.SolveCaptchaAsync(ClientKey);
             AssertSolveCaptchaResult(result);
         }
         
         [Fact]
-        public void SolveNonGeneric_WithoutCaptchaTypeSpecified()
+        public async Task SolveNonGeneric_WithoutCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W2);
-            var result = Driver.SolveCaptcha(ClientKey);
+            var result = await Driver.SolveCaptchaAsync(ClientKey);
             AssertSolveCaptchaResult(result);
         }
 

@@ -17,16 +17,13 @@ internal class FunCaptchaIdentifier : ProxyCaptchaIdentifier
         CaptchaType.FunCaptcha, CaptchaType.FunCaptchaProxyless
     };
 
-    public override CaptchaType? Identify(IWebDriver driver, SolverAdditionalArguments additionalArguments)
+    public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments)
     {
 
         try
         {
-            if (IsThereFunCaptchaFunCaptchaScriptInAnyIFrames(driver))
-                return base.SpecifyCaptcha(CaptchaType.FunCaptchaProxyless, driver, additionalArguments);
-            
-            if(IsThereAnElementWithPkey(driver))
-                return base.SpecifyCaptcha(CaptchaType.FunCaptchaProxyless, driver, additionalArguments);
+            if(IsFunCaptcha(driver))
+                return await base.SpecifyCaptcha(CaptchaType.FunCaptchaProxyless, driver, additionalArguments);
             
             return null;
         }
@@ -39,6 +36,10 @@ internal class FunCaptchaIdentifier : ProxyCaptchaIdentifier
             driver.SwitchTo().DefaultContent();
         }
     }
+
+    private bool IsFunCaptcha(IWebDriver driver)
+        => IsThereFunCaptchaFunCaptchaScriptInAnyIFrames(driver) || IsThereAnElementWithPkey(driver);
+
 
     private bool IsThereAnElementWithPkey(IWebDriver driver)
     {        

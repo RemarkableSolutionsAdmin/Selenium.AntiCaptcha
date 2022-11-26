@@ -17,6 +17,7 @@ public class CaptchaExtensionsTests
             var isProxyless = captcha.IsProxylessType();
             var isProxy = captcha.IsProxyType();
             Assert.True(isProxyless != isProxy);
+            Assert.True(captcha.IsProperlyDefined());
         }
     }
 

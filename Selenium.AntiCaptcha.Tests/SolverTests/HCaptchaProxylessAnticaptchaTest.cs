@@ -9,36 +9,36 @@ namespace Selenium.Anticaptcha.Tests.SolverTests;
 public class HCaptchaProxylessAnticaptchaTest : SequentialAnticaptchaTestBase
 {
     [Fact]
-    public void HCaptchaWithCaptchaTypeSpecified()
+    public async Task HCaptchaWithCaptchaTypeSpecified()
     {
         SetDriverUrl(TestUris.HCaptcha.W1);
-        var result = Driver.SolveCaptcha<HCaptchaSolution>(clientKey: ClientKey, new SolverAdditionalArguments {CaptchaType = CaptchaType.HCaptcha});
+        var result = await Driver.SolveCaptchaAsync<HCaptchaSolution>(clientKey: ClientKey, additionalArguments: new SolverAdditionalArguments {CaptchaType = CaptchaType.HCaptcha});
         AssertSolveCaptchaResult(result);
     }
     
     
     [Fact]
-    public void HCaptchaWithProxyWithoutCaptchaType()
+    public async Task HCaptchaWithProxyWithoutCaptchaType()
     {
         SetDriverUrl(TestUris.HCaptcha.W1);
-        var result = Driver.SolveCaptcha<HCaptchaSolution>(clientKey: ClientKey);
+        var result = await Driver.SolveCaptchaAsync<HCaptchaSolution>(clientKey: ClientKey);
         AssertSolveCaptchaResult(result);
     }
 
     [Fact]
-    public void SolveNonGeneric_HCaptchaWithCaptchaTypeSpecified()
+    public async Task SolveNonGeneric_HCaptchaWithCaptchaTypeSpecified()
     {
         SetDriverUrl(TestUris.HCaptcha.W1);
-        var result = Driver.SolveCaptcha(clientKey: ClientKey, new SolverAdditionalArguments {CaptchaType = CaptchaType.HCaptchaProxyless});
+        var result = await Driver.SolveCaptchaAsync(clientKey: ClientKey, additionalArguments: new SolverAdditionalArguments {CaptchaType = CaptchaType.HCaptchaProxyless});
         AssertSolveCaptchaResult(result);
     }
     
     
     [Fact]
-    public void SolveNonGeneric_HCaptchaWithProxyWithoutCaptchaType()
+    public async Task SolveNonGeneric_HCaptchaWithProxyWithoutCaptchaType()
     {
         SetDriverUrl(TestUris.HCaptcha.W1);
-        var result = Driver.SolveCaptcha(clientKey: ClientKey);
+        var result = await Driver.SolveCaptchaAsync(clientKey: ClientKey);
         AssertSolveCaptchaResult(result);
     }
 

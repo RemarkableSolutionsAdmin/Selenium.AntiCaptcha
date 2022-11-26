@@ -10,8 +10,8 @@ public class WebDriverExtensionsTests : AnticaptchaTestBase
 {
     public WebDriverExtensionsTests(WebDriverFixture fixture) : base(fixture) {}
     [Fact]
-    public void ShouldThrowException_WhenSolutionTypeAndCaptchaTypeDoNotMatch()
+    public async Task ShouldThrowException_WhenSolutionTypeAndCaptchaTypeDoNotMatch()
     {
-        Assert.Throws<ArgumentException>(() => Driver.SolveCaptcha<GeeTestV3Solution>(ClientKey, new SolverAdditionalArguments(CaptchaType: CaptchaType.ReCaptchaV2)));
+        await Assert.ThrowsAsync<ArgumentException>(() => Driver.SolveCaptchaAsync<GeeTestV3Solution>(ClientKey, new SolverAdditionalArguments(CaptchaType: CaptchaType.ReCaptchaV2)));
     }
 }

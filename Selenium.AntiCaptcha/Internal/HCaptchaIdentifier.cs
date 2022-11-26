@@ -19,9 +19,9 @@ public class HCaptchaIdentifier : ProxyCaptchaIdentifier
         IdentifiableTypes.AddRange(HCaptchaTypes);
     }
 
-    public override CaptchaType? Identify(IWebDriver driver, SolverAdditionalArguments additionalArguments)
+    public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments)
     {
-        return ContainsHCaptchaIFrame(driver) ? base.SpecifyCaptcha(CaptchaType.HCaptchaProxyless, driver, additionalArguments) : null;
+        return ContainsHCaptchaIFrame(driver) ? await base.SpecifyCaptcha(CaptchaType.HCaptchaProxyless, driver, additionalArguments) : null;
     }
     
     private static bool ContainsHCaptchaIFrame(IWebDriver driver)

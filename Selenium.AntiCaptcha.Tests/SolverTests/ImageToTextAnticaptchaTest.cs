@@ -12,32 +12,32 @@ public class ImageToTextAnticaptchaTest : SequentialAnticaptchaTestBase
     private SolverAdditionalArguments _solverAdditionalArguments;
     
     [Fact]        
-    public void Solve_WithCaptchaTypeSpecified()
+    public async Task Solve_WithCaptchaTypeSpecified()
     {
         SetDriverUrl(TestUris.ImageToText.W1);
         _solverAdditionalArguments = new SolverAdditionalArguments
         {
             ImageElement = Driver.FindElement(By.XPath("//img[contains(@class, 'captcha')]"))
         };
-        var result = Driver.SolveCaptcha<ImageToTextSolution>(ClientKey, _solverAdditionalArguments);
+        var result = await Driver.SolveCaptchaAsync<ImageToTextSolution>(ClientKey, _solverAdditionalArguments);
             
         AssertSolveCaptchaResult(result);
     }
     
     [Fact]        
-    public void Solve_WithoutCaptchaTypeSpecified()
+    public async Task Solve_WithoutCaptchaTypeSpecified()
     {
         SetDriverUrl(TestUris.ImageToText.W1);
         _solverAdditionalArguments = new SolverAdditionalArguments
         {
             ImageElement = Driver.FindElement(By.XPath("//img[contains(@class, 'captcha')]"))
         };
-        var result = Driver.SolveCaptcha<ImageToTextSolution>(ClientKey, _solverAdditionalArguments);
+        var result = await Driver.SolveCaptchaAsync<ImageToTextSolution>(ClientKey, _solverAdditionalArguments);
         AssertSolveCaptchaResult(result);
     }
 
     [Fact]        
-    public void SolveNonGeneric_WithCaptchaTypeSpecified()
+    public async Task SolveNonGeneric_WithCaptchaTypeSpecified()
     {
         SetDriverUrl(TestUris.ImageToText.W1);
         _solverAdditionalArguments = new SolverAdditionalArguments
@@ -45,20 +45,20 @@ public class ImageToTextAnticaptchaTest : SequentialAnticaptchaTestBase
             CaptchaType = CaptchaType.ImageToText,
             ImageElement = Driver.FindElement(By.XPath("//img[contains(@class, 'captcha')]"))
         };
-        var result = Driver.SolveCaptcha(ClientKey, _solverAdditionalArguments);
+        var result = await Driver.SolveCaptchaAsync(ClientKey, _solverAdditionalArguments);
             
         AssertSolveCaptchaResult(result);
     }
     
     [Fact]        
-    public void SolveNonGeneric_WithoutCaptchaTypeSpecified()
+    public async Task SolveNonGeneric_WithoutCaptchaTypeSpecified()
     {
         SetDriverUrl(TestUris.ImageToText.W1);
         _solverAdditionalArguments = new SolverAdditionalArguments
         {
             ImageElement = Driver.FindElement(By.XPath("//img[contains(@class, 'captcha')]"))
         };
-        var result = Driver.SolveCaptcha(ClientKey, _solverAdditionalArguments);
+        var result = await Driver.SolveCaptchaAsync(ClientKey, _solverAdditionalArguments);
         AssertSolveCaptchaResult(result);
     }
 

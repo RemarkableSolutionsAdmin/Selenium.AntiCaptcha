@@ -12,8 +12,7 @@ namespace Selenium.AntiCaptcha
 {
     public static class IWebDriverExtensions
     {
-        public static BaseResponse SolveCaptcha(
-            this IWebDriver driver,
+        public static async Task<BaseResponse> SolveCaptchaAsync(this IWebDriver driver,
             string clientKey,
             SolverAdditionalArguments? additionalArguments = null)
         {
@@ -22,7 +21,7 @@ namespace Selenium.AntiCaptcha
             
             if (captchaType == null)
             {
-                var identifiedCaptchaTypes = AllCaptchaTypesIdentifier.Identify(driver, additionalArguments);
+                var identifiedCaptchaTypes = await AllCaptchaTypesIdentifier.IdentifyAsync(driver, additionalArguments);
                 if (identifiedCaptchaTypes.Count != 1)
                 {
                     throw new Exception("Unable to identify captcha");
@@ -35,12 +34,12 @@ namespace Selenium.AntiCaptcha
 
         }
 
-        public static TaskResultResponse<TSolution>? SolveCaptcha<TSolution>(this IWebDriver driver, string clientKey,
+        public static async Task<TaskResultResponse<TSolution>> SolveCaptchaAsync<TSolution>(this IWebDriver driver, string clientKey,
             SolverAdditionalArguments? additionalArguments = null)
                 where TSolution : BaseSolution, new()
         {
             additionalArguments ??= new SolverAdditionalArguments();
-            var captchaType = additionalArguments.CaptchaType ?? AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(driver, additionalArguments);
+            var captchaType = additionalArguments.CaptchaType ?? await AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(driver, additionalArguments);
 
             if (!captchaType.HasValue)
             {

@@ -20,12 +20,12 @@ internal static class AllCaptchaTypesIdentifier
         new FunCaptchaIdentifier()
     };
 
-    internal static List<CaptchaType> Identify(IWebDriver driver, SolverAdditionalArguments additionalArguments)
+    internal static async Task<List<CaptchaType>> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments)
     {
         var identifiedTypes = new List<CaptchaType>();
         foreach (var captchaIdentifier in CaptchaIdentifiers)
         {
-            var identifiedCaptcha = captchaIdentifier.Identify(driver, additionalArguments);
+            var identifiedCaptcha = await captchaIdentifier.IdentifyAsync(driver, additionalArguments);
 
             if (identifiedCaptcha != null)
             {
@@ -39,17 +39,17 @@ internal static class AllCaptchaTypesIdentifier
 
     internal static bool CanIdentifyCaptcha(CaptchaType captchaType)
     {
-        return CaptchaIdentifiers.Any(x => x.CanIdentify(captchaType));
+        return CaptchaIdentifiers.Any(x => x.CanIdentifyAsync(captchaType));
     }
 
-    private static CaptchaType? IdentifyCaptcha(IWebDriver driver, SolverAdditionalArguments additionalArguments, CaptchaType captchaType)
+    private static async Task<CaptchaType?> IdentifyCaptcha(IWebDriver driver, SolverAdditionalArguments additionalArguments, CaptchaType captchaType)
     {
         foreach (var captchaIdentifier in CaptchaIdentifiers)
         {
-            if (!captchaIdentifier.CanIdentify(captchaType))
+            if (!captchaIdentifier.CanIdentifyAsync(captchaType))
                 continue;
 
-            var result = captchaIdentifier.SpecifyCaptcha(captchaType, driver, additionalArguments);
+            var result = await captchaIdentifier.SpecifyCaptcha(captchaType, driver, additionalArguments);
             if (result.HasValue)
             {
                 return result.Value;
@@ -58,10 +58,10 @@ internal static class AllCaptchaTypesIdentifier
         return captchaType;
     }
 
-    internal static CaptchaType? IdentifyCaptcha<TSolution>(IWebDriver driver, SolverAdditionalArguments additionalArguments)
+    internal static async Task<CaptchaType?> IdentifyCaptcha<TSolution>(IWebDriver driver, SolverAdditionalArguments additionalArguments)
         where TSolution : BaseSolution, new()
     {
         var result = new TSolution().GetCaptchaType();
-        return !result.HasValue ? result : IdentifyCaptcha(driver, additionalArguments, result.Value);
+        return !result.HasValue ? result : await IdentifyCaptcha(driver, additionalArguments, result.Value);
     }
 }

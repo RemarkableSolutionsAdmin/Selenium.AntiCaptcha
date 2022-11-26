@@ -9,18 +9,18 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
     public class FunCaptchaProxylessSolverTests : SequentialAnticaptchaTestBase
     {
         [Fact]
-        public void Solve_CaptchaTypeSpecified()
+        public async Task Solve_CaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.FunCaptcha.W1);
-            var result = Driver.SolveCaptcha<FunCaptchaSolution>(ClientKey);
+            var result = await Driver.SolveCaptchaAsync<FunCaptchaSolution>(ClientKey);
             AssertSolveCaptchaResult(result);
         }
         
         [Fact]
-        public void Solve_WithoutCaptchaTypeSpecified()
+        public async Task Solve_WithoutCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.FunCaptcha.W1);
-            var result = Driver.SolveCaptcha<FunCaptchaSolution>(ClientKey);
+            var result = await Driver.SolveCaptchaAsync<FunCaptchaSolution>(ClientKey);
             AssertSolveCaptchaResult(result);
         }
 

@@ -9,7 +9,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests;
 public class GeeV4ProxylessSolverTests : SequentialAnticaptchaTestBase
 {
     [Fact]
-    public void Solve_CaptchaTypeSpecified()
+    public async Task Solve_CaptchaTypeSpecified()
     {
         SetDriverUrl(TestUris.GeeTest.V4.W1);
         var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
@@ -18,13 +18,13 @@ public class GeeV4ProxylessSolverTests : SequentialAnticaptchaTestBase
         Assert.NotNull(slideButton);
         slideButton.Click();
         Thread.Sleep(1000);
-        var result = Driver.SolveCaptcha<GeeTestV4Solution>(ClientKey);
+        var result = await Driver.SolveCaptchaAsync<GeeTestV4Solution>(ClientKey);
 
         AssertSolveCaptchaResult(result);
     }
         
     [Fact]
-    public void Solve_WithoutCaptchaTypeSpecified()
+    public async Task Solve_WithoutCaptchaTypeSpecified()
     {
         SetDriverUrl(TestUris.GeeTest.V4.W1);
         var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
@@ -33,13 +33,13 @@ public class GeeV4ProxylessSolverTests : SequentialAnticaptchaTestBase
         Assert.NotNull(slideButton);
         slideButton.Click();
         Thread.Sleep(1000);
-        var result = Driver.SolveCaptcha<GeeTestV4Solution>(ClientKey);
+        var result = await Driver.SolveCaptchaAsync<GeeTestV4Solution>(ClientKey);
 
         AssertSolveCaptchaResult(result);
     }
 
     [Fact]
-    public void SolveNonGeneric_CaptchaTypeSpecified()
+    public async Task SolveNonGeneric_CaptchaTypeSpecified()
     {
         SetDriverUrl(TestUris.GeeTest.V4.W1);
         var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
@@ -48,13 +48,13 @@ public class GeeV4ProxylessSolverTests : SequentialAnticaptchaTestBase
         Assert.NotNull(slideButton);
         slideButton.Click();
         Thread.Sleep(1000);
-        var result = Driver.SolveCaptcha(ClientKey);
+        var result = await Driver.SolveCaptchaAsync(ClientKey);
 
         AssertSolveCaptchaResult(result);
     }
         
     [Fact]
-    public void SolveNonGeneric_WithoutCaptchaTypeSpecified()
+    public async Task SolveNonGeneric_WithoutCaptchaTypeSpecified()
     {
         SetDriverUrl(TestUris.GeeTest.V4.W1);
         var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
@@ -63,7 +63,7 @@ public class GeeV4ProxylessSolverTests : SequentialAnticaptchaTestBase
         Assert.NotNull(slideButton);
         slideButton.Click();
         Thread.Sleep(1000);
-        var result = Driver.SolveCaptcha(ClientKey);
+        var result = await Driver.SolveCaptchaAsync(ClientKey);
 
         AssertSolveCaptchaResult(result);
     }

@@ -12,13 +12,14 @@ public abstract class ProxyCaptchaIdentifier : ICaptchaIdentifier
 {
     protected readonly List<CaptchaType> IdentifiableTypes = new();
     
-    public bool CanIdentify(CaptchaType type)
+    public bool CanIdentifyAsync(CaptchaType type)
     {
         return IdentifiableTypes.Contains(type);
     }
 
-    public abstract CaptchaType? Identify(IWebDriver driver, SolverAdditionalArguments additionalArguments);
-    public virtual CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, SolverAdditionalArguments additionalArguments)
+    public abstract Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments);
+    public virtual async Task<CaptchaType?> SpecifyCaptcha(CaptchaType originalType, IWebDriver driver,
+        SolverAdditionalArguments additionalArguments)
     {
         if (additionalArguments.ProxyConfig == null || string.IsNullOrEmpty(additionalArguments.ProxyConfig.ProxyAddress))
         {

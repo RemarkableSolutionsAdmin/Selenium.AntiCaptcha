@@ -12,34 +12,34 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         private readonly SolverAdditionalArguments _solverAdditionalArguments;
         
         [Fact]
-        public void Solve_CaptchaTypeSpecified()
+        public async Task Solve_CaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.AntiGate.W1);
-            var result = Driver.SolveCaptcha<AntiGateSolution>(ClientKey, _solverAdditionalArguments);
+            var result = await Driver.SolveCaptchaAsync<AntiGateSolution>(ClientKey, _solverAdditionalArguments);
             AssertSolveCaptchaResult(result);
         }
         
         [Fact]
-        public void Solve_WithoutCaptchaTypeSpecified()
+        public async Task Solve_WithoutCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.AntiGate.W1);
-            var result = Driver.SolveCaptcha<AntiGateSolution>(ClientKey, _solverAdditionalArguments);
+            var result = await Driver.SolveCaptchaAsync<AntiGateSolution>(ClientKey, _solverAdditionalArguments);
             AssertSolveCaptchaResult(result);
         }
 
         [Fact]
-        public void SolveNonGeneric_CaptchaTypeSpecified()
+        public async Task SolveNonGeneric_CaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.AntiGate.W1);
-            var result = Driver.SolveCaptcha(ClientKey, _solverAdditionalArguments);
+            var result = await Driver.SolveCaptchaAsync(ClientKey, _solverAdditionalArguments);
             AssertSolveCaptchaResult(result);
         }
         
         [Fact]
-        public void SolveNonGeneric_WithoutCaptchaTypeSpecified()
+        public async Task SolveNonGeneric_WithoutCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.AntiGate.W1);
-            var result = Driver.SolveCaptcha(ClientKey, _solverAdditionalArguments);
+            var result = await Driver.SolveCaptchaAsync(ClientKey, _solverAdditionalArguments);
             AssertSolveCaptchaResult(result);
         }
 
