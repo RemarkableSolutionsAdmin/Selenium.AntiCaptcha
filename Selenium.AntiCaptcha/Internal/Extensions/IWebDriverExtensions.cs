@@ -39,16 +39,21 @@ internal static class IWebDriverExtensions
         }
     }
     
-    public static IWebElement? FindByXPath(this IWebDriver driver, string xPath)
+    public static IWebElement? FindByXPath(this IWebDriver driver, params string[] xPathPatterns)
     {
-        try
+        foreach (var xPathPattern in xPathPatterns)
         {
-            return driver.FindElement(By.XPath(xPath));
+            try
+            {
+                return driver.FindElement(By.XPath(xPathPattern));
+            }
+            catch
+            {
+                //ignore
+            }
         }
-        catch
-        {
-            return null;
-        }
+
+        return null;
     }
 
     public static IEnumerable<IWebElement> GetCurrentFrames(this IWebDriver driver)
@@ -56,11 +61,11 @@ internal static class IWebDriverExtensions
         return driver.FindElements(By.XPath("//iframe"));
     }
 
-    public static IWebElement? FindByXPathAllFrames(this IWebDriver driver, string xPath)
+    public static IWebElement? FindByXPathAllFrames(this IWebDriver driver, params string[] xPathPatterns)
     {
         try
         {
-            var result = driver.FindByXPath(xPath);
+            var result = driver.FindByXPath(xPathPatterns);
 
             if (result != null)
             {
@@ -71,13 +76,12 @@ internal static class IWebDriverExtensions
             foreach (var frame in frames)
             {
                 driver.SwitchTo().Frame(frame);
-                result = driver.FindByXPathAllFrames(xPath);
+                result = driver.FindByXPathAllFrames(xPathPatterns);
                 if (result != null)
                 {
                     return result;
                 }
             }
-
             return null;
         }
         catch (Exception)
@@ -89,8 +93,8 @@ internal static class IWebDriverExtensions
             driver.SwitchTo().DefaultContent();
         }
     }
-    
-    public static List<IWebElement> FindManyByXPathAllFrames(this IWebDriver driver, string xPath)
+
+    public static List<IWebElement> FindManyByXPathAllFrames(this IWebDriver driver, params string[] xPath)
     {
         var result = new List<IWebElement>();
         try
@@ -108,16 +112,21 @@ internal static class IWebDriverExtensions
         }
     }
 
-    public static List<IWebElement> FindManyByXPathCurrentFrame(this IWebDriver driver, string xPath)
+    public static List<IWebElement> FindManyByXPathCurrentFrame(this IWebDriver driver, params string[] xPathPatterns)
     {
-        try
+        foreach (var xPathPattern in xPathPatterns)
         {
-            return driver.FindElements(By.XPath(xPath)).ToList();
+            try
+            {
+                return driver.FindElements(By.XPath(xPathPattern)).ToList();
+            }
+            catch (Exception e)
+            {
+                // continue;
+            }
         }
-        catch (Exception e)
-        {
-            return new List<IWebElement>();
-        }
+
+        return new List<IWebElement>();
     }
 
     public static string GetAllPageSource(this IWebDriver driver)
@@ -155,4 +164,9 @@ internal static class IWebDriverExtensions
         xPaths.Any(xpath => driver.FindByXPath(xpath) != null);
     public static bool DoesAtLeastOneOfTheElementsExist(this IWebDriver driver, IEnumerable<string> xPaths) =>
         xPaths.Any(xpath => driver.FindByXPath(xpath) != null);
+
+    public static bool DoesAtLeastOneOfTheElementsExistInAllFrames(this IWebDriver driver, IEnumerable<string> xPaths)
+    {
+        return xPaths.Any(xpath => driver.FindByXPathAllFrames(xpath) != null);
+    }
 }

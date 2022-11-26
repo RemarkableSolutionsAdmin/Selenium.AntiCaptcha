@@ -12,7 +12,7 @@ public class GeeV3SolverTests : SequentialAnticaptchaTestBase
     public void GeeV3Test()
     {
         SetDriverUrl(TestUris.GeeTest.V3.W2);
-        var result = Driver.SolveCaptcha<GeeTestV3Solution>(ClientKey, CaptchaType.GeeTestV3, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+        var result = Driver.SolveCaptcha<GeeTestV3Solution>(ClientKey);
         AssertSolveCaptchaResult(result);
     }
 

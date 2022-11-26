@@ -3,18 +3,19 @@ using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Constants;
+using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers;
 
 internal class HCaptchaProxylessSolver  : Solver<HCaptchaProxylessRequest, HCaptchaSolution>
 {
-    protected override HCaptchaProxylessRequest BuildRequest(IWebDriver driver, string? url, string? siteKey, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig) =>
+    protected override HCaptchaProxylessRequest BuildRequest(SolverAdditionalArguments additionalArguments) =>
         new()
         {
-            WebsiteUrl = url ?? driver.Url,
-            WebsiteKey = siteKey,
-            UserAgent = userAgent ?? AnticaptchaDefaultValues.UserAgent
+            WebsiteUrl = additionalArguments.Url,
+            WebsiteKey = additionalArguments.SiteKey,
+            UserAgent = additionalArguments.UserAgent
         };
 
 

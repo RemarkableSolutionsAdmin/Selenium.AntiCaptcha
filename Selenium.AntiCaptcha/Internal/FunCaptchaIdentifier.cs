@@ -5,6 +5,7 @@ using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Internal.Helpers;
+using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Internal;
 
@@ -16,16 +17,16 @@ internal class FunCaptchaIdentifier : ProxyCaptchaIdentifier
         CaptchaType.FunCaptcha, CaptchaType.FunCaptchaProxyless
     };
 
-    public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig, IWebElement? imageElement = null)
+    public override CaptchaType? Identify(IWebDriver driver, SolverAdditionalArguments additionalArguments)
     {
 
         try
         {
             if (IsThereFunCaptchaFunCaptchaScriptInAnyIFrames(driver))
-                return base.SpecifyCaptcha(CaptchaType.FunCaptchaProxyless, driver, proxyConfig);
+                return base.SpecifyCaptcha(CaptchaType.FunCaptchaProxyless, driver, additionalArguments);
             
             if(IsThereAnElementWithPkey(driver))
-                return base.SpecifyCaptcha(CaptchaType.FunCaptchaProxyless, driver, proxyConfig);
+                return base.SpecifyCaptcha(CaptchaType.FunCaptchaProxyless, driver, additionalArguments);
             
             return null;
         }
@@ -102,6 +103,6 @@ internal class FunCaptchaIdentifier : ProxyCaptchaIdentifier
 
     public FunCaptchaIdentifier()
     {
-        IdentifableTypes.AddRange(_funcaptchaTypes);
+        IdentifiableTypes.AddRange(_funcaptchaTypes);
     }
 }

@@ -8,6 +8,7 @@ using AntiCaptchaApi.Net.Responses;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Internal.Extensions;
+using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
@@ -15,49 +16,63 @@ internal abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
     where TRequest: CaptchaRequest<TSolution>
     where TSolution: BaseSolution, new()
 {
-    protected virtual string GetSiteKey(IWebDriver driver, int waitingTime = 1000, int tries = 3)
-    {
-        if (tries <= 0)
-            return string.Empty;
-        
-        Thread.Sleep(waitingTime);
+    private const uint WaitingStepTime = 500;
+    
+    protected virtual string GetSiteKey(IWebDriver driver)
+    {   
         var pageSource = driver.GetAllPageSource();
         var regex = new Regex("gt=(.*?)&");
-        var gt = regex.Match(pageSource).Groups[1].Value;
+        var result = regex.Match(pageSource).Groups[1].Value;
 
-        if (!string.IsNullOrEmpty(gt))
-            return gt;
+        if (!string.IsNullOrEmpty(result))
+            return result;
         
         regex = new Regex("captcha_id=(.*?)&");
         var captchaIdRegexGroups = regex.Match(pageSource).Groups;
-        gt = captchaIdRegexGroups[1].Value;
+        result = captchaIdRegexGroups[1].Value;
 
         
-        if (!string.IsNullOrEmpty(gt))
-            return gt;
+        if (!string.IsNullOrEmpty(result))
+            return result;
 
         regex = new Regex("sitekey=(.*?)&");
         var siteKeyCaptchaGroups = regex.Match(pageSource).Groups;
-        gt = siteKeyCaptchaGroups[1].Value;
-
-        if (string.IsNullOrEmpty(gt))
-            GetSiteKey(driver, waitingTime, --tries);
-        return gt;
+        return siteKeyCaptchaGroups[1].Value;
     }
 
-    protected abstract TRequest BuildRequest(IWebDriver driver, string? url, string? siteKey,
-        IWebElement? imageElement, string? userAgent, ProxyConfig? proxyConfig);
+    protected string AcquireSiteKey(IWebDriver driver, uint timePassedInMs, uint maxPageLoadWaitingTimeInMs)
+    {
+        var result = GetSiteKey(driver);
+
+        if (!string.IsNullOrEmpty(result) || timePassedInMs >= maxPageLoadWaitingTimeInMs)
+            return result;
+        
+        return AcquireSiteKey(driver, timePassedInMs + WaitingStepTime, maxPageLoadWaitingTimeInMs);
+    }
+
+
+    protected abstract TRequest BuildRequest(SolverAdditionalArguments additionalArguments);
 
     protected virtual void FillResponseElement(IWebDriver driver, TSolution solution, IWebElement? responseElement)
     {
         
     }
-    public TaskResultResponse<TSolution> Solve(IWebDriver driver, string clientKey, string? url, string? siteKey, IWebElement? responseElement,
-        IWebElement? submitElement, IWebElement? imageElement, string? userAgent, ProxyConfig? proxyConfig)
+
+    protected virtual SolverAdditionalArguments FillMissingAdditionalArguments(IWebDriver driver, SolverAdditionalArguments solverAdditionalArguments)
+    {
+        return solverAdditionalArguments with
+        {
+            Url = solverAdditionalArguments.Url ?? driver.Url,
+            SiteKey = solverAdditionalArguments.SiteKey ?? AcquireSiteKey(driver, 0, WaitingStepTime),
+            UserAgent = solverAdditionalArguments.UserAgent ?? Constants.AnticaptchaDefaultValues.UserAgent
+        };
+    }
+    
+    public TaskResultResponse<TSolution> Solve(IWebDriver driver, string clientKey, SolverAdditionalArguments additionalArguments)
     {
         var client = new AnticaptchaClient(clientKey);
-        siteKey ??= GetSiteKey(driver);
-        var request = BuildRequest(driver, url, siteKey, imageElement, userAgent, proxyConfig);
+        additionalArguments = FillMissingAdditionalArguments(driver, additionalArguments);
+        var request = BuildRequest(additionalArguments);
         var result = client.SolveCaptcha(request);
 
         if (result.Status == TaskStatusType.Ready && result.Solution.IsValid())
@@ -66,12 +81,12 @@ internal abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
             if (jObject != null)
                 AddCookies(driver, jObject);
 
-            if (responseElement != null)
+            if (additionalArguments.ResponseElement != null)
             {
-                FillResponseElement(driver, result.Solution, responseElement);
+                FillResponseElement(driver, result.Solution, additionalArguments.ResponseElement);
             }
             
-            submitElement?.Click();
+            additionalArguments.SubmitElement?.Click();
         }
 
         return result;

@@ -11,9 +11,8 @@ internal abstract class FunCaptchaSolverBase<TRequest, TSolution> : Solver<TRequ
     where TRequest : CaptchaRequest<TSolution>
     where TSolution : FunCaptchaSolution, new()
 {
-    protected override string GetSiteKey(IWebDriver driver, int waitingTime = 1000, int tries = 3)
+    protected override string GetSiteKey(IWebDriver driver)
     {
-        Thread.Sleep(waitingTime);
         try
         {
             return driver.FindElement(By.Id("funcaptcha")).GetAttribute("data-pkey");

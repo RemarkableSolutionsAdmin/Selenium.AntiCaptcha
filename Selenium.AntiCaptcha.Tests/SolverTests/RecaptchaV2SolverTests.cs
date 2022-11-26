@@ -12,10 +12,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         public void Solve_CaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W2);
-            var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey, 
-                captchaType: CaptchaType.ReCaptchaV2, 
-                submitElement: Driver.FindElement(By.ClassName("btn")),
-                proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+            var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey);
             AssertSolveCaptchaResult(result);
         }
         
@@ -23,9 +20,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         public void Solve_WithoutCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W2);
-            var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey,
-                submitElement: Driver.FindElement(By.ClassName("btn")), 
-                proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+            var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey);
             AssertSolveCaptchaResult(result);
         }
 
@@ -33,10 +28,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         public void SolveNonGeneric_CaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W2);
-            var result = Driver.SolveCaptcha(ClientKey, 
-                captchaType: CaptchaType.ReCaptchaV2, 
-                submitElement: Driver.FindElement(By.ClassName("btn")),
-                proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+            var result = Driver.SolveCaptcha(ClientKey);
             AssertSolveCaptchaResult(result);
         }
         
@@ -44,9 +36,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         public void SolveNonGeneric_WithoutCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W2);
-            var result = Driver.SolveCaptcha(ClientKey,
-                submitElement: Driver.FindElement(By.ClassName("btn")), 
-                proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+            var result = Driver.SolveCaptcha(ClientKey);
             AssertSolveCaptchaResult(result);
         }
 

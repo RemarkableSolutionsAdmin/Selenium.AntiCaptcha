@@ -1,42 +1,62 @@
 ﻿using System.Net;
+using AntiCaptchaApi.Net.Enums;
 using AntiCaptchaApi.Net.Models;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Internal.Extensions;
+using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
     internal class ImageToTextSolver : Solver<ImageToTextRequest, ImageToTextSolution>
     {
-        protected override string GetSiteKey(IWebDriver driver, int waitingTime = 1000, int tries = 3)
+        protected override string GetSiteKey(IWebDriver driver)
         {
             return string.Empty;
         }
 
-        protected override ImageToTextRequest BuildRequest(IWebDriver driver, string? url, string? siteKey, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
+        protected override ImageToTextRequest BuildRequest(SolverAdditionalArguments additionalArguments)
         {
-            if (imageElement == null)
+            if (!string.IsNullOrEmpty(additionalArguments.ImageFilePath))
             {
-                throw new ArgumentException("No image found in the arguments. Please provide one.,");
+                return new ImageToTextRequest
+                {
+                    Phrase = additionalArguments.Phrase ?? false,
+                    Case = additionalArguments.Case ?? false,
+                    Numeric = additionalArguments.Numeric ?? NumericOption.NoRequirements,
+                    Math = additionalArguments.Math ?? 0,
+                    MinLength = additionalArguments.MinLength ?? 0,
+                    MaxLength = additionalArguments.MaxLength ?? 0,
+                    Comment = additionalArguments.Comment,
+                    FilePath = additionalArguments.ImageFilePath
+                };
+            }
+
+            if (additionalArguments.ImageElement == null)
+            {
+                throw new ArgumentException("No image found in the arguments. Please provide one.");
             }
             
             return new ImageToTextRequest
             {
-                BodyBase64 = imageElement.DownloadSourceAsBase64String(),
+                BodyBase64 = additionalArguments.ImageElement.DownloadSourceAsBase64String(),           
+                Phrase = additionalArguments.Phrase ?? false,
+                Case = additionalArguments.Case ?? false,
+                Numeric = additionalArguments.Numeric ?? NumericOption.NoRequirements,
+                Math = additionalArguments.Math ?? 0,
+                MinLength = additionalArguments.MinLength ?? 0,
+                MaxLength = additionalArguments.MaxLength ?? 0,
+                Comment = additionalArguments.Comment,
             };
         }
 
+
         protected override void FillResponseElement(IWebDriver driver, ImageToTextSolution solution, IWebElement? responseElement)
         {
-            if (responseElement == null)
-            {
-                responseElement = driver.FindElement(By.Name("captchaWord"));
-            }
-
-            //todo if not response element, throw an exception
-            responseElement.SendKeys(solution.Text);
+            responseElement ??= driver.FindElement(By.Name("captchaWord"));
+            responseElement?.SendKeys(solution.Text);
         }
     }
 }

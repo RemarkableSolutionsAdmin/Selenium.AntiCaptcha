@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
+using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Internal;
 
@@ -9,19 +10,24 @@ public class ImageToTextIdentifier : ProxyCaptchaIdentifier
 {
     public ImageToTextIdentifier()
     {
-        IdentifableTypes.Add(CaptchaType.ImageToText);
+        IdentifiableTypes.Add(CaptchaType.ImageToText);
     }
 
-    public override CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, ProxyConfig? proxyConfig)
+    public override CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, SolverAdditionalArguments additionalArguments)
     {
         return originalType;
     }
 
-    public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig, IWebElement? imageElement = null)
+    public override CaptchaType? Identify(IWebDriver driver, SolverAdditionalArguments additionalArguments)
     {
-        var base64 = imageElement?.DownloadSourceAsBase64String();
+        var base64 = additionalArguments.ImageElement?.DownloadSourceAsBase64String();
         
         if (!string.IsNullOrEmpty(base64))
+        {
+            return CaptchaType.ImageToText;
+        }
+
+        if (!string.IsNullOrEmpty(additionalArguments.ImageFilePath))
         {
             return CaptchaType.ImageToText;
         }

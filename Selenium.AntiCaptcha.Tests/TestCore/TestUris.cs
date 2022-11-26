@@ -15,9 +15,14 @@ public static class TestUris
 
     public static IEnumerable<object[]> TestableUris() =>        
         Recaptcha.Uris()
-        .Concat(FunCaptcha.Uris())
-        .Concat(HCaptcha.Uris())
-        .Concat(GeeTest.Uris());
+            .Concat(FunCaptcha.Uris())
+            .Concat(HCaptcha.Uris())
+            .Concat(GeeTest.Uris());
+
+    public static IEnumerable<object[]> TestableUrisWithoutRecaptcha() =>        
+        FunCaptcha.Uris()
+            .Concat(HCaptcha.Uris())
+            .Concat(GeeTest.Uris());
 
     public class Recaptcha
     {
@@ -35,7 +40,7 @@ public static class TestUris
                     yield return new object[] { new CaptchaUri(W2, Type) };
                 }
                 public const string W1 = "https://www.netflix.com/pl-en/login";
-                public const string W2 = "https://www.weebly.com/";
+                public const string W2 = "https://squareup.com/signup";
             }
 
             public static class NonEnterprise
@@ -74,10 +79,12 @@ public static class TestUris
                     yield return new object[] { new CaptchaUri(W1, Type) };
                     yield return new object[] { new CaptchaUri(W2, Type) };
                     yield return new object[] { new CaptchaUri(W3, Type) };
+                    yield return new object[] { new CaptchaUri(W4, Type) };
                 }
                 public const string W1 = "https://recaptcha-demo.appspot.com/recaptcha-v2-checkbox.php";
                 public const string W2 = "http://antigate.com/logintest.php";
                 public const string W3 = "https://rescan.io/join/";
+                public const string W4 = "https://recaptcha-demo.appspot.com/recaptcha-v2-invisible.php";
             }
         }
     }

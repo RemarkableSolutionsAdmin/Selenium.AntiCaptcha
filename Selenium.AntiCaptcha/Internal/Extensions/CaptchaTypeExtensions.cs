@@ -37,7 +37,7 @@ public static class CaptchaTypeExtensions
             CaptchaType.ReCaptchaV2Proxyless => CaptchaType.ReCaptchaV2,
             CaptchaType.ReCaptchaV2EnterpriseProxyless => CaptchaType.ReCaptchaV2Enterprise,
             CaptchaType.ReCaptchaV2Enterprise => CaptchaType.ReCaptchaV2Enterprise,
-            CaptchaType.ReCaptchaV3Proxyless => CaptchaType.ReCaptchaV3Enterprise,
+            CaptchaType.ReCaptchaV3Proxyless => CaptchaType.ReCaptchaV3Proxyless,
             CaptchaType.ReCaptchaV2 => CaptchaType.ReCaptchaV2,
             CaptchaType.HCaptcha => CaptchaType.HCaptcha,
             CaptchaType.HCaptchaProxyless => CaptchaType.HCaptcha,

@@ -3,6 +3,7 @@ using AntiCaptchaApi.Net.Models.Solutions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
+using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Internal;
 
@@ -21,14 +22,15 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
     
     public RecaptchaIdentifier()
     {
-        IdentifableTypes.AddRange(_recaptchaTypes);
+        IdentifiableTypes.AddRange(_recaptchaTypes);
     }
 
-    public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig, IWebElement? imageElement = null)
+    public override CaptchaType? Identify(IWebDriver driver, SolverAdditionalArguments additionalArguments)
     {       
         try
         {
             var pageSource = driver.GetAllPageSource();
+            var url = driver.Url;
             var isEnterprise = IsRecaptchaEnterprise(pageSource);
             var recaptchaFrame = GetRecaptchaIFrame(driver);
 
@@ -38,11 +40,23 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
             }
 
             driver.SwitchTo().Frame(recaptchaFrame);
+            var isInvisibleRecaptcha = IsInvisibleRecaptcha(driver);
+            var isV3Recaptcha = false;
+            var isV2Recaptcha = false;
 
-            var isV3Recaptcha = IsV3(driver);
-            var isV2Recaptcha = IsV2(driver);
+            if (isInvisibleRecaptcha) //Might be invisible V2 or V3.
+            {
+                var containsInteractableButtonWithSiteKey = HasInteractableButtonWithSiteKey(driver);
+                isV2Recaptcha = containsInteractableButtonWithSiteKey;
+            ;    isV3Recaptcha = !containsInteractableButtonWithSiteKey;
+            }
+            else
+            {
+                driver.SwitchTo().Frame(recaptchaFrame);
+                isV2Recaptcha = IsV2(driver);
+            }
 
-            if (isV2Recaptcha == isV3Recaptcha) //Should we throw an exception?
+            if (isV2Recaptcha == isV3Recaptcha)
             {
                 return null;
             }
@@ -51,11 +65,11 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
             if (isV2Recaptcha)
             {
                 result = isEnterprise ? CaptchaType.ReCaptchaV2EnterpriseProxyless : CaptchaType.ReCaptchaV2Proxyless;
-                return base.SpecifyCaptcha(result, driver, proxyConfig);
+                return base.SpecifyCaptcha(result, driver, additionalArguments);
             }
 
             result = isEnterprise ? CaptchaType.ReCaptchaV3Enterprise : CaptchaType.ReCaptchaV3Proxyless;
-            return base.SpecifyCaptcha(result, driver, proxyConfig);
+            return base.SpecifyCaptcha(result, driver, additionalArguments);
         }
         catch (Exception)
         {
@@ -67,10 +81,28 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
         }
     }
 
-
-    public override CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, ProxyConfig? proxyConfig)
+    private static bool HasInteractableButtonWithSiteKey(IWebDriver driver)
     {
-        return Identify(driver, proxyConfig);
+        var button = driver.FindByXPathAllFrames(
+            "//button[string-length(@data-sitekey) > 0]",
+            "//button[string-length(@sitekey) > 0]");
+
+        return button != null;
+    }
+
+    private bool IsInvisibleRecaptcha(IWebDriver driver)
+    {
+        var recaptchaV3ElementPaths = new List<string>()
+        {
+            "//div[@class='rc-anchor-invisible-text']"
+        };
+        return driver.FindByXPathAllFrames(recaptchaV3ElementPaths.ToArray()) != null;
+    }
+    
+
+    public override CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, SolverAdditionalArguments additionalArguments)
+    {
+        return Identify(driver, additionalArguments);
     }
 
     private static IWebElement? GetRecaptchaIFrame(IWebDriver driver)
@@ -82,7 +114,9 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
     {
         var recaptchaV2ElementPaths = new List<string>()
         {
-            "//div[@class='rc-anchor-content']"
+            "//div[@class='rc-anchor-content']",
+            
+            //"//div[contains(@class, 'rc-anchor-invisible-text')]"
         };
 
         return driver.DoesAtLeastOneOfTheElementsExist(recaptchaV2ElementPaths);

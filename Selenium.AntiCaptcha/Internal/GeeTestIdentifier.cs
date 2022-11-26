@@ -3,6 +3,7 @@ using AntiCaptchaApi.Net.Models;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
+using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Internal;
 
@@ -10,7 +11,7 @@ public class GeeTestIdentifier : ProxyCaptchaIdentifier
 {
     public GeeTestIdentifier()
     {
-        IdentifableTypes.AddRange(GeeTypes);
+        IdentifiableTypes.AddRange(GeeTypes);
     }
     
     private static List<CaptchaType> GeeTypes = new()
@@ -21,7 +22,7 @@ public class GeeTestIdentifier : ProxyCaptchaIdentifier
         CaptchaType.GeeTestV4Proxyless,
     };
 
-    public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig, IWebElement? imageElement = null)
+    public override CaptchaType? Identify(IWebDriver driver, SolverAdditionalArguments additionalArguments)
     {
         try
         {
@@ -36,7 +37,7 @@ public class GeeTestIdentifier : ProxyCaptchaIdentifier
 
             var hasV4OnlyAttribute = scriptSrcText?.DoesContainRegex("captcha_id=\\w{32}");
 
-            return base.SpecifyCaptcha(hasV4OnlyAttribute.GetValueOrDefault() ? CaptchaType.GeeTestV4Proxyless : CaptchaType.GeeTestV3Proxyless, driver, proxyConfig);
+            return base.SpecifyCaptcha(hasV4OnlyAttribute.GetValueOrDefault() ? CaptchaType.GeeTestV4Proxyless : CaptchaType.GeeTestV3Proxyless, driver, additionalArguments);
         }
         catch
         {
@@ -44,9 +45,9 @@ public class GeeTestIdentifier : ProxyCaptchaIdentifier
         }
     }
 
-    public override CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, ProxyConfig? proxyConfig)
+    public override CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, SolverAdditionalArguments additionalArguments)
     {
-        return Identify(driver, proxyConfig);
+        return Identify(driver, additionalArguments);
     }
 
     private static IWebElement? GetGeeScriptElement(IWebDriver driver)

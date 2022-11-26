@@ -4,22 +4,23 @@ using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Internal.Helpers;
+using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Internal;
 
 public abstract class ProxyCaptchaIdentifier : ICaptchaIdentifier
 {
-    protected readonly List<CaptchaType> IdentifableTypes = new();
+    protected readonly List<CaptchaType> IdentifiableTypes = new();
     
     public bool CanIdentify(CaptchaType type)
     {
-        return IdentifableTypes.Contains(type);
+        return IdentifiableTypes.Contains(type);
     }
 
-    public abstract CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig, IWebElement? imageElement = null);
-    public virtual CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, ProxyConfig? proxyConfig)
+    public abstract CaptchaType? Identify(IWebDriver driver, SolverAdditionalArguments additionalArguments);
+    public virtual CaptchaType? SpecifyCaptcha(CaptchaType originalType, IWebDriver driver, SolverAdditionalArguments additionalArguments)
     {
-        if (proxyConfig == null || string.IsNullOrEmpty(proxyConfig.ProxyAddress))
+        if (additionalArguments.ProxyConfig == null || string.IsNullOrEmpty(additionalArguments.ProxyConfig.ProxyAddress))
         {
             return originalType;
         }

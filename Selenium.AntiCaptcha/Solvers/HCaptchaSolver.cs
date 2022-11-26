@@ -4,20 +4,21 @@ using AntiCaptchaApi.Net.Requests;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Constants;
 using Selenium.AntiCaptcha.Internal.Extensions;
+using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
     internal class HCaptchaSolver : Solver<HCaptchaRequest, HCaptchaSolution>
     {
-        protected override HCaptchaRequest BuildRequest(IWebDriver driver, string? url, string? siteKey, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
+        protected override HCaptchaRequest BuildRequest(SolverAdditionalArguments additionalArguments)
         {
             return new HCaptchaRequest
             {
-                WebsiteUrl = url ?? driver.Url,
-                WebsiteKey = siteKey,
-                UserAgent = userAgent ?? AnticaptchaDefaultValues.UserAgent,
-                ProxyConfig = proxyConfig,
+                WebsiteUrl = additionalArguments.Url,
+                WebsiteKey = additionalArguments.SiteKey,
+                UserAgent = additionalArguments.UserAgent,
+                ProxyConfig = additionalArguments.ProxyConfig,
             };
         }
 

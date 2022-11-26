@@ -12,8 +12,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         public void Solve_WithCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W2);
-            var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey, captchaType: CaptchaType.ReCaptchaV2Proxyless, 
-                submitElement: Driver.FindElement(By.ClassName("btn")));
+            var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey);
             AssertSolveCaptchaResult(result);
         }
         
@@ -21,7 +20,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         public void Solve_WithoutCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W2);
-            var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey, submitElement: Driver.FindElement(By.ClassName("btn")));
+            var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey);
             AssertSolveCaptchaResult(result);
         }
 
@@ -29,8 +28,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         public void SolveNonGeneric_WithCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W2);
-            var result = Driver.SolveCaptcha(ClientKey, captchaType: CaptchaType.ReCaptchaV2Proxyless, 
-                submitElement: Driver.FindElement(By.ClassName("btn")));
+            var result = Driver.SolveCaptcha(ClientKey);
             AssertSolveCaptchaResult(result);
         }
         
@@ -38,7 +36,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         public void SolveNonGeneric_WithoutCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W2);
-            var result = Driver.SolveCaptcha(ClientKey, submitElement: Driver.FindElement(By.ClassName("btn")));
+            var result = Driver.SolveCaptcha(ClientKey);
             AssertSolveCaptchaResult(result);
         }
 

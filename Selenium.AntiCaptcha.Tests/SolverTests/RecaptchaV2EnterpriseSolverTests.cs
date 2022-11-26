@@ -12,7 +12,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         public void Solve_WithCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W1);
-            var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey, captchaType: CaptchaType.ReCaptchaV2Enterprise, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+            var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey);
             AssertSolveCaptchaResult(result);
         }
         
@@ -20,14 +20,14 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         public void Solve_WithoutCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W1);
-            var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+            var result = Driver.SolveCaptcha<RecaptchaSolution>(ClientKey);
             AssertSolveCaptchaResult(result);
         }
         [Fact]
         public void SolveNonGeneric_WithCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W1);
-            var result = Driver.SolveCaptcha(ClientKey, captchaType: CaptchaType.ReCaptchaV2Enterprise, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+            var result = Driver.SolveCaptcha(ClientKey);
             AssertSolveCaptchaResult(result);
         }
         
@@ -35,7 +35,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         public void SolveNonGeneric_WithoutCaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.Recaptcha.V2.NonEnterprise.W1);
-            var result = Driver.SolveCaptcha(ClientKey, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+            var result = Driver.SolveCaptcha(ClientKey);
             AssertSolveCaptchaResult(result);
         }
 

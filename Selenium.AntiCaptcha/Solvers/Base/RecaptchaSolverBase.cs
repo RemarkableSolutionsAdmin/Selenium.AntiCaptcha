@@ -10,10 +10,8 @@ internal abstract class RecaptchaSolverBase<TRequest, TSolution> : Solver<TReque
     where TRequest : CaptchaRequest<TSolution>
     where TSolution : RecaptchaSolution, new()
 {
-    protected override string GetSiteKey(IWebDriver driver, int waitingTime = 1000, int tries = 3)
+    protected override string GetSiteKey(IWebDriver driver)
     {
-        Thread.Sleep(waitingTime);
-
         try
         {
             return driver.FindElement(By.ClassName("g-recaptcha")).GetAttribute("data-sitekey");

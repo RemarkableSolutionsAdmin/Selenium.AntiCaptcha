@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
+using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Internal;
 
@@ -15,12 +16,12 @@ public class HCaptchaIdentifier : ProxyCaptchaIdentifier
 
     public HCaptchaIdentifier()
     {
-        IdentifableTypes.AddRange(HCaptchaTypes);
+        IdentifiableTypes.AddRange(HCaptchaTypes);
     }
 
-    public override CaptchaType? Identify(IWebDriver driver, ProxyConfig? proxyConfig, IWebElement? imageElement = null)
+    public override CaptchaType? Identify(IWebDriver driver, SolverAdditionalArguments additionalArguments)
     {
-        return ContainsHCaptchaIFrame(driver) ? base.SpecifyCaptcha(CaptchaType.HCaptchaProxyless, driver, proxyConfig) : null;
+        return ContainsHCaptchaIFrame(driver) ? base.SpecifyCaptcha(CaptchaType.HCaptchaProxyless, driver, additionalArguments) : null;
     }
     
     private static bool ContainsHCaptchaIFrame(IWebDriver driver)

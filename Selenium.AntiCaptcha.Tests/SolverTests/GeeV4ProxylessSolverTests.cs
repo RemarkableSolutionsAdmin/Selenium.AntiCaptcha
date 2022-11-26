@@ -18,7 +18,7 @@ public class GeeV4ProxylessSolverTests : SequentialAnticaptchaTestBase
         Assert.NotNull(slideButton);
         slideButton.Click();
         Thread.Sleep(1000);
-        var result = Driver.SolveCaptcha<GeeTestV4Solution>(ClientKey, CaptchaType.GeeTestV4Proxyless);
+        var result = Driver.SolveCaptcha<GeeTestV4Solution>(ClientKey);
 
         AssertSolveCaptchaResult(result);
     }
@@ -48,7 +48,7 @@ public class GeeV4ProxylessSolverTests : SequentialAnticaptchaTestBase
         Assert.NotNull(slideButton);
         slideButton.Click();
         Thread.Sleep(1000);
-        var result = Driver.SolveCaptcha(ClientKey, CaptchaType.GeeTestV4Proxyless);
+        var result = Driver.SolveCaptcha(ClientKey);
 
         AssertSolveCaptchaResult(result);
     }

@@ -12,8 +12,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         public void Solve_CaptchaTypeSpecified()
         {
             SetDriverUrl(TestUris.FunCaptcha.W1);
-            var result = Driver.SolveCaptcha<FunCaptchaSolution>(ClientKey, 
-                captchaType: CaptchaType.FunCaptchaProxyless);
+            var result = Driver.SolveCaptcha<FunCaptchaSolution>(ClientKey);
             AssertSolveCaptchaResult(result);
         }
         

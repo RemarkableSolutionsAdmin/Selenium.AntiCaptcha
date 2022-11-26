@@ -4,26 +4,37 @@ using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Internal.Extensions;
+using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
     internal class GeeTestV3Solver : Solver<GeeTestV3Request, GeeTestV3Solution>
     {
-        protected override GeeTestV3Request BuildRequest(IWebDriver driver, string? url, string? siteKey, IWebElement? imageElement, string? userAgent, ProxyConfig proxyConfig)
+        protected override GeeTestV3Request BuildRequest(SolverAdditionalArguments additionalArguments)
         {
-            var challenge = GetChallenge(driver);
             return  new GeeTestV3Request
             {
-                WebsiteUrl = url ?? driver.Url,
-                Challenge = challenge,
-                GeetestApiServerSubdomain = null,
-                GeetestGetLib = null,
-                Gt = siteKey,
-                ProxyConfig = proxyConfig,
-                UserAgent = userAgent ?? Constants.AnticaptchaDefaultValues.UserAgent
+                WebsiteUrl = additionalArguments.Url,
+                Challenge = additionalArguments.Challenge,
+                GeetestApiServerSubdomain = additionalArguments.GeetestApiServerSubdomain,
+                GeetestGetLib = additionalArguments.GeetestGetLib,
+                Gt = additionalArguments.Gt,
+                ProxyConfig = additionalArguments.ProxyConfig,
+                UserAgent = additionalArguments.UserAgent
             };
         }
+
+        protected override SolverAdditionalArguments FillMissingAdditionalArguments(IWebDriver driver, SolverAdditionalArguments solverAdditionalArguments)
+        {
+            return base.FillMissingAdditionalArguments(driver, solverAdditionalArguments)
+                with
+                {
+                    Gt = solverAdditionalArguments.Gt ?? AcquireSiteKey(driver, 0, solverAdditionalArguments.MaxPageLoadWaitingTimeInMilliseconds),
+                    Challenge = solverAdditionalArguments.Challenge ?? GetChallenge(driver)
+                };
+        }
+
         private static string GetChallenge(IWebDriver driver)
         {
             var pageSource = driver.GetAllPageSource();

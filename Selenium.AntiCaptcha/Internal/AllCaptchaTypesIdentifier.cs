@@ -4,14 +4,12 @@ using AntiCaptchaApi.Net.Models.Solutions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
+using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Internal;
 
 internal static class AllCaptchaTypesIdentifier
 {
-    private const int IdentifyRetryThreshold = 3;
-    private const int IdentifyRetryWaitTimeMs = 2000;
-
     private static readonly List<ICaptchaIdentifier> CaptchaIdentifiers = new()
     {
         new GeeTestIdentifier(),
@@ -22,73 +20,48 @@ internal static class AllCaptchaTypesIdentifier
         new FunCaptchaIdentifier()
     };
 
-    internal static List<CaptchaType> Identify(IWebDriver driver, ProxyConfig? proxyConfig)
+    internal static List<CaptchaType> Identify(IWebDriver driver, SolverAdditionalArguments additionalArguments)
     {
         var identifiedTypes = new List<CaptchaType>();
-        for (var i = 0; i < IdentifyRetryThreshold; i++)
+        foreach (var captchaIdentifier in CaptchaIdentifiers)
         {
-            foreach (var captchaIdentifier in CaptchaIdentifiers)
+            var identifiedCaptcha = captchaIdentifier.Identify(driver, additionalArguments);
+
+            if (identifiedCaptcha != null)
             {
-                var identifiedCaptcha = captchaIdentifier.Identify(driver, proxyConfig);
-
-                if (identifiedCaptcha != null)
-                {
-                    identifiedTypes.Add(identifiedCaptcha.Value);
-                }
+                identifiedTypes.Add(identifiedCaptcha.Value);
             }
-
-            if (identifiedTypes.Any())
-            {
-                return identifiedTypes;
-            }
-
-            Thread.Sleep(IdentifyRetryWaitTimeMs);
-
         }
-
+        
         return identifiedTypes;
     }
-
-
-
+    
 
     internal static bool CanIdentifyCaptcha(CaptchaType captchaType)
     {
         return CaptchaIdentifiers.Any(x => x.CanIdentify(captchaType));
     }
 
-    internal static CaptchaType? IdentifyCaptcha(IWebDriver driver,  ProxyConfig? proxyConfig, CaptchaType? result = null)
+    private static CaptchaType? IdentifyCaptcha(IWebDriver driver, SolverAdditionalArguments additionalArguments, CaptchaType captchaType)
     {
-        for (var i = 0; i < IdentifyRetryThreshold; i++)
+        foreach (var captchaIdentifier in CaptchaIdentifiers)
         {
-            foreach (var captchaIdentifier in CaptchaIdentifiers)
+            if (!captchaIdentifier.CanIdentify(captchaType))
+                continue;
+
+            var result = captchaIdentifier.SpecifyCaptcha(captchaType, driver, additionalArguments);
+            if (result.HasValue)
             {
-                if (!captchaIdentifier.CanIdentify(result.Value))
-                    continue;
-
-                var original = result;
-                result = captchaIdentifier.SpecifyCaptcha(result.Value, driver, proxyConfig);
-                if (result.HasValue)
-                {
-                    return result;
-                }
-
-                result = original;
+                return result.Value;
             }
-            Thread.Sleep(IdentifyRetryWaitTimeMs);
         }
-
-        return result;
+        return captchaType;
     }
 
-    internal static CaptchaType? IdentifyCaptcha<TSolution>(IWebDriver driver, ProxyConfig? proxyConfig)
+    internal static CaptchaType? IdentifyCaptcha<TSolution>(IWebDriver driver, SolverAdditionalArguments additionalArguments)
         where TSolution : BaseSolution, new()
     {
         var result = new TSolution().GetCaptchaType();
-
-        if (!result.HasValue)
-            return result;
-
-        return IdentifyCaptcha(driver, proxyConfig, result);
+        return !result.HasValue ? result : IdentifyCaptcha(driver, additionalArguments, result.Value);
     }
 }

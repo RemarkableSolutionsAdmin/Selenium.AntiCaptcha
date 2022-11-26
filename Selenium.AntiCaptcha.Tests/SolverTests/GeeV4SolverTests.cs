@@ -18,7 +18,7 @@ public class GeeV4SolverTests : SequentialAnticaptchaTestBase
         Assert.NotNull(slideButton);
         slideButton.Click();
         Thread.Sleep(1000);
-        var result = Driver.SolveCaptcha<GeeTestV4Solution>(ClientKey, CaptchaType.GeeTestV4, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+        var result = Driver.SolveCaptcha<GeeTestV4Solution>(ClientKey);
 
         AssertSolveCaptchaResult(result);
     }
@@ -33,7 +33,7 @@ public class GeeV4SolverTests : SequentialAnticaptchaTestBase
         Assert.NotNull(slideButton);
         slideButton.Click();
         Thread.Sleep(1000);
-        var result = Driver.SolveCaptcha<GeeTestV4Solution>(ClientKey, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+        var result = Driver.SolveCaptcha<GeeTestV4Solution>(ClientKey);
 
         AssertSolveCaptchaResult(result);
     }
@@ -48,7 +48,7 @@ public class GeeV4SolverTests : SequentialAnticaptchaTestBase
         Assert.NotNull(slideButton);
         slideButton.Click();
         Thread.Sleep(1000);
-        var result = Driver.SolveCaptcha(ClientKey, CaptchaType.GeeTestV4, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+        var result = Driver.SolveCaptcha(ClientKey);
 
         AssertSolveCaptchaResult(result);
     }
@@ -63,7 +63,7 @@ public class GeeV4SolverTests : SequentialAnticaptchaTestBase
         Assert.NotNull(slideButton);
         slideButton.Click();
         Thread.Sleep(1000);
-        var result = Driver.SolveCaptcha(ClientKey, proxyConfig: TestEnvironment.GetCurrentTestProxyConfig());
+        var result = Driver.SolveCaptcha(ClientKey);
 
         AssertSolveCaptchaResult(result);
     }
