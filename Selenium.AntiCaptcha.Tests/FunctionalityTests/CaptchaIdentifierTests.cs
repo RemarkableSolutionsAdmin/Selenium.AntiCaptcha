@@ -258,7 +258,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
     {
         var solverAdditionalArguments = additionalArguments ?? new SolverAdditionalArguments();
         await SetDriverUrl(captchaUri.Uri);
-        var identifiedTypes = await AllCaptchaTypesIdentifier.IdentifyAsync(Driver, solverAdditionalArguments);
+        var identifiedTypes = await AllCaptchaTypesIdentifier.IdentifyAsync(Driver, solverAdditionalArguments, CancellationToken.None);
         var testFailed = identifiedTypes.Count != 1 || identifiedTypes[0] != captchaUri.ExpectedType;
         
         Assert.False(testFailed, GetTestFailReasonText(captchaUri, solverAdditionalArguments, string.Join(", ", identifiedTypes.Select(x => x.ToString()))));
@@ -283,7 +283,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
     {
         var solverAdditionalArguments = additionalArguments ?? new SolverAdditionalArguments();
         await SetDriverUrl(captchaUri.Uri);
-        var type = await AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(Driver, solverAdditionalArguments); 
+        var type = await AllCaptchaTypesIdentifier.IdentifyCaptchaAsync<TSolution>(Driver, solverAdditionalArguments, CancellationToken.None); 
         var testFailed = type == null || type != captchaUri.ExpectedType;
         Assert.False(testFailed, GetTestFailReasonText(captchaUri, solverAdditionalArguments, type.ToString()));
     }

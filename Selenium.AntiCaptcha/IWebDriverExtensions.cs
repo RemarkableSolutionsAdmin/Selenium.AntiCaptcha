@@ -14,37 +14,32 @@ namespace Selenium.AntiCaptcha
     {
         public static async Task<BaseResponse> SolveCaptchaAsync(this IWebDriver driver,
             string clientKey,
-            SolverAdditionalArguments? additionalArguments = null)
+            SolverAdditionalArguments? additionalArguments = null,
+            CancellationToken cancellationToken = default)
         {
             additionalArguments ??= new SolverAdditionalArguments();
-            driver.SwitchTo().DefaultContent();
-            var captchaType = additionalArguments.CaptchaType;
-            
-            if (captchaType == null)
+            var captchaType = additionalArguments.CaptchaType ?? await IdentifyCaptcha(driver, additionalArguments, cancellationToken);
+            dynamic solver = SolverFactory.GetSolver(driver, clientKey, captchaType);
+            return await solver.SolveAsync(additionalArguments, cancellationToken);
+        }
+
+        private static async Task<CaptchaType> IdentifyCaptcha(IWebDriver driver, SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken = default)
+        {          
+            var identifiedCaptchaTypes = await AllCaptchaTypesIdentifier.IdentifyAsync(driver, additionalArguments, cancellationToken);
+            if (identifiedCaptchaTypes.Count != 1)
             {
-                var identifiedCaptchaTypes = await AllCaptchaTypesIdentifier.IdentifyAsync(driver, additionalArguments);
-                if (identifiedCaptchaTypes.Count != 1)
-                {
-                    throw new Exception($"Unable to identify captcha. Found multiple matching captcha types: " +
-                                        $"{string.Join(',', identifiedCaptchaTypes.Select(x => x.ToString()))}");
-                }
-                captchaType = identifiedCaptchaTypes.First();
+                throw new Exception($"Unable to identify captcha. Found multiple matching captcha types: " +
+                                    $"{string.Join(',', identifiedCaptchaTypes.Select(x => x.ToString()))}");
             }
-
-            dynamic solver = SolverFactory.GetSolver(captchaType.Value);
-            var solution = await solver.SolveAsync(driver, clientKey, additionalArguments);
-            driver.SwitchTo().DefaultContent();
-            return solution;
-
+            return identifiedCaptchaTypes.First();
         }
 
         public static async Task<TaskResultResponse<TSolution>> SolveCaptchaAsync<TSolution>(this IWebDriver driver, string clientKey,
-            SolverAdditionalArguments? additionalArguments = null)
+            SolverAdditionalArguments? additionalArguments = null, CancellationToken cancellationToken = default)
                 where TSolution : BaseSolution, new()
         {
-            driver.SwitchTo().DefaultContent();
             additionalArguments ??= new SolverAdditionalArguments();
-            var captchaType = additionalArguments.CaptchaType ?? await AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(driver, additionalArguments);
+            var captchaType = additionalArguments.CaptchaType ?? await AllCaptchaTypesIdentifier.IdentifyCaptchaAsync<TSolution>(driver, additionalArguments, cancellationToken);
 
             if (!captchaType.HasValue)
             {
@@ -52,12 +47,8 @@ namespace Selenium.AntiCaptcha
             }
 
             ValidateSolutionOutputToCaptchaType<TSolution>(captchaType.Value);
-            var solver = SolverFactory.GetSolver<TSolution>(captchaType.Value);
-            var solution = await solver.SolveAsync(driver, clientKey, additionalArguments);
-            
-            driver.SwitchTo().DefaultContent();
-            
-            return solution;
+            var solver = SolverFactory.GetSolver<TSolution>(driver,  clientKey, captchaType.Value);
+            return await solver.SolveAsync(additionalArguments, cancellationToken);
 
         }
 

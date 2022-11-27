@@ -23,14 +23,14 @@ namespace Selenium.AntiCaptcha.Solvers
             };
         }
 
-        protected override async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(IWebDriver driver,
+        protected override async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(
             SolverAdditionalArguments solverAdditionalArguments)
         {
-            return await base.FillMissingAdditionalArguments(driver, solverAdditionalArguments)
+            return await base.FillMissingAdditionalArguments(solverAdditionalArguments)
                 with
                 {
-                    Challenge = solverAdditionalArguments.Challenge ?? GetChallenge(driver),
-                    Gt = solverAdditionalArguments.Gt ?? await AcquireSiteKey(driver, solverAdditionalArguments.MaxPageLoadWaitingTimeInMilliseconds),
+                    Challenge = solverAdditionalArguments.Challenge ?? GetChallenge(Driver),
+                    Gt = solverAdditionalArguments.Gt ?? await AcquireSiteKey(solverAdditionalArguments.MaxPageLoadWaitingTimeInMilliseconds),
                 };
         }
 
@@ -39,6 +39,10 @@ namespace Selenium.AntiCaptcha.Solvers
             var pageSource = driver.GetAllPageSource();
             var regex = new Regex("challenge=(.*?)&");
             return regex.Match(pageSource).Groups[1].Value;
+        }
+
+        public GeeTestV3ProxylessSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        {
         }
     }
 }

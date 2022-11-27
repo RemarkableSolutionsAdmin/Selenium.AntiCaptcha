@@ -23,14 +23,18 @@ namespace Selenium.AntiCaptcha.Solvers
             };
         }
 
-        protected override async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(IWebDriver driver,
+        protected override async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(
             SolverAdditionalArguments solverAdditionalArguments)
         {
-            return await base.FillMissingAdditionalArguments(driver, solverAdditionalArguments) with
+            return await base.FillMissingAdditionalArguments(solverAdditionalArguments) with
             {
                 MinScore = solverAdditionalArguments.MinScore ?? AnticaptchaDefaultValues.MinScore,
                 IsEnterprise = solverAdditionalArguments.IsEnterprise ?? true
             };
+        }
+
+        public ReCaptchaV3EnterpriseSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        {
         }
     }
 }

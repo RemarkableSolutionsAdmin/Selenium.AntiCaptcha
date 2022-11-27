@@ -28,7 +28,6 @@ public static class PageSourceSearcher
 
         return match.Groups[1].Value;
     }
-    
 
     public static string FindSiteKey(IWebDriver driver)
     {

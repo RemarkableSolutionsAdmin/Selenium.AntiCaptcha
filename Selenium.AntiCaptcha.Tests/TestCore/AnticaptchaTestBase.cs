@@ -61,8 +61,7 @@ public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>
         Assert.NotNull(result);
         if (!string.IsNullOrEmpty(result.ErrorDescription))
         {
-            Assert.Empty(result.ErrorDescription);
-            Assert.NotNull(result.ErrorDescription);   
+            Assert.False(true, result?.ErrorDescription);
         }
 
         if (!string.IsNullOrEmpty(result.CreateTaskResponse.ErrorDescription))

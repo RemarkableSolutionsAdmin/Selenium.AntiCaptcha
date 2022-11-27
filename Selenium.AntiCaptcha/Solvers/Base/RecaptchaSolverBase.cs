@@ -10,24 +10,24 @@ internal abstract class RecaptchaSolverBase<TRequest, TSolution> : Solver<TReque
     where TRequest : CaptchaRequest<TSolution>
     where TSolution : RecaptchaSolution, new()
 {
-    protected override string GetSiteKey(IWebDriver driver)
+    protected override string GetSiteKey()
     {
         try
         {
-            return driver.FindElement(By.ClassName("g-recaptcha")).GetAttribute("data-sitekey");
+            return Driver.FindElement(By.ClassName("g-recaptcha")).GetAttribute("data-sitekey");
         }
         catch (Exception e)
         {
-            
+            // ignored
         }
 
-        var recaptchaFrameSrc = driver.FindByXPath("//iframe[contains(@src, 'recaptcha')]")?.GetAttribute("src");
+        var recaptchaFrameSrc = Driver.FindByXPath("//iframe[contains(@src, 'recaptcha')]")?.GetAttribute("src");
 
 
         if (!string.IsNullOrEmpty(recaptchaFrameSrc))
         {
             var regex = new Regex("k=(.*?)&");
-            var siteKey = regex.Match(driver.GetAllPageSource()).Groups[1].Value;
+            var siteKey = regex.Match(Driver.GetAllPageSource()).Groups[1].Value;
 
             if (!string.IsNullOrEmpty(siteKey))
                 return siteKey;
@@ -37,7 +37,7 @@ internal abstract class RecaptchaSolverBase<TRequest, TSolution> : Solver<TReque
     }
     
     
-    protected override void FillResponseElement(IWebDriver driver, TSolution solution, IWebElement? responseElement)
+    protected override void FillResponseElement(TSolution solution, IWebElement? responseElement)
     {
         if (responseElement != null)
         {
@@ -45,9 +45,13 @@ internal abstract class RecaptchaSolverBase<TRequest, TSolution> : Solver<TReque
         }
         else
         {
-            var js = driver as IJavaScriptExecutor;
+            var js = Driver as IJavaScriptExecutor;
             js.ExecuteScript($"window.localStorage.setItem('_grecaptcha','{solution.GRecaptchaResponse}');");
             js.ExecuteScript($"document.getElementById('g-recaptcha-response').innerText='{solution.GRecaptchaResponse}';");
         }
+    }
+
+    protected RecaptchaSolverBase(string clientKey, IWebDriver driver) : base(clientKey, driver)
+    {
     }
 }

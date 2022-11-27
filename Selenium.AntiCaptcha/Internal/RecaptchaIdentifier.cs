@@ -25,7 +25,10 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
         IdentifiableTypes.AddRange(_recaptchaTypes);
     }
 
-    public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments)
+    public override async Task<CaptchaType?> IdentifyAsync(
+        IWebDriver driver,
+        SolverAdditionalArguments additionalArguments,
+        CancellationToken cancellationToken)
     {       
         try
         {
@@ -64,11 +67,11 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
             if (isV2Recaptcha)
             {
                 result = isEnterprise ? CaptchaType.ReCaptchaV2EnterpriseProxyless : CaptchaType.ReCaptchaV2Proxyless;
-                return await base.SpecifyCaptcha(result, driver, additionalArguments);
+                return await base.SpecifyCaptcha(result, driver, additionalArguments, cancellationToken);
             }
 
             result = isEnterprise ? CaptchaType.ReCaptchaV3Enterprise : CaptchaType.ReCaptchaV3Proxyless;
-            return await base.SpecifyCaptcha(result, driver, additionalArguments);
+            return await base.SpecifyCaptcha(result, driver, additionalArguments, cancellationToken);
         }
         catch (Exception)
         {
@@ -100,9 +103,9 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
     
 
     public override Task<CaptchaType?> SpecifyCaptcha(CaptchaType originalType, IWebDriver driver,
-        SolverAdditionalArguments additionalArguments)
+        SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)
     {
-        return IdentifyAsync(driver, additionalArguments);
+        return IdentifyAsync(driver, additionalArguments, cancellationToken);
     }
 
     private static IWebElement? GetRecaptchaIFrame(IWebDriver driver)

@@ -14,15 +14,16 @@ public class AntiGateIdentifier : ProxyCaptchaIdentifier
     }
 
 
-    public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments)
+    public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
+        CancellationToken cancellationToken)
     {
         return null; //TODO!
     }
 
     //TODO!
     public override async Task<CaptchaType?> SpecifyCaptcha(CaptchaType originalType, IWebDriver driver,
-        SolverAdditionalArguments additionalArguments)
+        SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)
     {
-        return await base.SpecifyCaptcha(originalType, driver, additionalArguments);
+        return await base.SpecifyCaptcha(originalType, driver, additionalArguments, cancellationToken);
     }
 }

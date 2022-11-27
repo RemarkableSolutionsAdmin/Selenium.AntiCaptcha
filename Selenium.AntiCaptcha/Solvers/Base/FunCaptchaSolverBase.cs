@@ -11,17 +11,21 @@ internal abstract class FunCaptchaSolverBase<TRequest, TSolution> : Solver<TRequ
     where TRequest : CaptchaRequest<TSolution>
     where TSolution : FunCaptchaSolution, new()
 {
-    protected override string GetSiteKey(IWebDriver driver)
+    protected override string GetSiteKey()
     {
         try
         {
-            return driver.FindElement(By.Id("funcaptcha")).GetAttribute("data-pkey");
+            return Driver.FindElement(By.Id("funcaptcha")).GetAttribute("data-pkey");
         }
         catch (Exception e)
         {
             // ignore
         }
  
-        return PageSourceSearcher.FindFunCaptchaSiteKey(driver);
+        return PageSourceSearcher.FindFunCaptchaSiteKey(Driver);
+    }
+
+    protected FunCaptchaSolverBase(string clientKey, IWebDriver driver) : base(clientKey, driver)
+    {
     }
 }

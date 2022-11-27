@@ -14,12 +14,13 @@ public class ImageToTextIdentifier : ProxyCaptchaIdentifier
     }
 
     public override async Task<CaptchaType?> SpecifyCaptcha(CaptchaType originalType, IWebDriver driver,
-        SolverAdditionalArguments additionalArguments)
+        SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)
     {
         return originalType;
     }
 
-    public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments)
+    public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
+        CancellationToken cancellationToken)
     {
         var base64 = additionalArguments.ImageElement?.DownloadSourceAsBase64String();
         

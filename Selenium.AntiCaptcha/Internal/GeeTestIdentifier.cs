@@ -22,7 +22,8 @@ public class GeeTestIdentifier : ProxyCaptchaIdentifier
         CaptchaType.GeeTestV4Proxyless,
     };
 
-    public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments)
+    public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
+        CancellationToken cancellationToken)
     {
         try
         {
@@ -37,7 +38,7 @@ public class GeeTestIdentifier : ProxyCaptchaIdentifier
 
             var hasV4OnlyAttribute = scriptSrcText?.DoesContainRegex("captcha_id=\\w{32}");
 
-            return await base.SpecifyCaptcha(hasV4OnlyAttribute.GetValueOrDefault() ? CaptchaType.GeeTestV4Proxyless : CaptchaType.GeeTestV3Proxyless, driver, additionalArguments);
+            return await base.SpecifyCaptcha(hasV4OnlyAttribute.GetValueOrDefault() ? CaptchaType.GeeTestV4Proxyless : CaptchaType.GeeTestV3Proxyless, driver, additionalArguments, cancellationToken);
         }
         catch
         {
@@ -46,9 +47,9 @@ public class GeeTestIdentifier : ProxyCaptchaIdentifier
     }
 
     public override Task<CaptchaType?> SpecifyCaptcha(CaptchaType originalType, IWebDriver driver,
-        SolverAdditionalArguments additionalArguments)
+        SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)
     {
-        return IdentifyAsync(driver, additionalArguments);
+        return IdentifyAsync(driver, additionalArguments, cancellationToken);
     }
 
     private static IWebElement? GetGeeScriptElement(IWebDriver driver)

@@ -12,7 +12,7 @@ namespace Selenium.AntiCaptcha.Solvers
 {
     internal class ImageToTextSolver : Solver<ImageToTextRequest, ImageToTextSolution>
     {
-        protected override string GetSiteKey(IWebDriver driver)
+        protected override string GetSiteKey()
         {
             return string.Empty;
         }
@@ -53,10 +53,14 @@ namespace Selenium.AntiCaptcha.Solvers
         }
 
 
-        protected override void FillResponseElement(IWebDriver driver, ImageToTextSolution solution, IWebElement? responseElement)
+        protected override void FillResponseElement(ImageToTextSolution solution, IWebElement? responseElement)
         {
-            responseElement ??= driver.FindElement(By.Name("captchaWord"));
+            responseElement ??= Driver.FindElement(By.Name("captchaWord"));
             responseElement?.SendKeys(solution.Text);
+        }
+
+        public ImageToTextSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        {
         }
     }
 }

@@ -19,13 +19,17 @@ internal class HCaptchaProxylessSolver  : Solver<HCaptchaProxylessRequest, HCapt
         };
 
 
-    protected override void FillResponseElement(IWebDriver driver, HCaptchaSolution solution, IWebElement? responseElement)
+    protected override void FillResponseElement(HCaptchaSolution solution, IWebElement? responseElement)
     {
         if (responseElement == null)
         {
-            responseElement = driver.FindElement(By.Name("h-captcha-response"));
+            responseElement = Driver.FindElement(By.Name("h-captcha-response"));
         }
 
         responseElement.SendKeys(solution.GRecaptchaResponse);
+    }
+
+    public HCaptchaProxylessSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+    {
     }
 }

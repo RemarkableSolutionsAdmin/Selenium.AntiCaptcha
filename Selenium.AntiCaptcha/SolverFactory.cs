@@ -1,4 +1,5 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
+using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Internal.Helpers;
@@ -9,7 +10,7 @@ namespace Selenium.AntiCaptcha;
 
 internal static class SolverFactory
 {
-    internal static ISolver<TSolution> GetSolver<TSolution>(CaptchaType captchaType)
+    internal static ISolver<TSolution> GetSolver<TSolution>(IWebDriver webDriver, string clientKey, CaptchaType captchaType)
         where TSolution : BaseSolution, new()
     {
         var solutionType = captchaType.GetSolutionType();
@@ -19,46 +20,44 @@ internal static class SolverFactory
             throw new ArgumentException("Wrong solution type chosen to captcha type.");
         }
 
-        return GetSolver(captchaType) as ISolver<TSolution>;
-
-        throw new ArgumentException();
+        return GetSolver(webDriver, clientKey, captchaType) as ISolver<TSolution>;
     }
-    internal static ISolver GetSolver(CaptchaType captchaType)
+    internal static ISolver GetSolver(IWebDriver webDriver, string clientKey, CaptchaType captchaType)
     {
         switch (captchaType)
         {
             case CaptchaType.ReCaptchaV2:
-                return new ReCaptchaV2Solver();
+                return new ReCaptchaV2Solver(clientKey, webDriver);
             case CaptchaType.ReCaptchaV2Proxyless:
-                return new ReCaptchaV2ProxylessSolver();
+                return new ReCaptchaV2ProxylessSolver(clientKey, webDriver);
             case CaptchaType.ReCaptchaV2Enterprise:
-                return new ReCaptchaV2EnterpriseSolver();
+                return new ReCaptchaV2EnterpriseSolver(clientKey, webDriver);
             case CaptchaType.ReCaptchaV2EnterpriseProxyless:
-                return new ReCaptchaV2EnterpriseProxylessSolver();
+                return new ReCaptchaV2EnterpriseProxylessSolver(clientKey, webDriver);
             case CaptchaType.ReCaptchaV3Proxyless:
-                return new ReCaptchaV3ProxylessSolver();
+                return new ReCaptchaV3ProxylessSolver(clientKey, webDriver);
             case CaptchaType.ReCaptchaV3Enterprise:
-                return new ReCaptchaV3EnterpriseSolver();
+                return new ReCaptchaV3EnterpriseSolver(clientKey, webDriver);
             case CaptchaType.HCaptcha:
-                return new HCaptchaSolver();
+                return new HCaptchaSolver(clientKey, webDriver);
             case CaptchaType.HCaptchaProxyless:
-                return new HCaptchaProxylessSolver();
+                return new HCaptchaProxylessSolver(clientKey, webDriver);
             case CaptchaType.FunCaptcha:
-                return new FunCaptchaSolver();
+                return new FunCaptchaSolver(clientKey, webDriver);
             case CaptchaType.FunCaptchaProxyless:
-                return new FunCaptchaProxylessSolver();
+                return new FunCaptchaProxylessSolver(clientKey, webDriver);
             case CaptchaType.ImageToText:
-                return new ImageToTextSolver();
+                return new ImageToTextSolver(clientKey, webDriver);
             case CaptchaType.GeeTestV3:
-                return new GeeTestV3Solver();
+                return new GeeTestV3Solver(clientKey, webDriver);
             case CaptchaType.GeeTestV3Proxyless:
-                return new GeeTestV3ProxylessSolver();
+                return new GeeTestV3ProxylessSolver(clientKey, webDriver);
             case CaptchaType.GeeTestV4:
-                return new GeeTestV4Solver();
+                return new GeeTestV4Solver(clientKey, webDriver);
             case CaptchaType.GeeTestV4Proxyless:
-                return new GeeTestV4ProxylessSolver();
+                return new GeeTestV4ProxylessSolver(clientKey, webDriver);
             case CaptchaType.AntiGate:
-                return new AntiGateSolver();
+                return new AntiGateSolver(clientKey, webDriver);
             default:
                 throw new ArgumentOutOfRangeException(nameof(captchaType), captchaType, null);
         }

@@ -17,13 +17,13 @@ internal class FunCaptchaIdentifier : ProxyCaptchaIdentifier
         CaptchaType.FunCaptcha, CaptchaType.FunCaptchaProxyless
     };
 
-    public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments)
+    public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
+        CancellationToken cancellationToken)
     {
-
         try
         {
             if(IsFunCaptcha(driver))
-                return await base.SpecifyCaptcha(CaptchaType.FunCaptchaProxyless, driver, additionalArguments);
+                return await base.SpecifyCaptcha(CaptchaType.FunCaptchaProxyless, driver, additionalArguments, cancellationToken);
             
             return null;
         }

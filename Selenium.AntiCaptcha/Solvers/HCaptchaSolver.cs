@@ -24,19 +24,24 @@ namespace Selenium.AntiCaptcha.Solvers
             };
         }
 
-        protected override async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(IWebDriver driver, SolverAdditionalArguments solverAdditionalArguments)
+        protected override async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(
+            SolverAdditionalArguments solverAdditionalArguments)
         {
-            return await base.FillMissingAdditionalArguments(driver, solverAdditionalArguments) with
+            return await base.FillMissingAdditionalArguments(solverAdditionalArguments) with
             {
                 IsInvisible = solverAdditionalArguments.IsInvisible ?? false,
                 EnterprisePayload = solverAdditionalArguments.EnterprisePayload ?? new Dictionary<string, string>()
             };
         }
 
-        protected override void FillResponseElement(IWebDriver driver, HCaptchaSolution solution, IWebElement? responseElement)
+        protected override void FillResponseElement(HCaptchaSolution solution, IWebElement? responseElement)
         {
-            responseElement ??= driver.FindElement(By.Name("h-captcha-response"));
+            responseElement ??= Driver.FindElement(By.Name("h-captcha-response"));
             responseElement.SendKeys(solution.GRecaptchaResponse);
+        }
+
+        public HCaptchaSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        {
         }
     }
 }

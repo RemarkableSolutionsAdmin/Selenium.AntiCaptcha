@@ -10,7 +10,8 @@ namespace Selenium.AntiCaptcha.Solvers.Base;
 public interface ISolver<TSolution> : ISolver
     where TSolution : BaseSolution, new()
 {
-    public Task<TaskResultResponse<TSolution>> SolveAsync(IWebDriver driver, string clientKey, SolverAdditionalArguments additionalArguments);
+    public Task<TaskResultResponse<TSolution>> SolveAsync(SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken);
+    public void Reconfigure(IWebDriver driver, string clientKey);
 }
 
 public interface ISolver { }
