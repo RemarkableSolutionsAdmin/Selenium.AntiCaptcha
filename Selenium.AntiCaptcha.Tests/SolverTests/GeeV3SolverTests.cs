@@ -11,7 +11,7 @@ public class GeeV3SolverTests : SequentialAnticaptchaTestBase
     [Fact]
     public async Task GeeV3Test()
     {
-        SetDriverUrl(TestUris.GeeTest.V3.W2);
+        await SetDriverUrl(TestUris.GeeTest.V3.W2);
         var result = await Driver.SolveCaptchaAsync<GeeTestV3Solution>(ClientKey);
         AssertSolveCaptchaResult(result);
     }

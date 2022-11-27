@@ -13,6 +13,7 @@ public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>
     private readonly WebDriverFixture _fixture;
     protected readonly IWebDriver Driver;
     private const int MaxWaitingTimeInMilliseconds = 5000;
+    private const int StepDelayTimeInMilliseconds = 500;
 
 
     protected AnticaptchaTestBase(WebDriverFixture fixture)
@@ -24,32 +25,34 @@ public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>
 
     protected readonly string ClientKey = TestEnvironment.ClientKey;
 
-    private void WaitForLoad(int timeElapsedInMilliseconds)
+    private async Task WaitForLoad()
     {
+        var timeElapsedInMilliseconds = 0;
         while (true)
         {
-            if (timeElapsedInMilliseconds > MaxWaitingTimeInMilliseconds) return;
+            if (timeElapsedInMilliseconds > MaxWaitingTimeInMilliseconds ||
+                Driver.FindByXPathAllFrames("//*[contains(@class, 'captcha')]") != null)
+            {
+                break;
+            }
 
-            if (Driver.FindByXPathAllFrames() != null) return;
-
-            Thread.Sleep(500);
-            
-            timeElapsedInMilliseconds += MaxWaitingTimeInMilliseconds;
+            await Task.Delay(StepDelayTimeInMilliseconds);
+            timeElapsedInMilliseconds += StepDelayTimeInMilliseconds;
         }
     }
 
-    protected void SetDriverUrl(string url)
+    protected async Task SetDriverUrl(string url)
     {
-        try
+        if (url == Driver.Url)
         {
-            Driver.Navigate().GoToUrl(url);
-            WaitForLoad(0);
+            Driver.Manage().Cookies.DeleteAllCookies();
+            Driver.Navigate().Refresh();
         }
-        catch (WebDriverException)
+        else
         {
-            _fixture.RecreateWebDriver();
-            Driver.Url = url;
-        };
+            Driver.Navigate().GoToUrl(url);   
+        }
+        await WaitForLoad();
     }
     
     protected static void AssertSolveCaptchaResult<TSolution>(TaskResultResponse<TSolution>? result)

@@ -12,23 +12,23 @@ namespace Selenium.Anticaptcha.Tests.FunctionalityTests;
 
 public class CaptchaIdentifierTests : AnticaptchaTestBase
 {
-    private void TestProxyCaptchaIdentification(CaptchaUri captchaUri)
+    private async Task TestProxyCaptchaIdentification(CaptchaUri captchaUri)
     {                
         var proxyType = captchaUri.ExpectedType.ToProxyType();
         if (proxyType.IsProxyType())
         {
-            TestNonGenericIdentifier(captchaUri with { ExpectedType = proxyType }, new SolverAdditionalArguments
+            await TestNonGenericIdentifier(captchaUri with { ExpectedType = proxyType }, new SolverAdditionalArguments
             {
                 ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
             });
         }
     }
 
-    private void TestProxylessCaptchaIdentification(CaptchaUri captchaUri)
+    private async Task TestProxylessCaptchaIdentification(CaptchaUri captchaUri)
     {
         if (captchaUri.ExpectedType.IsProxylessType())
         {
-            TestNonGenericIdentifier(captchaUri);
+            await TestNonGenericIdentifier(captchaUri);
         }
     }
     
@@ -47,62 +47,62 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         
             [Theory]
             [MemberData(nameof(TestUris.Recaptcha.V3.Enterprise.Uris), MemberType = typeof(TestUris.Recaptcha.V3.Enterprise))]
-            public void TestAllRecaptchaV3EnterpriseUrisProxyless(CaptchaUri captchaUri)
+            public async Task TestAllRecaptchaV3EnterpriseUrisProxyless(CaptchaUri captchaUri)
             {
-                TestProxylessCaptchaIdentification(captchaUri);
+                await TestProxylessCaptchaIdentification(captchaUri);
             }
          
          
             [Theory]
             [MemberData(nameof(TestUris.Recaptcha.V3.NonEnterprise.Uris), MemberType = typeof(TestUris.Recaptcha.V3.NonEnterprise))]
-            public void TestAllRecaptchaV3NonEnterpriseUrisProxyless(CaptchaUri captchaUri)
+            public async Task TestAllRecaptchaV3NonEnterpriseUrisProxyless(CaptchaUri captchaUri)
             {
-                TestProxylessCaptchaIdentification(captchaUri);
+                await TestProxylessCaptchaIdentification(captchaUri);
             }
 
          
             [Theory]
             [MemberData(nameof(TestUris.Recaptcha.V2.NonEnterprise.Uris), MemberType = typeof(TestUris.Recaptcha.V2.NonEnterprise))]
-            public void TestAllRecaptchaV2NonEnterpriseUrisProxyless(CaptchaUri captchaUri)
+            public async Task TestAllRecaptchaV2NonEnterpriseUrisProxyless(CaptchaUri captchaUri)
             {
-                TestProxylessCaptchaIdentification(captchaUri);
+                await TestProxylessCaptchaIdentification(captchaUri);
             }
          
             [Theory]
             [MemberData(nameof(TestUris.Recaptcha.V2.Enterprise.Uris), MemberType = typeof(TestUris.Recaptcha.V2.Enterprise))]
-            public void TestAllRecaptchaV2EnterpriseUrisProxyless(CaptchaUri captchaUri)
+            public async Task TestAllRecaptchaV2EnterpriseUrisProxyless(CaptchaUri captchaUri)
             {
-                TestProxylessCaptchaIdentification(captchaUri);
+                await TestProxylessCaptchaIdentification(captchaUri);
             }
         
             [Theory]
             [MemberData(nameof(TestUris.Recaptcha.V3.Enterprise.Uris), MemberType = typeof(TestUris.Recaptcha.V3.Enterprise))]
-            public void TestAllRecaptchaV3EnterpriseUrisProxy(CaptchaUri captchaUri)
+            public async Task TestAllRecaptchaV3EnterpriseUrisProxy(CaptchaUri captchaUri)
             {
-                TestProxyCaptchaIdentification(captchaUri);
+                await TestProxyCaptchaIdentification(captchaUri);
             }
          
          
             [Theory]
             [MemberData(nameof(TestUris.Recaptcha.V3.NonEnterprise.Uris), MemberType = typeof(TestUris.Recaptcha.V3.NonEnterprise))]
-            public void TestAllRecaptchaV3NonEnterpriseUrisProxy(CaptchaUri captchaUri)
+            public async Task TestAllRecaptchaV3NonEnterpriseUrisProxy(CaptchaUri captchaUri)
             {
-                TestProxyCaptchaIdentification(captchaUri);
+                await TestProxyCaptchaIdentification(captchaUri);
             }
 
          
             [Theory]
             [MemberData(nameof(TestUris.Recaptcha.V2.NonEnterprise.Uris), MemberType = typeof(TestUris.Recaptcha.V2.NonEnterprise))]
-            public void TestAllRecaptchaV2NonEnterpriseUrisProxy(CaptchaUri captchaUri)
+            public async Task TestAllRecaptchaV2NonEnterpriseUrisProxy(CaptchaUri captchaUri)
             {
-                TestProxyCaptchaIdentification(captchaUri);
+                await TestProxyCaptchaIdentification(captchaUri);
             }
          
             [Theory]
             [MemberData(nameof(TestUris.Recaptcha.V2.Enterprise.Uris), MemberType = typeof(TestUris.Recaptcha.V2.Enterprise))]
-            public void TestAllRecaptchaV2EnterpriseUrisProxy(CaptchaUri captchaUri)
+            public async Task TestAllRecaptchaV2EnterpriseUrisProxy(CaptchaUri captchaUri)
             {
-                TestProxyCaptchaIdentification(captchaUri);
+                await TestProxyCaptchaIdentification(captchaUri);
             }
         }
 
@@ -115,22 +115,22 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
             
             [Theory]
             [MemberData(nameof(TestUris.TestableUrisWithoutRecaptcha), MemberType = typeof(TestUris))]
-            public void TestAllProxylessCaptchaUris(CaptchaUri captchaUri)
+            public async Task TestAllProxylessCaptchaUris(CaptchaUri captchaUri)
             {
                 if (captchaUri.ExpectedType.IsProxylessType())
                 {
-                    TestNonGenericIdentifier(captchaUri);
+                    await TestNonGenericIdentifier(captchaUri);
                 }
             }
          
             [Theory]
             [MemberData(nameof(TestUris.TestableUrisWithoutRecaptcha), MemberType = typeof(TestUris))]
-            public void TestAllProxyCaptchaUris(CaptchaUri captchaUri)
+            public async Task TestAllProxyCaptchaUris(CaptchaUri captchaUri)
             {
                 var proxyType = captchaUri.ExpectedType.ToProxyType();
                 if (!proxyType.IsProxylessType())
                 {
-                    TestNonGenericIdentifier(captchaUri with { ExpectedType = proxyType }, new SolverAdditionalArguments
+                    await TestNonGenericIdentifier(captchaUri with { ExpectedType = proxyType }, new SolverAdditionalArguments
                     {
                         ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
                     });
@@ -147,17 +147,17 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         
         [Theory]
         [InlineData(TestUris.GeeTest.V3.W1, CaptchaType.GeeTestV3Proxyless)]
-        public void ShouldReturnProperGeeV3TestType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
+        public async Task ShouldReturnProperGeeV3TestType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
         {
-            TestIdentifier<GeeTestV3Solution>(websiteUrl, expectedType, null);
+            await TestIdentifier<GeeTestV3Solution>(websiteUrl, expectedType, null);
         }
         
         
         [Theory]
         [InlineData(TestUris.GeeTest.V3.W1, CaptchaType.GeeTestV3)]
-        public void ShouldReturnProperGeeV3TestType_WithProxy(string websiteUrl, CaptchaType expectedType)
+        public async Task ShouldReturnProperGeeV3TestType_WithProxy(string websiteUrl, CaptchaType expectedType)
         {
-            TestIdentifier<GeeTestV3Solution>(websiteUrl, expectedType, new SolverAdditionalArguments
+            await TestIdentifier<GeeTestV3Solution>(websiteUrl, expectedType, new SolverAdditionalArguments
             {
                 ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
             });
@@ -166,17 +166,17 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         
         [Theory]
         [InlineData(TestUris.GeeTest.V4.W1, CaptchaType.GeeTestV4Proxyless)]
-        public void ShouldReturnProperGeeV4TestType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
+        public async Task ShouldReturnProperGeeV4TestType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
         {
-            TestIdentifier<GeeTestV4Solution>(websiteUrl, expectedType, null);
+            await TestIdentifier<GeeTestV4Solution>(websiteUrl, expectedType, null);
         }
         
         
         [Theory]
         [InlineData(TestUris.GeeTest.V4.W1, CaptchaType.GeeTestV4)]
-        public void ShouldReturnProperGeeV4TestType_WithProxy(string websiteUrl, CaptchaType expectedType)
+        public async Task ShouldReturnProperGeeV4TestType_WithProxy(string websiteUrl, CaptchaType expectedType)
         {
-            TestIdentifier<GeeTestV4Solution>(websiteUrl, expectedType, new SolverAdditionalArguments
+            await TestIdentifier<GeeTestV4Solution>(websiteUrl, expectedType, new SolverAdditionalArguments
             {
                 ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
             });
@@ -186,17 +186,17 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         [InlineData(TestUris.Recaptcha.V3.Enterprise.W1, CaptchaType.ReCaptchaV3Enterprise)]
         [InlineData(TestUris.Recaptcha.V3.NonEnterprise.W1, CaptchaType.ReCaptchaV3Proxyless)]
         [InlineData(TestUris.Recaptcha.V2.NonEnterprise.W1, CaptchaType.ReCaptchaV2Proxyless)]
-        public void ShouldReturnProperRecaptchaType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
+        public async Task ShouldReturnProperRecaptchaType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
         {
-            TestIdentifier<RecaptchaSolution>(websiteUrl, expectedType, null);
+            await TestIdentifier<RecaptchaSolution>(websiteUrl, expectedType, null);
         }
         
         [Theory]
         [InlineData(TestUris.Recaptcha.V3.Enterprise.W1, CaptchaType.ReCaptchaV3Enterprise)]
         [InlineData(TestUris.Recaptcha.V2.NonEnterprise.W1, CaptchaType.ReCaptchaV2)]
-        public void ShouldReturnProperRecaptchaType_WithProxy(string websiteUrl, CaptchaType expectedType)
+        public async Task ShouldReturnProperRecaptchaType_WithProxy(string websiteUrl, CaptchaType expectedType)
         {
-            TestIdentifier<RecaptchaSolution>(websiteUrl, expectedType, new SolverAdditionalArguments
+            await TestIdentifier<RecaptchaSolution>(websiteUrl, expectedType, new SolverAdditionalArguments
             {
                 ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
             });
@@ -205,16 +205,16 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         
         [Theory]
         [InlineData(TestUris.FunCaptcha.W1, CaptchaType.FunCaptchaProxyless)]
-        public void ShouldReturnProperFunCaptchaType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
+        public async Task ShouldReturnProperFunCaptchaType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
         {
-            TestIdentifier<FunCaptchaSolution>(websiteUrl, expectedType, null);
+            await TestIdentifier<FunCaptchaSolution>(websiteUrl, expectedType, null);
         }
         
         [Theory]
         [InlineData(TestUris.FunCaptcha.W1, CaptchaType.FunCaptcha)]
-        public void ShouldReturnProperFunCaptchaType_WithProxy(string websiteUrl, CaptchaType expectedType)
+        public async Task ShouldReturnProperFunCaptchaType_WithProxy(string websiteUrl, CaptchaType expectedType)
         {
-            TestIdentifier<FunCaptchaSolution>(websiteUrl, expectedType, new SolverAdditionalArguments
+            await TestIdentifier<FunCaptchaSolution>(websiteUrl, expectedType, new SolverAdditionalArguments
             {
                 ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
             });
@@ -223,16 +223,16 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         
         [Theory]
         [InlineData(TestUris.ImageToText.W1, CaptchaType.ImageToText)]
-        public void ShouldReturnProperImageToTextType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
+        public async Task ShouldReturnProperImageToTextType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
         {
-            TestIdentifier<ImageToTextSolution>(websiteUrl, expectedType, null);
+            await TestIdentifier<ImageToTextSolution>(websiteUrl, expectedType, null);
         }
         
         [Theory]
         [InlineData(TestUris.AntiGate.W1, CaptchaType.AntiGate)]
-        public void ShouldReturnProperAntiGateType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
+        public async Task ShouldReturnProperAntiGateType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
         {
-            TestIdentifier<AntiGateSolution>(websiteUrl, expectedType, null);
+            await TestIdentifier<AntiGateSolution>(websiteUrl, expectedType, null);
         }
 
         public IdentificationWithSolutionTypeSpecified(WebDriverFixture fixture) : base(fixture)
@@ -254,13 +254,11 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         }
     }
     
-    protected void TestNonGenericIdentifier(CaptchaUri captchaUri, SolverAdditionalArguments? additionalArguments = null)
+    protected async Task TestNonGenericIdentifier(CaptchaUri captchaUri, SolverAdditionalArguments? additionalArguments = null)
     {
         var solverAdditionalArguments = additionalArguments ?? new SolverAdditionalArguments();
-        SetDriverUrl(captchaUri.Uri);
-        var identifyTask = AllCaptchaTypesIdentifier.IdentifyAsync(Driver, solverAdditionalArguments);
-        Task.WaitAll(identifyTask);
-        var identifiedTypes = identifyTask.Result;
+        await SetDriverUrl(captchaUri.Uri);
+        var identifiedTypes = await AllCaptchaTypesIdentifier.IdentifyAsync(Driver, solverAdditionalArguments);
         var testFailed = identifiedTypes.Count != 1 || identifiedTypes[0] != captchaUri.ExpectedType;
         
         Assert.False(testFailed, GetTestFailReasonText(captchaUri, solverAdditionalArguments, string.Join(", ", identifiedTypes.Select(x => x.ToString()))));
@@ -273,22 +271,19 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
                $"ProxyConfig was {additionalArguments?.ProxyConfig}";
     }
     
-    protected void TestIdentifier<TSolution>(string websiteUri, CaptchaType expectedType, SolverAdditionalArguments? additionalArguments = null)
+    protected async Task TestIdentifier<TSolution>(string websiteUri, CaptchaType expectedType, SolverAdditionalArguments? additionalArguments = null)
         where TSolution : BaseSolution, new()
     {
         var captchaUri = new CaptchaUri(websiteUri, expectedType);
-        TestIdentifier<TSolution>(captchaUri, additionalArguments);
+        await TestIdentifier<TSolution>(captchaUri, additionalArguments);
     }
-    
 
-    protected void TestIdentifier<TSolution>(CaptchaUri captchaUri, SolverAdditionalArguments? additionalArguments = null)
+    protected async Task TestIdentifier<TSolution>(CaptchaUri captchaUri, SolverAdditionalArguments? additionalArguments = null)
         where TSolution : BaseSolution, new()
     {
         var solverAdditionalArguments = additionalArguments ?? new SolverAdditionalArguments();
-        SetDriverUrl(captchaUri.Uri);
-        var identifyTask = AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(Driver, solverAdditionalArguments);
-        Task.WaitAll(identifyTask);
-        var type = identifyTask.Result; 
+        await SetDriverUrl(captchaUri.Uri);
+        var type = await AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(Driver, solverAdditionalArguments); 
         var testFailed = type == null || type != captchaUri.ExpectedType;
         Assert.False(testFailed, GetTestFailReasonText(captchaUri, solverAdditionalArguments, type.ToString()));
     }

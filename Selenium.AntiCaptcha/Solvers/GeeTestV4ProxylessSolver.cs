@@ -21,12 +21,13 @@ namespace Selenium.AntiCaptcha.Solvers
             };
         }
 
-        protected override SolverAdditionalArguments FillMissingAdditionalArguments(IWebDriver driver, SolverAdditionalArguments solverAdditionalArguments)
+        protected override async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(IWebDriver driver,
+            SolverAdditionalArguments solverAdditionalArguments)
         {
-            return base.FillMissingAdditionalArguments(driver, solverAdditionalArguments)
+            return await base.FillMissingAdditionalArguments(driver, solverAdditionalArguments)
                 with
                 {
-                    Gt = solverAdditionalArguments.Gt ?? AcquireSiteKey(driver, 0, solverAdditionalArguments.MaxPageLoadWaitingTimeInMilliseconds),
+                    Gt = solverAdditionalArguments.Gt ?? await AcquireSiteKey(driver, solverAdditionalArguments.MaxPageLoadWaitingTimeInMilliseconds),
                     Challenge = solverAdditionalArguments.Challenge ?? GetChallenge(driver)
                 };
         }

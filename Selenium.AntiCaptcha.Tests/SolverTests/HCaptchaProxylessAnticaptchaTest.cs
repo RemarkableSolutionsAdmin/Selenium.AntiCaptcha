@@ -9,18 +9,20 @@ namespace Selenium.Anticaptcha.Tests.SolverTests;
 public class HCaptchaProxylessAnticaptchaTest : SequentialAnticaptchaTestBase
 {
     [Fact]
-    public async Task HCaptchaWithCaptchaTypeSpecified()
+    public async Task SolveGeneric_HCaptchaWithCaptchaTypeSpecified()
     {
-        SetDriverUrl(TestUris.HCaptcha.W1);
-        var result = await Driver.SolveCaptchaAsync<HCaptchaSolution>(clientKey: ClientKey, additionalArguments: new SolverAdditionalArguments {CaptchaType = CaptchaType.HCaptcha});
+        await SetDriverUrl(TestUris.HCaptcha.W1);
+        var result = await Driver.SolveCaptchaAsync<HCaptchaSolution>(clientKey: ClientKey, additionalArguments: new SolverAdditionalArguments
+        {
+            CaptchaType = CaptchaType.HCaptchaProxyless,
+        });
         AssertSolveCaptchaResult(result);
     }
     
-    
     [Fact]
-    public async Task HCaptchaWithProxyWithoutCaptchaType()
+    public async Task SolveGeneric_HCaptchaWithProxyWithoutCaptchaType()
     {
-        SetDriverUrl(TestUris.HCaptcha.W1);
+        await SetDriverUrl(TestUris.HCaptcha.W1);
         var result = await Driver.SolveCaptchaAsync<HCaptchaSolution>(clientKey: ClientKey);
         AssertSolveCaptchaResult(result);
     }
@@ -28,8 +30,11 @@ public class HCaptchaProxylessAnticaptchaTest : SequentialAnticaptchaTestBase
     [Fact]
     public async Task SolveNonGeneric_HCaptchaWithCaptchaTypeSpecified()
     {
-        SetDriverUrl(TestUris.HCaptcha.W1);
-        var result = await Driver.SolveCaptchaAsync(clientKey: ClientKey, additionalArguments: new SolverAdditionalArguments {CaptchaType = CaptchaType.HCaptchaProxyless});
+        await SetDriverUrl(TestUris.HCaptcha.W1);
+        var result = await Driver.SolveCaptchaAsync(clientKey: ClientKey, additionalArguments: new SolverAdditionalArguments
+        {
+            CaptchaType = CaptchaType.HCaptchaProxyless
+        });
         AssertSolveCaptchaResult(result);
     }
     
@@ -37,7 +42,7 @@ public class HCaptchaProxylessAnticaptchaTest : SequentialAnticaptchaTestBase
     [Fact]
     public async Task SolveNonGeneric_HCaptchaWithProxyWithoutCaptchaType()
     {
-        SetDriverUrl(TestUris.HCaptcha.W1);
+        await SetDriverUrl(TestUris.HCaptcha.W1);
         var result = await Driver.SolveCaptchaAsync(clientKey: ClientKey);
         AssertSolveCaptchaResult(result);
     }

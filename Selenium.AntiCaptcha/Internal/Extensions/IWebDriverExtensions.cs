@@ -6,19 +6,6 @@ namespace Selenium.AntiCaptcha.Internal.Extensions;
 
 internal static class IWebDriverExtensions
 {
-    //public static void Wait(this IWebDriver driver, IWebElement element, int timeout = 1000, int interval = 250)
-    //{
-    //    var fluentWait = new DefaultWait<IWebDriver>(driver);
-    //    fluentWait.Timeout = TimeSpan.FromMilliseconds(timeout);
-    //    fluentWait.PollingInterval = TimeSpan.FromMilliseconds(interval);
-    //    fluentWait.IgnoreExceptionTypes(typeof(NoSuchElementException));
-    //    fluentWait.Message = "Element not found";
-    //    if (driver.Manage().Timeouts().ImplicitWait == TimeSpan.Zero)
-    //    {
-    //        Thread.Sleep(timeout);
-    //    }
-    //}
-
     public static void ForEachFrame(this IWebDriver driver, Action? action)
     {
         try
@@ -63,6 +50,8 @@ internal static class IWebDriverExtensions
 
     public static IWebElement? FindByXPathAllFrames(this IWebDriver driver, params string[] xPathPatterns)
     {
+        if (!xPathPatterns.Any())
+            return null;
         try
         {
             var result = driver.FindByXPath(xPathPatterns);
@@ -94,12 +83,14 @@ internal static class IWebDriverExtensions
         }
     }
 
-    public static List<IWebElement> FindManyByXPathAllFrames(this IWebDriver driver, params string[] xPath)
+    public static List<IWebElement> FindManyByXPathAllFrames(this IWebDriver driver, params string[] xPathPatterns)
     {
+        if (!xPathPatterns.Any())
+            return new List<IWebElement>();
         var result = new List<IWebElement>();
         try
         {
-            driver.ForEachFrame(() => result.AddRange(driver.FindManyByXPathCurrentFrame(xPath)));
+            driver.ForEachFrame(() => result.AddRange(driver.FindManyByXPathCurrentFrame(xPathPatterns)));
             return result;
         }
         catch (Exception)
@@ -131,6 +122,7 @@ internal static class IWebDriverExtensions
 
     public static string GetAllPageSource(this IWebDriver driver)
     {
+        driver.SwitchTo().DefaultContent();
         var result = GatherAllPageSourcesInFrames(driver);
         driver.SwitchTo().DefaultContent();
         return result;

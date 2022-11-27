@@ -19,6 +19,17 @@ namespace Selenium.AntiCaptcha.Solvers
                 WebsiteKey = additionalArguments.SiteKey,
                 UserAgent = additionalArguments.UserAgent,
                 ProxyConfig = additionalArguments.ProxyConfig,
+                IsInvisible = additionalArguments.IsInvisible!.Value,
+                EnterprisePayload = additionalArguments.EnterprisePayload
+            };
+        }
+
+        protected override async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(IWebDriver driver, SolverAdditionalArguments solverAdditionalArguments)
+        {
+            return await base.FillMissingAdditionalArguments(driver, solverAdditionalArguments) with
+            {
+                IsInvisible = solverAdditionalArguments.IsInvisible ?? false,
+                EnterprisePayload = solverAdditionalArguments.EnterprisePayload ?? new Dictionary<string, string>()
             };
         }
 

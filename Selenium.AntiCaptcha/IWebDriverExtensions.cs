@@ -17,6 +17,7 @@ namespace Selenium.AntiCaptcha
             SolverAdditionalArguments? additionalArguments = null)
         {
             additionalArguments ??= new SolverAdditionalArguments();
+            driver.SwitchTo().DefaultContent();
             var captchaType = additionalArguments.CaptchaType;
             
             if (captchaType == null)
@@ -24,13 +25,16 @@ namespace Selenium.AntiCaptcha
                 var identifiedCaptchaTypes = await AllCaptchaTypesIdentifier.IdentifyAsync(driver, additionalArguments);
                 if (identifiedCaptchaTypes.Count != 1)
                 {
-                    throw new Exception("Unable to identify captcha");
+                    throw new Exception($"Unable to identify captcha. Found multiple matching captcha types: " +
+                                        $"{string.Join(',', identifiedCaptchaTypes.Select(x => x.ToString()))}");
                 }
                 captchaType = identifiedCaptchaTypes.First();
             }
 
             dynamic solver = SolverFactory.GetSolver(captchaType.Value);
-            return solver.Solve(driver, clientKey, additionalArguments);
+            var solution = await solver.SolveAsync(driver, clientKey, additionalArguments);
+            driver.SwitchTo().DefaultContent();
+            return solution;
 
         }
 
@@ -38,6 +42,7 @@ namespace Selenium.AntiCaptcha
             SolverAdditionalArguments? additionalArguments = null)
                 where TSolution : BaseSolution, new()
         {
+            driver.SwitchTo().DefaultContent();
             additionalArguments ??= new SolverAdditionalArguments();
             var captchaType = additionalArguments.CaptchaType ?? await AllCaptchaTypesIdentifier.IdentifyCaptcha<TSolution>(driver, additionalArguments);
 
@@ -48,8 +53,11 @@ namespace Selenium.AntiCaptcha
 
             ValidateSolutionOutputToCaptchaType<TSolution>(captchaType.Value);
             var solver = SolverFactory.GetSolver<TSolution>(captchaType.Value);
-
-            return solver.Solve(driver, clientKey, additionalArguments);
+            var solution = await solver.SolveAsync(driver, clientKey, additionalArguments);
+            
+            driver.SwitchTo().DefaultContent();
+            
+            return solution;
 
         }
 

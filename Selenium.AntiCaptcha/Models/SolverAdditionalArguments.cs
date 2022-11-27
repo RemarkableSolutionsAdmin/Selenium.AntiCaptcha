@@ -37,6 +37,9 @@ public record SolverAdditionalArguments(
     int? MaxLength = null,
     string? Comment = null,
     string? ImageFilePath = null,
-    uint MaxPageLoadWaitingTimeInMilliseconds = 5000)
+    int MaxPageLoadWaitingTimeInMilliseconds = 5000, 
+    bool? IsInvisible = null,
+    Dictionary<string, string>? EnterprisePayload = null,
+    int MaxTimeOutTimeInSeconds = 300)
 {
 }

@@ -23,9 +23,10 @@ namespace Selenium.AntiCaptcha.Solvers
             };
         }
 
-        protected override SolverAdditionalArguments FillMissingAdditionalArguments(IWebDriver driver, SolverAdditionalArguments solverAdditionalArguments)
+        protected override async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(IWebDriver driver,
+            SolverAdditionalArguments solverAdditionalArguments)
         {
-            return base.FillMissingAdditionalArguments(driver, solverAdditionalArguments) with
+            return await base.FillMissingAdditionalArguments(driver, solverAdditionalArguments) with
             {
                 MinScore = solverAdditionalArguments.MinScore ?? AnticaptchaDefaultValues.MinScore,
                 IsEnterprise = solverAdditionalArguments.IsEnterprise ?? true

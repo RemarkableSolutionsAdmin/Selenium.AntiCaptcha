@@ -16,7 +16,7 @@ public class AntiGateIdentifier : ProxyCaptchaIdentifier
 
     public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments)
     {
-        return null; //todo!
+        return null; //TODO!
     }
 
     //TODO!

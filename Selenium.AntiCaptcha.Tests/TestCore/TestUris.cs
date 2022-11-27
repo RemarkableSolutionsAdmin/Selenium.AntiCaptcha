@@ -160,7 +160,7 @@ public static class TestUris
             //yield return new object[] { new CaptchaUri(W1, Type) };
             yield return new object[] { new CaptchaUri(W2, Type) };
         }
-        public const string W1 = "https://entwickler.ebay.de/signin?tab=register";
+        public const string W1 = "https://entwickler.ebay.de/signin?tab=register"; //On this site there's also Recaptcha.
         public const string W2 = "https://www.chartboost.com/sign-up/";
     }
     

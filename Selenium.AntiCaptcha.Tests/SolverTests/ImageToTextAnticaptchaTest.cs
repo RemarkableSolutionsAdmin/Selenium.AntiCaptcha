@@ -14,7 +14,7 @@ public class ImageToTextAnticaptchaTest : SequentialAnticaptchaTestBase
     [Fact]        
     public async Task Solve_WithCaptchaTypeSpecified()
     {
-        SetDriverUrl(TestUris.ImageToText.W1);
+        await SetDriverUrl(TestUris.ImageToText.W1);
         _solverAdditionalArguments = new SolverAdditionalArguments
         {
             ImageElement = Driver.FindElement(By.XPath("//img[contains(@class, 'captcha')]"))
@@ -27,7 +27,7 @@ public class ImageToTextAnticaptchaTest : SequentialAnticaptchaTestBase
     [Fact]        
     public async Task Solve_WithoutCaptchaTypeSpecified()
     {
-        SetDriverUrl(TestUris.ImageToText.W1);
+        await SetDriverUrl(TestUris.ImageToText.W1);
         _solverAdditionalArguments = new SolverAdditionalArguments
         {
             ImageElement = Driver.FindElement(By.XPath("//img[contains(@class, 'captcha')]"))
@@ -39,7 +39,7 @@ public class ImageToTextAnticaptchaTest : SequentialAnticaptchaTestBase
     [Fact]        
     public async Task SolveNonGeneric_WithCaptchaTypeSpecified()
     {
-        SetDriverUrl(TestUris.ImageToText.W1);
+        await SetDriverUrl(TestUris.ImageToText.W1);
         _solverAdditionalArguments = new SolverAdditionalArguments
         {
             CaptchaType = CaptchaType.ImageToText,
@@ -53,7 +53,7 @@ public class ImageToTextAnticaptchaTest : SequentialAnticaptchaTestBase
     [Fact]        
     public async Task SolveNonGeneric_WithoutCaptchaTypeSpecified()
     {
-        SetDriverUrl(TestUris.ImageToText.W1);
+        await SetDriverUrl(TestUris.ImageToText.W1);
         _solverAdditionalArguments = new SolverAdditionalArguments
         {
             ImageElement = Driver.FindElement(By.XPath("//img[contains(@class, 'captcha')]"))

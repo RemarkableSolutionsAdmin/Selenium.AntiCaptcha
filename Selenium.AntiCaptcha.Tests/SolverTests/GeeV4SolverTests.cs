@@ -11,7 +11,7 @@ public class GeeV4SolverTests : SequentialAnticaptchaTestBase
     [Fact]
     public async Task Solve_CaptchaTypeSpecified()
     {
-        SetDriverUrl(TestUris.GeeTest.V4.W1);
+        await SetDriverUrl(TestUris.GeeTest.V4.W1);
         var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
         var slideButton = FindSlideButton(allButtonParents);
         
@@ -26,7 +26,7 @@ public class GeeV4SolverTests : SequentialAnticaptchaTestBase
     [Fact]
     public async Task Solve_WithoutCaptchaTypeSpecified()
     {
-        SetDriverUrl(TestUris.GeeTest.V4.W1);
+        await SetDriverUrl(TestUris.GeeTest.V4.W1);
         var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
         var slideButton = FindSlideButton(allButtonParents);
         
@@ -41,7 +41,7 @@ public class GeeV4SolverTests : SequentialAnticaptchaTestBase
     [Fact]
     public async Task SolveNonGeneric_CaptchaTypeSpecified()
     {
-        SetDriverUrl(TestUris.GeeTest.V4.W1);
+        await SetDriverUrl(TestUris.GeeTest.V4.W1);
         var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
         var slideButton = FindSlideButton(allButtonParents);
         
@@ -56,7 +56,7 @@ public class GeeV4SolverTests : SequentialAnticaptchaTestBase
     [Fact]
     public async Task SolveNonGeneric_WithoutCaptchaTypeSpecified()
     {
-        SetDriverUrl(TestUris.GeeTest.V4.W1);
+        await SetDriverUrl(TestUris.GeeTest.V4.W1);
         var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
         var slideButton = FindSlideButton(allButtonParents);
         
