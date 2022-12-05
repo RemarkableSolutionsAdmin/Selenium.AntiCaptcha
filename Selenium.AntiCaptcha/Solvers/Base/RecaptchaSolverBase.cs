@@ -21,7 +21,8 @@ internal abstract class RecaptchaSolverBase<TRequest, TSolution> : Solver<TReque
             // ignored
         }
 
-        var recaptchaFrameSrc = Driver.FindByXPath("//iframe[contains(@src, 'recaptcha')]")?.GetAttribute("src");
+        
+        var recaptchaFrameSrc = Driver.FindByXPathAllFrames("//iframe[contains(@src, 'recaptcha')]")?.GetAttribute("src");
 
 
         if (!string.IsNullOrEmpty(recaptchaFrameSrc))

@@ -17,8 +17,27 @@ public abstract class ProxyCaptchaIdentifier : ICaptchaIdentifier
         return IdentifiableTypes.Contains(type);
     }
 
-    public abstract Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
+    public abstract Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
         CancellationToken cancellationToken);
+
+    public async Task<CaptchaType?> IdentifyInAllFramesAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)
+    {        
+        var currentFrame = driver.GetCurrentFrame();
+        try
+        {
+            return await IdentifyInCurrentFrameAsync(driver, additionalArguments, cancellationToken);
+        }
+        catch
+        {
+            return null;
+        }
+        finally
+        {
+            driver.TryToSwitchToFrame(currentFrame);
+        }
+    }
+
+
     public virtual async Task<CaptchaType?> SpecifyCaptcha(CaptchaType originalType, IWebDriver driver,
         SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)
     {

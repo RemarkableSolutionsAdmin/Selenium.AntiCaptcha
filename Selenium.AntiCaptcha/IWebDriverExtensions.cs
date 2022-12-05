@@ -17,6 +17,8 @@ namespace Selenium.AntiCaptcha
             SolverAdditionalArguments? additionalArguments = null,
             CancellationToken cancellationToken = default)
         {
+            var x = driver.GetFullFramesTree();
+
             additionalArguments ??= new SolverAdditionalArguments();
             var captchaType = additionalArguments.CaptchaType ?? await IdentifyCaptcha(driver, additionalArguments, cancellationToken);
             dynamic solver = SolverFactory.GetSolver(driver, clientKey, captchaType);

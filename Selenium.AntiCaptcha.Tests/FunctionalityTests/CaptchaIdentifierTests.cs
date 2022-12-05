@@ -112,7 +112,15 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
             public OtherCaptcha(WebDriverFixture fixture) : base(fixture)
             {
             }
-            
+            [Theory]
+            [MemberData(nameof(TestUris.FunCaptcha.Uris), MemberType = typeof(TestUris.FunCaptcha))]
+            public async Task TestAllProxylessFunCaptchaUris(CaptchaUri captchaUri)
+            {
+                if (captchaUri.ExpectedType.IsProxylessType())
+                {
+                    await TestNonGenericIdentifier(captchaUri);
+                }
+            }
             [Theory]
             [MemberData(nameof(TestUris.TestableUrisWithoutRecaptcha), MemberType = typeof(TestUris))]
             public async Task TestAllProxylessCaptchaUris(CaptchaUri captchaUri)
@@ -126,7 +134,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
             [Theory]
             [MemberData(nameof(TestUris.TestableUrisWithoutRecaptcha), MemberType = typeof(TestUris))]
             public async Task TestAllProxyCaptchaUris(CaptchaUri captchaUri)
-            {
+            {   
                 var proxyType = captchaUri.ExpectedType.ToProxyType();
                 if (!proxyType.IsProxylessType())
                 {

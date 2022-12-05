@@ -17,24 +17,12 @@ internal class FunCaptchaIdentifier : ProxyCaptchaIdentifier
         CaptchaType.FunCaptcha, CaptchaType.FunCaptchaProxyless
     };
 
-    public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
+    public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
         CancellationToken cancellationToken)
     {
-        try
-        {
-            if(IsFunCaptcha(driver))
-                return await base.SpecifyCaptcha(CaptchaType.FunCaptchaProxyless, driver, additionalArguments, cancellationToken);
-            
-            return null;
-        }
-        catch
-        {
-            return null;
-        }
-        finally
-        {
-            driver.SwitchTo().DefaultContent();
-        }
+        if(IsFunCaptcha(driver))
+            return await base.SpecifyCaptcha(CaptchaType.FunCaptchaProxyless, driver, additionalArguments, cancellationToken);
+        return null;
     }
 
     private bool IsFunCaptcha(IWebDriver driver)
@@ -42,64 +30,16 @@ internal class FunCaptchaIdentifier : ProxyCaptchaIdentifier
 
 
     private bool IsThereAnElementWithPkey(IWebDriver driver)
-    {        
-        try
-        {
-            if (!string.IsNullOrEmpty(PageSourceSearcher.FindFunCaptchaSiteKey(driver)))
-            {
-                return true;
-            }
-            
-            var frames = driver.FindManyByXPathCurrentFrame("//iframe");
-
-            foreach (var frame in frames)
-            {
-                driver.SwitchTo().Frame(frame);
-                if (IsThereFunCaptchaFunCaptchaScriptInAnyIFrames(driver))
-                {
-                    return true;
-                }
-            }
-
-            return driver.FindByXPath("//script[contains(@src, 'funcaptcha'") != null;
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-        finally
-        {
-            driver.SwitchTo().DefaultContent();
-        }
+    {
+        driver.SwitchTo().DefaultContent();
+        return !string.IsNullOrEmpty(PageSourceSearcher.FindFunCaptchaSiteKey(driver));
     }
 
     private static bool IsThereFunCaptchaFunCaptchaScriptInAnyIFrames(IWebDriver driver)
     {
-        try
-        {
-            var frames = driver.FindManyByXPathCurrentFrame("//iframe");
-
-            foreach (var frame in frames)
-            {
-                driver.SwitchTo().Frame(frame);
-                if (IsThereFunCaptchaFunCaptchaScriptInAnyIFrames(driver))
-                {
-                    return true;
-                }
-            }
-
-            return driver.FindByXPath("//script[contains(@src, 'funcaptcha'") != null;
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-        finally
-        {
-            driver.SwitchTo().DefaultContent();
-        }
+        driver.SwitchTo().DefaultContent();
+        return driver.FindByXPathAllFrames("//script[contains(@src, 'funcaptcha'") != null;
     }
-    
     
 
     public FunCaptchaIdentifier()

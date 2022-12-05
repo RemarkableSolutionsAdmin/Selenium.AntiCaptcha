@@ -25,11 +25,11 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
         IdentifiableTypes.AddRange(_recaptchaTypes);
     }
 
-    public override async Task<CaptchaType?> IdentifyAsync(
+    public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(
         IWebDriver driver,
         SolverAdditionalArguments additionalArguments,
         CancellationToken cancellationToken)
-    {       
+    {
         try
         {
             var pageSource = driver.GetAllPageSource();
@@ -48,6 +48,7 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
 
             if (isInvisibleRecaptcha) //Might be invisible V2 or V3.
             {
+                driver.SwitchTo().DefaultContent();
                 var containsInteractableButtonWithSiteKey = HasInteractableButtonWithSiteKey(driver);
                 isV2Recaptcha = containsInteractableButtonWithSiteKey;
             ;    isV3Recaptcha = !containsInteractableButtonWithSiteKey;
@@ -77,10 +78,6 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
         {
             return null;
         }
-        finally
-        {
-            driver.SwitchTo().DefaultContent();
-        }
     }
 
     private static bool HasInteractableButtonWithSiteKey(IWebDriver driver)
@@ -105,12 +102,12 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
     public override Task<CaptchaType?> SpecifyCaptcha(CaptchaType originalType, IWebDriver driver,
         SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)
     {
-        return IdentifyAsync(driver, additionalArguments, cancellationToken);
+        return IdentifyInCurrentFrameAsync(driver, additionalArguments, cancellationToken);
     }
 
     private static IWebElement? GetRecaptchaIFrame(IWebDriver driver)
     {
-        return driver.FindByXPath("//iframe[contains(@src, 'recaptcha')]");
+        return driver.FindByXPathInCurrentFrame("//iframe[contains(@src, 'recaptcha')]");
     }
 
     private static bool IsV2(IWebDriver driver)

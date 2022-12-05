@@ -25,7 +25,11 @@ internal static class AllCaptchaTypesIdentifier
         var identifiedTypes = new List<CaptchaType>();
         foreach (var captchaIdentifier in CaptchaIdentifiers)
         {
-            var identifiedCaptcha = await captchaIdentifier.IdentifyAsync(driver, additionalArguments, cancellationToken);
+            var currentFrameElement = driver.GetCurrentFrame();
+            
+            var identifiedCaptcha = await captchaIdentifier.IdentifyInAllFramesAsync(driver, additionalArguments, cancellationToken);
+            var currentFrameElement2 = driver.GetCurrentFrame();
+
 
             if (identifiedCaptcha != null)
             {

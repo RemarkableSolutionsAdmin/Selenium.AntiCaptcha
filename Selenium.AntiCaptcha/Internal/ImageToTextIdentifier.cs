@@ -19,7 +19,7 @@ public class ImageToTextIdentifier : ProxyCaptchaIdentifier
         return originalType;
     }
 
-    public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
+    public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
         CancellationToken cancellationToken)
     {
         var base64 = additionalArguments.ImageElement?.DownloadSourceAsBase64String();
@@ -39,7 +39,7 @@ public class ImageToTextIdentifier : ProxyCaptchaIdentifier
 
     private static bool DoesCaptchaImageElementExists(IWebDriver driver)
     {
-        var imageElements = driver.FindManyByXPathAllFrames("//img");
+        //var imageElements = driver.FindManyByXPathAllFrames("//img");
         return false; // TODO!
     }
     

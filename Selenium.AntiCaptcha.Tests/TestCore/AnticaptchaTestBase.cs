@@ -1,37 +1,36 @@
-﻿using AntiCaptchaApi.Net.Enums;
-using AntiCaptchaApi.Net.Models;
-using AntiCaptchaApi.Net.Models.Solutions;
+﻿using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Responses;
 using AntiCaptchaApi.Net.Responses.Abstractions;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 using Selenium.AntiCaptcha.Internal.Extensions;
 
 namespace Selenium.Anticaptcha.Tests.TestCore;
-public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>
+public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>, IDisposable
 {
     private readonly WebDriverFixture _fixture;
-    protected readonly IWebDriver Driver;
+    protected IWebDriver Driver => _fixture.Driver;
     private const int MaxWaitingTimeInMilliseconds = 5000;
     private const int StepDelayTimeInMilliseconds = 500;
-
-
+    private const string ResetWebsiteUri = "https://www.google.com/";
+    
     protected AnticaptchaTestBase(WebDriverFixture fixture)
     {
-        this._fixture = fixture;
-        Driver = _fixture.Driver;
+        _fixture = fixture;
     }
-
-
+    
     protected readonly string ClientKey = TestEnvironment.ClientKey;
-
+    
+    public virtual void Dispose()
+    {
+        //_fixture?.Dispose();
+    }
+    
     private async Task WaitForLoad()
     {
         var timeElapsedInMilliseconds = 0;
         while (true)
         {
-            if (timeElapsedInMilliseconds > MaxWaitingTimeInMilliseconds ||
-                Driver.FindByXPathAllFrames("//*[contains(@class, 'captcha')]") != null)
+            if (IsLoaded(timeElapsedInMilliseconds))
             {
                 break;
             }
@@ -39,6 +38,21 @@ public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>
             await Task.Delay(StepDelayTimeInMilliseconds);
             timeElapsedInMilliseconds += StepDelayTimeInMilliseconds;
         }
+    }
+
+    private bool IsLoaded(int timeElapsedInMilliseconds)
+    {
+        var isResetPage = Driver.Url == ResetWebsiteUri;
+        return timeElapsedInMilliseconds > MaxWaitingTimeInMilliseconds ||
+               (isResetPage ?
+                   Driver.FindByXPathAllFrames("//img[contains(@alt, 'oogle')]") != null : //TODO: better xpaths.
+                   Driver.FindByXPathAllFrames("//*[contains(@class, 'captcha')]") != null
+               );
+    }
+
+    protected async Task ResetDriverUri()
+    {
+        await SetDriverUrl(ResetWebsiteUri);
     }
 
     protected async Task SetDriverUrl(string url)

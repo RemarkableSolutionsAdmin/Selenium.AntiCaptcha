@@ -22,7 +22,7 @@ public class GeeTestIdentifier : ProxyCaptchaIdentifier
         CaptchaType.GeeTestV4Proxyless,
     };
 
-    public override async Task<CaptchaType?> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
+    public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
         CancellationToken cancellationToken)
     {
         try
@@ -49,7 +49,7 @@ public class GeeTestIdentifier : ProxyCaptchaIdentifier
     public override Task<CaptchaType?> SpecifyCaptcha(CaptchaType originalType, IWebDriver driver,
         SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)
     {
-        return IdentifyAsync(driver, additionalArguments, cancellationToken);
+        return IdentifyInCurrentFrameAsync(driver, additionalArguments, cancellationToken);
     }
 
     private static IWebElement? GetGeeScriptElement(IWebDriver driver)
