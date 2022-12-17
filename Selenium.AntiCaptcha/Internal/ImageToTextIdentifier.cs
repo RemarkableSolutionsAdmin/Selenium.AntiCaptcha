@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using System.Text.RegularExpressions;
+using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
@@ -38,8 +39,42 @@ public class ImageToTextIdentifier : ProxyCaptchaIdentifier
 
     private static bool DoesCaptchaImageElementExists(IWebDriver driver)
     {
-        //var imageElements = driver.FindManyByXPathAllFrames("//img");
-        return false; // TODO!
+        var pageSource = driver.GetAllPageSource();
+
+        var doesContainIFrames = pageSource.DoesContainRegex(@"<\s*iframe.*<\/iframe>");
+
+        if (doesContainIFrames)
+            return false;
+        
+        
+        var imageSources = pageSource.GetFirstRegexThatFits(RegexOptions.Multiline | RegexOptions.IgnoreCase, "^.*?<\\s*?img.*src\\s*=\\s*\"(.+?)\".*?$");
+
+        if (!imageSources.Any(x => x.Success))
+        {
+            return false;
+        }
+
+
+        var possibleCaptchaImagesCounter = 0;
+            
+        foreach (Match match in imageSources)
+        {
+            if(match.Groups.Count != 2 || !match.Groups[1].Success) 
+                continue;
+                
+            var sourceValue = match.Groups[1].Value.ToLower();
+            var idMatch = sourceValue.GetFirstRegexThatFits(true, @".*?=(\d{1,20})\D*?");
+
+            if (sourceValue.Contains("captcha") && idMatch is not null && idMatch.Success)
+            {
+                possibleCaptchaImagesCounter++;
+            }
+
+        }
+
+
+        return possibleCaptchaImagesCounter == 1;
+
     }
     
     

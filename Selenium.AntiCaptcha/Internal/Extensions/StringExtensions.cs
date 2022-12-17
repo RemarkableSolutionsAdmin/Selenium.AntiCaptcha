@@ -20,9 +20,14 @@ internal static class StringExtensions
     public static Match? GetFirstRegexThatFits(this string text, bool ignoreCase = false, params string[] regexPatterns)
     {
         return (regexPatterns
-            .Select(pattern => new { pattern, regOptions = CaseInsensitiveOptions })
-            .Select(@t => ignoreCase ? new Regex(@t.pattern, @t.regOptions) : new Regex(@t.pattern))
-            .Select(regex => regex.Match(text)))
+                .Select(pattern => new { pattern, regOptions = CaseInsensitiveOptions })
+                .Select(@t => ignoreCase ? new Regex(@t.pattern, @t.regOptions) : new Regex(@t.pattern))
+                .Select(regex => regex.Match(text)))
             .FirstOrDefault(match => match.Success);
+    }
+
+    public static MatchCollection GetFirstRegexThatFits(this string text, RegexOptions regexOptions, string regexPattern)
+    {
+        return new Regex(regexPattern, regexOptions).Matches(text);
     }
 }

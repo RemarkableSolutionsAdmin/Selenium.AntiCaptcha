@@ -83,9 +83,9 @@ internal abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
 
         if (result.Status == TaskStatusType.Ready && result.Solution.IsValid())
         {
-            var cookies = (result.Solution as AntiGateSolution)?.Cookies; //TODO: Should add interface to Solution which returns Cookies.
+            var cookies = (result.Solution as AntiGateSolution)?.Cookies; 
             if (cookies != null)
-                AddCookies(Driver, cookies);
+                AddCookies(Driver, cookies, additionalArguments.ShouldResetCookiesBeforeAdd);
 
             if (additionalArguments.ResponseElement != null)
             {
@@ -104,11 +104,15 @@ internal abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
         _clientKey = clientKey;
     }
 
-    private static void AddCookies(IWebDriver driver, JObject? cookies)
+    private static void AddCookies(IWebDriver driver, JObject? cookies, bool shouldClearCookies)
     {
         if (cookies is not { Count: > 0 }) 
             return;
-        driver.Manage().Cookies.DeleteAllCookies();
+        
+        if (shouldClearCookies)
+        {
+            driver.Manage().Cookies.DeleteAllCookies();
+        }
         foreach (var cookie in cookies)
         {
             if (!string.IsNullOrEmpty(cookie.Key) && !string.IsNullOrEmpty(cookie.Value?.ToString()))

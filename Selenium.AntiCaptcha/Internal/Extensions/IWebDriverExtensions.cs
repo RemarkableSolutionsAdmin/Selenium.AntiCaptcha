@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using OpenQA.Selenium;
+using Selenium.AntiCaptcha.Exceptions;
 using Selenium.AntiCaptcha.Internal.Models;
 
 namespace Selenium.AntiCaptcha.Internal.Extensions;
@@ -85,20 +86,20 @@ internal static class IWebDriverExtensions
         return driver.FindElements(By.TagName("iframe")).Select(x => new ExtendedWebElement(x)).ToList();
     }
 
-    public static IEnumerable<IWebElement> FindManyByXPathAllFrames(this IWebDriver driver, params string[] xPathPatterns)
+    public static IEnumerable<ExtendedWebElement> FindManyByXPathAllFrames(this IWebDriver driver, params string[] xPathPatterns)
     {
         if (!xPathPatterns.Any())
-            return new List<IWebElement>();
+            return new List<ExtendedWebElement>();
         var currentFrame = driver.GetCurrentFrame();
-        var result = new List<IWebElement>();
+        var result = new List<ExtendedWebElement>();
         try
         {
-            driver.ForEachFrame(() => result.AddRange(driver.FindManyByXPathCurrentFrame(xPathPatterns)));
+            driver.ForEachFrame(() => result.AddRange(driver.FindManyByXPathCurrentFrame(xPathPatterns).Select(x => new ExtendedWebElement(x))));
             return result;
         }
         catch (Exception)
         {
-            return new List<IWebElement>();
+            return new List<ExtendedWebElement>();
         }
         finally
         {
@@ -140,15 +141,14 @@ internal static class IWebDriverExtensions
         var inputWebElements = driver.FindElements(By.TagName("html"));
         if (inputWebElements.Count != 1)
         {
-            //TODO! Exception.
-            return null;
+            throw new MultipleHtmlRootElementFoundWhileTraversingSiteException();
         }
 
         return new ExtendedWebElement(inputWebElements.Single());
     }
 
     //Must start from root.
-    public static TreeNode<ExtendedWebElement>? GetFramesTree(this IWebDriver driver)
+    internal static TreeNode<ExtendedWebElement> GetFramesTree(this IWebDriver driver)
     {
         var currentHtmlElement = driver.GetCurrentFrame();
 
@@ -194,11 +194,11 @@ internal static class IWebDriverExtensions
         {
             driver.SwitchTo().DefaultContent();
             framesTree = driver.GetFramesTree();
-            return framesTree; //TODO: Throw an error if null. 
+            return driver.GetFramesTree() ?? throw new CouldNotBuildFramesTree();
         }
-        catch (Exception)
+        catch (Exception exception)
         {
-            return null; //TODO. Throw an error.
+            throw new CouldNotBuildFramesTree(exception);
         }
         finally
         {
@@ -227,7 +227,7 @@ internal static class IWebDriverExtensions
         {
             if (!driver.TryToSwitchToFrame(node.Value))
             {
-                // todo: throw
+                throw new CouldNotTraverseToFrameException();
             }
         }
     }
@@ -256,7 +256,6 @@ internal static class IWebDriverExtensions
     
     public static ExtendedWebElement? GetCurrentFrame(this IWebDriver driver) //TODO Refresh cache.
     {
-        var x = driver.PageSource;
         var inputWebElement = driver.GetCurrentRootWebElement();
         var inputChildrenFrames = FindIFramesInCurrentFrame(driver);
         

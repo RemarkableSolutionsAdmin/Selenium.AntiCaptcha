@@ -25,10 +25,15 @@ namespace Selenium.AntiCaptcha
         private static async Task<CaptchaType> IdentifyCaptcha(IWebDriver driver, SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken = default)
         {          
             var identifiedCaptchaTypes = await AllCaptchaTypesIdentifier.IdentifyAsync(driver, additionalArguments, cancellationToken);
-            if (identifiedCaptchaTypes.Count != 1)
+            if (identifiedCaptchaTypes.Count > 1)
             {
                 throw new Exception($"Unable to identify captcha. Found multiple matching captcha types: " +
                                     $"{string.Join(',', identifiedCaptchaTypes.Select(x => x.ToString()))}");
+            }
+            
+            if (identifiedCaptchaTypes.Count == 1)
+            {
+                throw new Exception($"Unable to identify captcha. Did not find any captcha on current page.");
             }
             return identifiedCaptchaTypes.First();
         }

@@ -40,6 +40,7 @@ public record SolverAdditionalArguments(
     int MaxPageLoadWaitingTimeInMilliseconds = 5000, 
     bool? IsInvisible = null,
     Dictionary<string, string>? EnterprisePayload = null,
-    int MaxTimeOutTimeInSeconds = 300)
+    int MaxTimeOutTimeInSeconds = 300,
+    bool ShouldResetCookiesBeforeAdd = false)
 {
 }

@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using System.Text.RegularExpressions;
+using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
@@ -31,6 +32,8 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
         try
         {
             var pageSource = driver.GetAllPageSource();
+
+
             var isEnterprise = IsRecaptchaEnterprise(pageSource);
             var recaptchaFrame = GetRecaptchaIFrame(driver);
 
