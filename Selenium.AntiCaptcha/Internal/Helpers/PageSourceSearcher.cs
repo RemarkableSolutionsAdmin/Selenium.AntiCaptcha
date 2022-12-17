@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
+using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Internal.Extensions;
 
 namespace Selenium.AntiCaptcha.Internal.Helpers;
@@ -33,5 +35,43 @@ public static class PageSourceSearcher
         var pageSource = driver.GetAllPageSource();
         var match = pageSource.GetFirstRegexThatFits(false, SiteKeyRegexPattern);
         return match != null ? match.Groups[1].Value : string.Empty;
+    }
+
+    public static string FindSingleImageSourceForImageToText(IWebDriver driver)
+    {
+        var pageSource = driver.GetAllPageSource();
+
+        var doesContainIFrames = pageSource.DoesContainRegex(@"<\s*iframe.*<\/iframe>");
+
+        if (doesContainIFrames)
+            return string.Empty;
+        
+        
+        var imageSources = pageSource.GetFirstRegexThatFits(RegexOptions.Multiline | RegexOptions.IgnoreCase, "^.*?<\\s*?img.*src\\s*=\\s*\"(.+?)\".*?$");
+
+        if (!imageSources.Any(x => x.Success))
+        {
+            return string.Empty;
+        }
+
+
+        var possibleCaptchaImageSources = new List<string>();
+            
+        foreach (Match match in imageSources)
+        {
+            if(match.Groups.Count != 2 || !match.Groups[1].Success) 
+                continue;
+            var sourceValue = Regex.Unescape((System.Net.WebUtility.HtmlDecode(match.Groups[1].Value)));
+            
+            var idMatch = sourceValue.GetFirstRegexThatFits(true, @".*?=(\d{1,20})\D*?");
+
+            if (sourceValue.ToLower().Contains("captcha") && idMatch is not null && idMatch.Success)
+            {
+                possibleCaptchaImageSources.Add(sourceValue);
+            }
+
+        }
+        
+        return possibleCaptchaImageSources.Count == 1 ? possibleCaptchaImageSources[0] : string.Empty;
     }
 }

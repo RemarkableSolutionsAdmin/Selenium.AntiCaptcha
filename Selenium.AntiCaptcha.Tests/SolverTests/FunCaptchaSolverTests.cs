@@ -11,7 +11,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         [Fact]
         public async Task Solve_CaptchaTypeSpecified()
         {
-            await SetDriverUrl(TestUris.FunCaptcha.W1);
+            await SetDriverUrl(TestUris.FunCaptcha.FunCaptchaDemo);
             var result = await Driver.SolveCaptchaAsync<FunCaptchaSolution>(ClientKey, _solverAdditionalArguments);
             AssertSolveCaptchaResult(result);
         }
@@ -19,7 +19,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         [Fact]
         public async Task Solve_WithoutCaptchaTypeSpecified()
         {
-            await SetDriverUrl(TestUris.FunCaptcha.W1);
+            await SetDriverUrl(TestUris.FunCaptcha.FunCaptchaDemo);
             var result = await Driver.SolveCaptchaAsync<FunCaptchaSolution>(ClientKey, _solverAdditionalArguments);
             AssertSolveCaptchaResult(result);
         }
@@ -27,7 +27,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         [Fact]
         public async Task SolveNonGeneric_CaptchaTypeSpecified()
         {
-            await SetDriverUrl(TestUris.FunCaptcha.W1);
+            await SetDriverUrl(TestUris.FunCaptcha.FunCaptchaDemo);
             var result = await Driver.SolveCaptchaAsync(ClientKey, _solverAdditionalArguments);
             AssertSolveCaptchaResult(result);
         }
@@ -35,7 +35,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
         [Fact]
         public async Task SolveNonGeneric_WithoutCaptchaTypeSpecified()
         {
-            await SetDriverUrl(TestUris.FunCaptcha.W1);
+            await SetDriverUrl(TestUris.FunCaptcha.FunCaptchaDemo);
             var result = await Driver.SolveCaptchaAsync(ClientKey, _solverAdditionalArguments);
             AssertSolveCaptchaResult(result);
         }

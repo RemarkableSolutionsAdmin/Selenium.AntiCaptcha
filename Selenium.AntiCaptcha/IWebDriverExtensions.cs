@@ -3,6 +3,7 @@ using AntiCaptchaApi.Net.Responses;
 using AntiCaptchaApi.Net.Responses.Abstractions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
+using Selenium.AntiCaptcha.Exceptions;
 using Selenium.AntiCaptcha.Internal;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
@@ -25,17 +26,13 @@ namespace Selenium.AntiCaptcha
         private static async Task<CaptchaType> IdentifyCaptcha(IWebDriver driver, SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken = default)
         {          
             var identifiedCaptchaTypes = await AllCaptchaTypesIdentifier.IdentifyAsync(driver, additionalArguments, cancellationToken);
-            if (identifiedCaptchaTypes.Count > 1)
+            return identifiedCaptchaTypes.Count switch
             {
-                throw new Exception($"Unable to identify captcha. Found multiple matching captcha types: " +
-                                    $"{string.Join(',', identifiedCaptchaTypes.Select(x => x.ToString()))}");
-            }
-            
-            if (identifiedCaptchaTypes.Count == 1)
-            {
-                throw new Exception($"Unable to identify captcha. Did not find any captcha on current page.");
-            }
-            return identifiedCaptchaTypes.First();
+                > 1 => throw new UnidentifiableCaptchaException($"Unable to identify captcha. Found multiple matching captcha types: " +
+                                                                $"{string.Join(',', identifiedCaptchaTypes.Select(x => x.ToString()))}"),
+                0 => throw new UnidentifiableCaptchaException($"Unable to identify captcha. Did not find any captcha on current page."),
+                _ => identifiedCaptchaTypes.First()
+            };
         }
 
         public static async Task<TaskResultResponse<TSolution>> SolveCaptchaAsync<TSolution>(this IWebDriver driver, string clientKey,
@@ -47,7 +44,7 @@ namespace Selenium.AntiCaptcha
 
             if (!captchaType.HasValue)
             {
-                throw new ArgumentNullException(nameof(captchaType), "Could not identify the captcha type from arguments. Please provide captchaType.");
+                throw new UnidentifiableCaptchaException("Could not identify the captcha type from arguments. Please provide captchaType or better additional arguments.");
             }
 
             ValidateSolutionOutputToCaptchaType<TSolution>(captchaType.Value);

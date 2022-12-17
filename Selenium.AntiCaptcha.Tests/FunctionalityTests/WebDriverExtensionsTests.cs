@@ -20,7 +20,7 @@ public class WebDriverExtensionsTests : AnticaptchaTestBase
 
     public class FramesTreeTraversingTests : WebDriverExtensionsTests
     {
-        private const string TestUri = TestUris.Recaptcha.V2.NonEnterprise.W2; 
+        private const string TestUri = TestUris.Recaptcha.V2.NonEnterprise.AntigateDemo; 
         // TestUris.Recaptcha.V2.NonEnterprise.W2: Has structure
         //   1
         // 1 1 1

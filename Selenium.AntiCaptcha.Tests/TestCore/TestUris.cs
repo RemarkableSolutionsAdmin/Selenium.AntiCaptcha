@@ -1,8 +1,12 @@
-﻿using Selenium.AntiCaptcha.Enums;
+﻿using System.Diagnostics.CodeAnalysis;
+using Selenium.AntiCaptcha.Enums;
 
 namespace Selenium.Anticaptcha.Tests.TestCore;
 
 
+[SuppressMessage("ReSharper", "IdentifierTypo")]
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+[SuppressMessage("ReSharper", "MemberHidesStaticFromOuterClass")]
 public static class TestUris
 {
     public static IEnumerable<object[]> Uris() => 
@@ -17,12 +21,14 @@ public static class TestUris
         Recaptcha.Uris()
             .Concat(FunCaptcha.Uris())
             .Concat(HCaptcha.Uris())
-            .Concat(GeeTest.Uris());
+            .Concat(GeeTest.Uris())
+            .Concat(ImageToText.Uris());
 
     public static IEnumerable<object[]> TestableUrisWithoutRecaptcha() =>        
         FunCaptcha.Uris()
             .Concat(HCaptcha.Uris())
-            .Concat(GeeTest.Uris());
+            .Concat(GeeTest.Uris())
+            .Concat(ImageToText.Uris());
 
     public class Recaptcha
     {
@@ -36,11 +42,11 @@ public static class TestUris
                 public const CaptchaType Type = CaptchaType.ReCaptchaV3Enterprise;
                 public static IEnumerable<object[]> Uris()
                 {
-                    yield return new object[] { new CaptchaUri(W1, Type) };
-                    yield return new object[] { new CaptchaUri(W2, Type) };
+                    yield return new object[] { new CaptchaUri(Netflix, Type) };
+                    yield return new object[] { new CaptchaUri(SquareUp, Type) };
                 }
-                public const string W1 = "https://www.netflix.com/pl-en/login";
-                public const string W2 = "https://squareup.com/signup";
+                public const string Netflix = "https://www.netflix.com/pl-en/login";
+                public const string SquareUp = "https://squareup.com/signup";
             }
 
             public static class NonEnterprise
@@ -48,11 +54,11 @@ public static class TestUris
                 public const CaptchaType Type = CaptchaType.ReCaptchaV3Proxyless;
                 public static IEnumerable<object[]> Uris()
                 {
-                    yield return new object[] { new CaptchaUri(W1, Type) };
-                    yield return new object[] { new CaptchaUri(W2, Type) };
+                    yield return new object[] { new CaptchaUri(RecaptchaV3Demo, Type) };
+                    yield return new object[] { new CaptchaUri(Twillo, Type) };
                 }
-                public const string W1 = "https://recaptcha-demo.appspot.com/recaptcha-v3-request-scores.php";
-                public const string W2 = "https://www.twilio.com/go/twilio-brand-sales-1";
+                public const string RecaptchaV3Demo = "https://recaptcha-demo.appspot.com/recaptcha-v3-request-scores.php";
+                public const string Twillo = "https://www.twilio.com/go/twilio-brand-sales-1";
             }
         }
 
@@ -65,9 +71,9 @@ public static class TestUris
                 public const CaptchaType Type = CaptchaType.ReCaptchaV2EnterpriseProxyless;
                 public static IEnumerable<object[]> Uris()
                 {
-                    yield return new object[] { new CaptchaUri(W1, Type) };
+                    yield return new object[] { new CaptchaUri(Steam, Type) };
                 }
-                public const string W1 = "https://store.steampowered.com/join";
+                public const string Steam = "https://store.steampowered.com/join";
             }
 
             public static class NonEnterprise
@@ -76,15 +82,15 @@ public static class TestUris
 
                 public static IEnumerable<object[]> Uris()
                 {
-                    yield return new object[] { new CaptchaUri(W1, Type) };
-                    yield return new object[] { new CaptchaUri(W2, Type) };
-                    yield return new object[] { new CaptchaUri(W3, Type) };
-                    yield return new object[] { new CaptchaUri(W4, Type) };
+                    yield return new object[] { new CaptchaUri(RecaptchaV2DemoCheckbox, Type) };
+                    yield return new object[] { new CaptchaUri(AntigateDemo, Type) };
+                    yield return new object[] { new CaptchaUri(Rescan, Type) };
+                    yield return new object[] { new CaptchaUri(RecaptchaV2DemoInvisible, Type) };
                 }
-                public const string W1 = "https://recaptcha-demo.appspot.com/recaptcha-v2-checkbox.php";
-                public const string W2 = "http://antigate.com/logintest.php";
-                public const string W3 = "https://rescan.io/join/";
-                public const string W4 = "https://recaptcha-demo.appspot.com/recaptcha-v2-invisible.php";
+                public const string RecaptchaV2DemoCheckbox = "https://recaptcha-demo.appspot.com/recaptcha-v2-checkbox.php";
+                public const string AntigateDemo = "http://antigate.com/logintest.php";
+                public const string Rescan = "https://rescan.io/join/";
+                public const string RecaptchaV2DemoInvisible = "https://recaptcha-demo.appspot.com/recaptcha-v2-invisible.php";
             }
         }
     }
@@ -93,13 +99,13 @@ public static class TestUris
         public const CaptchaType Type = CaptchaType.FunCaptchaProxyless;
         public static IEnumerable<object[]> Uris()
         {
-            yield return new object[] { new CaptchaUri(W1, Type) };
-            yield return new object[] { new CaptchaUri(W2, Type) };
-            yield return new object[] { new CaptchaUri(W3, Type) };
+            yield return new object[] { new CaptchaUri(FunCaptchaDemo, Type) };
+            yield return new object[] { new CaptchaUri(Roblox, Type) };
+            yield return new object[] { new CaptchaUri(Github, Type) };
         }
-        public const string W1 = "https://api.funcaptcha.com/fc/api/nojs/?pkey=69A21A01-CC7B-B9C6-0F9A-E7FA06677FFC";
-        public const string W2 = "https://www.roblox.com/";
-        public const string W3 = "https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home";
+        public const string FunCaptchaDemo = "https://api.funcaptcha.com/fc/api/nojs/?pkey=69A21A01-CC7B-B9C6-0F9A-E7FA06677FFC";
+        public const string Roblox = "https://www.roblox.com/";
+        public const string Github = "https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home";
     }
 
     public static class GeeTest
@@ -110,9 +116,9 @@ public static class TestUris
             public const CaptchaType Type = CaptchaType.GeeTestV4Proxyless;
             public static IEnumerable<object[]> Uris()
             {
-                yield return new object[] { new CaptchaUri(W1, Type) };
+                yield return new object[] { new CaptchaUri(GeeTestV4Demo, Type) };
             }
-            public const string W1 = "https://www.geetest.com/en/adaptive-captcha-demo";
+            public const string GeeTestV4Demo = "https://www.geetest.com/en/adaptive-captcha-demo";
         }
 
         public static class V3
@@ -120,13 +126,13 @@ public static class TestUris
             public const CaptchaType Type = CaptchaType.GeeTestV3Proxyless;
             public static IEnumerable<object[]> Uris()
             {
-                yield return new object[] { new CaptchaUri(W1, Type) };
-                //yield return new object[] { new CaptchaUri(W2, Type) };
-                yield return new object[] { new CaptchaUri(W3, Type) };
+                yield return new object[] { new CaptchaUri(GeeTestV3Demo, Type) };
+                //yield return new object[] { new CaptchaUri(Seloger, Type) };
+                yield return new object[] { new CaptchaUri(Zhiyou, Type) };
             }
-            public const string W1 = "https://www.geetest.com/en/demo";
-            public const string W2 = "https://www.seloger.com/";
-            public const string W3 = "https://zhiyou.smzdm.com/user/login?redirect_to=http%3A%2F%2Fzhiyou.smzdm.com%2Fuser";
+            public const string GeeTestV3Demo = "https://www.geetest.com/en/demo";
+            public const string Seloger = "https://www.seloger.com/";
+            public const string Zhiyou = "https://zhiyou.smzdm.com/user/login?redirect_to=http%3A%2F%2Fzhiyou.smzdm.com%2Fuser";
         }
     }
 
@@ -135,11 +141,11 @@ public static class TestUris
         public const CaptchaType Type = CaptchaType.ImageToText;
         public static IEnumerable<object[]> Uris()
         {
-            yield return new object[] { new CaptchaUri(W1, Type) };
-            yield return new object[] { new CaptchaUri(W2, Type) };
+            yield return new object[] { new CaptchaUri(Wikipedia, Type) };
+            yield return new object[] { new CaptchaUri(DemoCaptcha, Type) };
         }
-        public const string W1 = "https://en.wikipedia.org/w/index.php?title=Special:CreateAccount&returnto=Main+Page";
-        public const string W2 = "https://democaptcha.com/demo-form-eng/image.html";
+        public const string Wikipedia = "https://en.wikipedia.org/w/index.php?title=Special:CreateAccount&returnto=Main+Page";
+        public const string DemoCaptcha = "https://democaptcha.com/demo-form-eng/image.html";
     }
 
     public static class AntiGate
@@ -147,9 +153,9 @@ public static class TestUris
         public const CaptchaType Type = CaptchaType.AntiGate;                
         public static IEnumerable<object[]> Uris()
         {
-            yield return new object[] { new CaptchaUri(W1, Type) };
+            yield return new object[] { new CaptchaUri(AntiCaptchaTuttorialAntiGate, Type) };
         }
-        public const string W1 = "https://anti-captcha.com/tutorials/v2-textarea";
+        public const string AntiCaptchaTuttorialAntiGate = "https://anti-captcha.com/tutorials/v2-textarea";
     }
 
     public static class HCaptcha
@@ -157,11 +163,11 @@ public static class TestUris
         public const CaptchaType Type = CaptchaType.HCaptchaProxyless;         
         public static IEnumerable<object[]> Uris()
         {
-            //yield return new object[] { new CaptchaUri(W1, Type) };
-            yield return new object[] { new CaptchaUri(W2, Type) };
+            //yield return new object[] { new CaptchaUri(EntiwicklerEbay, Type) };
+            yield return new object[] { new CaptchaUri(ChartBoost, Type) };
         }
-        public const string W1 = "https://entwickler.ebay.de/signin?tab=register"; //On this site there's also Recaptcha.
-        public const string W2 = "https://www.chartboost.com/sign-up/";
+        public const string EntiwicklerEbay = "https://entwickler.ebay.de/signin?tab=register"; //On this site there's also Recaptcha.
+        public const string ChartBoost = "https://www.chartboost.com/sign-up/";
     }
     
 }

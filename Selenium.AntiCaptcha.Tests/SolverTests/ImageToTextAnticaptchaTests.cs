@@ -9,14 +9,14 @@ using Selenium.Anticaptcha.Tests.TestCore;
 namespace Selenium.Anticaptcha.Tests.SolverTests;
 
 [Category(TestCategories.Proxyless)]
-public class ImageToTextAnticaptchaTest : SequentialAnticaptchaTestBase
+public class ImageToTextAnticaptchaTests : SequentialAnticaptchaTestBase
 {
     private SolverAdditionalArguments _solverAdditionalArguments;
     
     [Fact]        
     public async Task Solve_WithCaptchaTypeSpecified()
     {
-        await SetDriverUrl(TestUris.ImageToText.W1);
+        await SetDriverUrl(TestUris.ImageToText.Wikipedia);
         _solverAdditionalArguments = new SolverAdditionalArguments
         {
             ImageElement = Driver.FindElement(By.XPath("//img[contains(@class, 'captcha')]"))
@@ -29,7 +29,7 @@ public class ImageToTextAnticaptchaTest : SequentialAnticaptchaTestBase
     [Fact]        
     public async Task Solve_WithoutCaptchaTypeSpecified()
     {
-        await SetDriverUrl(TestUris.ImageToText.W1);
+        await SetDriverUrl(TestUris.ImageToText.Wikipedia);
         _solverAdditionalArguments = new SolverAdditionalArguments
         {
             ImageElement = Driver.FindElement(By.XPath("//img[contains(@class, 'captcha')]"))
@@ -41,7 +41,7 @@ public class ImageToTextAnticaptchaTest : SequentialAnticaptchaTestBase
     [Fact]        
     public async Task SolveNonGeneric_WithCaptchaTypeSpecified()
     {
-        await SetDriverUrl(TestUris.ImageToText.W1);
+        await SetDriverUrl(TestUris.ImageToText.Wikipedia);
         _solverAdditionalArguments = new SolverAdditionalArguments
         {
             CaptchaType = CaptchaType.ImageToText,
@@ -55,7 +55,7 @@ public class ImageToTextAnticaptchaTest : SequentialAnticaptchaTestBase
     [Fact]        
     public async Task SolveNonGeneric_WithoutCaptchaTypeSpecified()
     {
-        await SetDriverUrl(TestUris.ImageToText.W1);
+        await SetDriverUrl(TestUris.ImageToText.Wikipedia);
         _solverAdditionalArguments = new SolverAdditionalArguments
         {
             ImageElement = Driver.FindElement(By.XPath("//img[contains(@class, 'captcha')]"))
@@ -64,7 +64,15 @@ public class ImageToTextAnticaptchaTest : SequentialAnticaptchaTestBase
         AssertSolveCaptchaResult(result);
     }
 
-    public ImageToTextAnticaptchaTest(WebDriverFixture fixture) : base(fixture)
+    [Fact]        
+    public async Task SolveNonGeneric_WithoutCaptchaTypeAndNoImageElementConfiguredSpecified()
+    {
+        await SetDriverUrl(TestUris.ImageToText.Wikipedia);
+        var result = await Driver.SolveCaptchaAsync(ClientKey, _solverAdditionalArguments);
+        AssertSolveCaptchaResult(result);
+    }
+
+    public ImageToTextAnticaptchaTests(WebDriverFixture fixture) : base(fixture)
     {
     }
 }

@@ -2,5 +2,8 @@
 
 public class UnidentifiableCaptchaException : ArgumentException
 {
-    
+    public UnidentifiableCaptchaException(string details) : base(details)
+    {
+        
+    }
 }
