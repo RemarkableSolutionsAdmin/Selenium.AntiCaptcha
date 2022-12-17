@@ -1,4 +1,5 @@
-﻿using AntiCaptchaApi.Net.Models.Solutions;
+﻿using System.ComponentModel;
+using AntiCaptchaApi.Net.Models.Solutions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha;
 using Selenium.AntiCaptcha.Enums;
@@ -7,6 +8,7 @@ using Selenium.Anticaptcha.Tests.TestCore;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests;
 
+[Category(TestCategories.Proxyless)]
 public class ImageToTextAnticaptchaTest : SequentialAnticaptchaTestBase
 {
     private SolverAdditionalArguments _solverAdditionalArguments;

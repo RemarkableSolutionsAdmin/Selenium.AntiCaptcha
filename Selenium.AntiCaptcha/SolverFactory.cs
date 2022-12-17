@@ -2,7 +2,6 @@
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
-using Selenium.AntiCaptcha.Internal.Helpers;
 using Selenium.AntiCaptcha.Solvers;
 using Selenium.AntiCaptcha.Solvers.Base;
 

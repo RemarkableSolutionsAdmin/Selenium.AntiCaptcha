@@ -1,5 +1,4 @@
-﻿using AntiCaptchaApi.Net.Models;
-using AntiCaptchaApi.Net.Models.Solutions;
+﻿using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Responses;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Models;

@@ -1,5 +1,4 @@
 ﻿using Selenium.AntiCaptcha.Enums;
-using Selenium.AntiCaptcha.Internal;
 using Selenium.AntiCaptcha.Internal.Extensions;
 
 namespace Selenium.Anticaptcha.Tests.FunctionalityTests;

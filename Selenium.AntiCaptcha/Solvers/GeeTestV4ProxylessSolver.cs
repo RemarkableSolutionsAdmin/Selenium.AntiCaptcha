@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using AntiCaptchaApi.Net.Models;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
 using OpenQA.Selenium;

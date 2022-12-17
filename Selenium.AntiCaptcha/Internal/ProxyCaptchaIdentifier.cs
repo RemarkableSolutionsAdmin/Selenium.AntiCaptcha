@@ -1,9 +1,6 @@
-﻿using AntiCaptchaApi.Net.Models;
-using AntiCaptchaApi.Net.Models.Solutions;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
-using Selenium.AntiCaptcha.Internal.Helpers;
 using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Internal;

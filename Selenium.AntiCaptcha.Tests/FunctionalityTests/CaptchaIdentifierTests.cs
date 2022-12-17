@@ -1,9 +1,7 @@
-﻿using AntiCaptchaApi.Net.Models;
-using AntiCaptchaApi.Net.Models.Solutions;
+﻿using AntiCaptchaApi.Net.Models.Solutions;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal;
 using Selenium.AntiCaptcha.Internal.Extensions;
-using Selenium.AntiCaptcha.Internal.Helpers;
 using Selenium.AntiCaptcha.Models;
 using Selenium.Anticaptcha.Tests.TestCore;
 

@@ -1,6 +1,4 @@
-﻿using OpenQA.Selenium.DevTools;
-
-namespace Selenium.AntiCaptcha.Constants;
+﻿namespace Selenium.AntiCaptcha.Constants;
 
 public static class AnticaptchaDefaultValues
 {
