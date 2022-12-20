@@ -71,14 +71,14 @@ More flexible approach. Identification of captchas might not always work
 
 ```csharp
 public record SolverAdditionalArguments(
-    CaptchaType? CaptchaType = null,
-    string? Url = null,
-    string? SiteKey = null,
-    IWebElement? ResponseElement = null,
-    IWebElement? SubmitElement = null,
-    IWebElement? ImageElement = null,
+    CaptchaType? CaptchaType = null,                //Provide it if you know what captcha to expect
+    string? Url = null,                             //The Url where you are trying to solve your captcha
+    string? SiteKey = null,                         //SiteKey should be unique per website. If you know what it is you can provide it explicitly otherwise it will be scrapped by captcha solver
+    IWebElement? ResponseElement = null,            //This elements has to be filled in before submitting form on a website. 
+    IWebElement? SubmitElement = null,              //Element used to submit your form
+    IWebElement? ImageElement = null,               //Element where picture for ImageToText captcha resides
     string? UserAgent = null,
-    ProxyConfig? ProxyConfig = null,
+    ProxyConfig? ProxyConfig = null,                //Used for captchas requiring Proxies
     string? FunCaptchaApiJsSubdomain = null,
     string? Data = null,
     JObject? Variables = null,
@@ -87,7 +87,7 @@ public record SolverAdditionalArguments(
     string? GeetestApiServerSubdomain = null,
     string? GeetestGetLib = null,
     string? Challenge = null,
-    string? Gt = null,
+    string? Gt = null,                             //Gt is SiteKey for GeeTest captchas
     Dictionary<string, string>? InitParameters = null,
     double? MinScore = null,
     string? PageAction = null,
