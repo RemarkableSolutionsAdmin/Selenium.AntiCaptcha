@@ -1,24 +1,28 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <AssemblyName>Selenium.AntiCaptcha</AssemblyName>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>1.0.0</Version>
+    <Authors>RemarkableSolutions</Authors>
+    <PackageProjectUrl>https://github.com/RemarkableSolutionsAdmin/Selenium.AntiCaptcha</PackageProjectUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/RemarkableSolutionsAdmin/Selenium.AntiCaptcha</RepositoryUrl>
+    <PackageTags>Selenium Anti-Captcha captcha RemarkableSolutions Captcha Recaptcha GeeCaptcha RecaptchaV2</PackageTags>
+    <Nullable>enable</Nullable>
     <Title>Selenium.AntiCaptcha</Title>
     <Description>Selenium extension methods for captcha solving using Anti-Captcha.com api</Description>
     <Copyright>Copyright (c) Remarkable Solutions 2022</Copyright>
-    <PackageProjectUrl>https://github.com/RemarkableSolutionsAdmin/Selenium.AntiCaptcha</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/RemarkableSolutionsAdmin/Selenium.AntiCaptcha</RepositoryUrl>
-    <PackageTags>Selenium Anti-Captcha captcha RemarkableSolutions</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <PublishRepositoryUrl>True</PublishRepositoryUrl>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageVersion>1.0.0</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AntiCaptchaApi.Net" Version="1.0.1" />
+    <PackageReference Include="AntiCaptchaApi.Net" Version="1.0.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Selenium.WebDriver" Version="4.1.1" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="105.0.5195.5200" />
