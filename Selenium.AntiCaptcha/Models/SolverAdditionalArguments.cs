@@ -32,7 +32,7 @@ public record SolverAdditionalArguments(
     bool? Phrase = null,
     bool? Case = null,
     NumericOption? Numeric = null,
-    int? Math = null,
+    bool? Math = null,
     int? MinLength = null,
     int? MaxLength = null,
     string? Comment = null,
