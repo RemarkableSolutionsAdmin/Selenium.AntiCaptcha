@@ -8,7 +8,7 @@ using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class GeeTestV3Solver : Solver<GeeTestV3Request, GeeTestV3Solution>
+    internal class GeeTestV3Solver : GeeTestV3SolverBase<GeeTestV3Request>
     {
         protected override GeeTestV3Request BuildRequest(SolverAdditionalArguments additionalArguments)
         {
@@ -22,24 +22,6 @@ namespace Selenium.AntiCaptcha.Solvers
                 ProxyConfig = additionalArguments.ProxyConfig,
                 UserAgent = additionalArguments.UserAgent
             };
-        }
-
-        protected override async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(
-            SolverAdditionalArguments solverAdditionalArguments)
-        {
-            return await base.FillMissingAdditionalArguments(solverAdditionalArguments)
-                with
-                {
-                    Gt = solverAdditionalArguments.Gt ?? await AcquireSiteKey(solverAdditionalArguments.MaxPageLoadWaitingTimeInMilliseconds),
-                    Challenge = solverAdditionalArguments.Challenge ?? GetChallenge(Driver)
-                };
-        }
-
-        private static string GetChallenge(IWebDriver driver)
-        {
-            var pageSource = driver.GetAllPageSource();
-            var regex = new Regex("challenge=(.*?)&");
-            return regex.Match(pageSource).Groups[1].Value;
         }
 
         public GeeTestV3Solver(string clientKey, IWebDriver driver) : base(clientKey, driver)

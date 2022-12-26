@@ -17,7 +17,7 @@ namespace Selenium.AntiCaptcha.Solvers
                 WebsiteKey = additionalArguments.SiteKey,
                 MinScore = additionalArguments.MinScore!.Value,
                 PageAction = additionalArguments.PageAction,
-                IsEnterprise = additionalArguments.IsEnterprise!.Value,
+                IsEnterprise = additionalArguments.IsEnterprise,
                 ApiDomain = additionalArguments.ApiDomain
             };
         }

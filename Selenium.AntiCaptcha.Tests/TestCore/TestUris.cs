@@ -142,7 +142,7 @@ public static class TestUris
                 yield return new object[] { new CaptchaUri(Zhiyou, Type) };
             }
             public const string GeeTestV3Demo = "https://www.geetest.com/en/demo";
-            public const string Seloger = "https://www.seloger.com/";
+            //public const string Seloger = "https://www.seloger.com/";
             public const string Zhiyou = "https://zhiyou.smzdm.com/user/login?redirect_to=http%3A%2F%2Fzhiyou.smzdm.com%2Fuser";
         }
     }

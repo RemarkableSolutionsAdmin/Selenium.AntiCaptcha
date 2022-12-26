@@ -9,7 +9,7 @@ public class GeeV3SolverTests : SequentialAnticaptchaTestBase
     [Fact]
     public async Task GeeV3Test()
     {
-        await SetDriverUrl(TestUris.GeeTest.V3.Seloger);
+        await SetDriverUrl(TestUris.GeeTest.V3.GeeTestV3Demo);
         var result = await Driver.SolveCaptchaAsync<GeeTestV3Solution>(ClientKey);
         AssertSolveCaptchaResult(result);
     }

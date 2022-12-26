@@ -16,7 +16,7 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
 {
     private string _clientKey;
     protected IWebDriver Driver;
-    private const int WaitingStepTime = 500;
+    protected const int WaitingStepTime = 500;
 
     public Solver(string clientKey, IWebDriver driver)
     {

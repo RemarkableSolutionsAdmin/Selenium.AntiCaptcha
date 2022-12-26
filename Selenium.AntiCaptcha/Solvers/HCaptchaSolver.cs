@@ -6,7 +6,7 @@ using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class HCaptchaSolver : Solver<HCaptchaRequest, HCaptchaSolution>
+    internal class HCaptchaSolver : HCaptchaSolverBase<HCaptchaRequest>
     {
         protected override HCaptchaRequest BuildRequest(SolverAdditionalArguments additionalArguments)
         {
@@ -16,25 +16,9 @@ namespace Selenium.AntiCaptcha.Solvers
                 WebsiteKey = additionalArguments.SiteKey,
                 UserAgent = additionalArguments.UserAgent,
                 ProxyConfig = additionalArguments.ProxyConfig,
-                IsInvisible = additionalArguments.IsInvisible!.Value,
+                IsInvisible = additionalArguments.IsInvisible,
                 EnterprisePayload = additionalArguments.EnterprisePayload
             };
-        }
-
-        protected override async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(
-            SolverAdditionalArguments solverAdditionalArguments)
-        {
-            return await base.FillMissingAdditionalArguments(solverAdditionalArguments) with
-            {
-                IsInvisible = solverAdditionalArguments.IsInvisible ?? false,
-                EnterprisePayload = solverAdditionalArguments.EnterprisePayload ?? new Dictionary<string, string>()
-            };
-        }
-
-        protected override void FillResponseElement(HCaptchaSolution solution, IWebElement? responseElement)
-        {
-            responseElement ??= Driver.FindElement(By.Name("h-captcha-response"));
-            responseElement.SendKeys(solution.GRecaptchaResponse);
         }
 
         public HCaptchaSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)

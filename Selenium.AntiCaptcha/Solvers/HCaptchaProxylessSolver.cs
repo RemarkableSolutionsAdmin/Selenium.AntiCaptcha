@@ -6,7 +6,7 @@ using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers;
 
-internal class HCaptchaProxylessSolver  : Solver<HCaptchaProxylessRequest, HCaptchaSolution>
+internal class HCaptchaProxylessSolver  : HCaptchaSolverBase<HCaptchaProxylessRequest>
 {
     protected override HCaptchaProxylessRequest BuildRequest(SolverAdditionalArguments additionalArguments) =>
         new()
@@ -15,17 +15,7 @@ internal class HCaptchaProxylessSolver  : Solver<HCaptchaProxylessRequest, HCapt
             WebsiteKey = additionalArguments.SiteKey,
             UserAgent = additionalArguments.UserAgent
         };
-
-
-    protected override void FillResponseElement(HCaptchaSolution solution, IWebElement? responseElement)
-    {
-        if (responseElement == null)
-        {
-            responseElement = Driver.FindElement(By.Name("h-captcha-response"));
-        }
-
-        responseElement.SendKeys(solution.GRecaptchaResponse);
-    }
+    
 
     public HCaptchaProxylessSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
     {
