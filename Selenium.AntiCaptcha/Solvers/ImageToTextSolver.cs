@@ -23,12 +23,12 @@ namespace Selenium.AntiCaptcha.Solvers
             {
                 return new ImageToTextRequest
                 {
-                    Phrase = additionalArguments.Phrase ?? false,
-                    Case = additionalArguments.Case ?? false,
-                    Numeric = additionalArguments.Numeric ?? NumericOption.NoRequirements,
-                    Math = additionalArguments.Math ?? false,
-                    MinLength = additionalArguments.MinLength ?? 0,
-                    MaxLength = additionalArguments.MaxLength ?? 0,
+                    Phrase = additionalArguments.Phrase,
+                    Case = additionalArguments.Case,
+                    Numeric = additionalArguments.Numeric,
+                    Math = additionalArguments.Math,
+                    MinLength = additionalArguments.MinLength,
+                    MaxLength = additionalArguments.MaxLength,
                     Comment = additionalArguments.Comment,
                     FilePath = additionalArguments.ImageFilePath
                 };
@@ -57,12 +57,12 @@ namespace Selenium.AntiCaptcha.Solvers
             return new ImageToTextRequest
             {
                 BodyBase64 = additionalArguments.ImageElement?.DownloadSourceAsBase64String() ?? bodyBase64,           
-                Phrase = additionalArguments.Phrase ?? false,
-                Case = additionalArguments.Case ?? false,
-                Numeric = additionalArguments.Numeric ?? NumericOption.NoRequirements,
-                Math = additionalArguments.Math ?? false,
-                MinLength = additionalArguments.MinLength ?? 0,
-                MaxLength = additionalArguments.MaxLength ?? 0,
+                Phrase = additionalArguments.Phrase,
+                Case = additionalArguments.Case,
+                Numeric = additionalArguments.Numeric,
+                Math = additionalArguments.Math,
+                MinLength = additionalArguments.MinLength,
+                MaxLength = additionalArguments.MaxLength,
                 Comment = additionalArguments.Comment,
             };
         }

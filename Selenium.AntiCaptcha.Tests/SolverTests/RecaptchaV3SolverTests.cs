@@ -6,7 +6,7 @@ using Selenium.Anticaptcha.Tests.TestCore;
 namespace Selenium.Anticaptcha.Tests.SolverTests
 {
     [Category(TestCategories.Proxyless)]
-    public class RecaptchaV3ProxylessSolverTests : SequentialAnticaptchaTestBase
+    public class RecaptchaV3SolverTests : SequentialAnticaptchaTestBase
     {
         [Fact]
         public async Task Solve_WithCaptchaTypeSpecified()
@@ -40,7 +40,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests
             AssertSolveCaptchaResult(result);
         }
 
-        public RecaptchaV3ProxylessSolverTests(WebDriverFixture fixture) : base(fixture)
+        public RecaptchaV3SolverTests(WebDriverFixture fixture) : base(fixture)
         {
         }
     }

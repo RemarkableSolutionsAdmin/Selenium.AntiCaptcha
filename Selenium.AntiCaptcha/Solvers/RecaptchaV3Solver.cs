@@ -7,11 +7,11 @@ using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class ReCaptchaV3ProxylessSolver : RecaptchaSolverBase<RecaptchaV3ProxylessRequest, RecaptchaSolution>
+    internal class RecaptchaV3Solver : RecaptchaSolverBase<RecaptchaV3Request, RecaptchaSolution>
     {
-        protected override RecaptchaV3ProxylessRequest BuildRequest(SolverAdditionalArguments additionalArguments)
+        protected override RecaptchaV3Request BuildRequest(SolverAdditionalArguments additionalArguments)
         {
-            return new RecaptchaV3ProxylessRequest
+            return new RecaptchaV3Request
             {
                 WebsiteUrl = additionalArguments.Url,
                 WebsiteKey = additionalArguments.SiteKey,
@@ -32,7 +32,7 @@ namespace Selenium.AntiCaptcha.Solvers
             };
         }
 
-        public ReCaptchaV3ProxylessSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        public RecaptchaV3Solver(string clientKey, IWebDriver driver) : base(clientKey, driver)
         {
         }
     }

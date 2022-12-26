@@ -6,7 +6,7 @@
         ReCaptchaV2Proxyless,
         ReCaptchaV2Enterprise,
         ReCaptchaV2EnterpriseProxyless,
-        ReCaptchaV3Proxyless,
+        ReCaptchaV3,
         ReCaptchaV3Enterprise,
         HCaptcha,
         HCaptchaProxyless,

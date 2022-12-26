@@ -190,7 +190,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         
         [Theory]
         [InlineData(TestUris.Recaptcha.V3.Enterprise.Netflix, CaptchaType.ReCaptchaV3Enterprise)]
-        [InlineData(TestUris.Recaptcha.V3.NonEnterprise.RecaptchaV3Demo, CaptchaType.ReCaptchaV3Proxyless)]
+        [InlineData(TestUris.Recaptcha.V3.NonEnterprise.RecaptchaV3Demo, CaptchaType.ReCaptchaV3)]
         [InlineData(TestUris.Recaptcha.V2.NonEnterprise.RecaptchaV2DemoCheckbox, CaptchaType.ReCaptchaV2Proxyless)]
         public async Task ShouldReturnProperRecaptchaType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
         {

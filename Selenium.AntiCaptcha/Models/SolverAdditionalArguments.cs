@@ -14,7 +14,7 @@ public record SolverAdditionalArguments(
     IWebElement? SubmitElement = null, 
     IWebElement? ImageElement = null, 
     string? UserAgent = null, 
-    ProxyConfig? ProxyConfig = null,
+    TypedProxyConfig? ProxyConfig = null,
     string? FunCaptchaApiJsSubdomain = null,
     string? Data = null,
     JObject? Variables = null,

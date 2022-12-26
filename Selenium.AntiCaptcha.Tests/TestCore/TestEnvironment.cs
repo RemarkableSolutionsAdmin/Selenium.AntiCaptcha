@@ -22,9 +22,9 @@ public static class TestEnvironment
 
     public const string DriverBasedTestCollection = "Driver collection";
         
-    internal static ProxyConfig GetCurrentTestProxyConfig()
+    internal static TypedProxyConfig GetCurrentTestProxyConfig()
     {
-        return new ProxyConfig()
+        return new TypedProxyConfig()
         {
             ProxyType = ProxyTypeOption.Http,
             ProxyAddress = ProxyAddress,

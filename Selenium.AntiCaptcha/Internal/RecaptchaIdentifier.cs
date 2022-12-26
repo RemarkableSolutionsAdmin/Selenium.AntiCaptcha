@@ -15,7 +15,7 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
         CaptchaType.ReCaptchaV2Proxyless,
         CaptchaType.ReCaptchaV2EnterpriseProxyless,
         CaptchaType.ReCaptchaV2Enterprise,
-        CaptchaType.ReCaptchaV3Proxyless,
+        CaptchaType.ReCaptchaV3,
         CaptchaType.ReCaptchaV3Enterprise,
     };
     
@@ -72,7 +72,7 @@ internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
                 return await base.SpecifyCaptcha(result, driver, additionalArguments, cancellationToken);
             }
 
-            result = isEnterprise ? CaptchaType.ReCaptchaV3Enterprise : CaptchaType.ReCaptchaV3Proxyless;
+            result = isEnterprise ? CaptchaType.ReCaptchaV3Enterprise : CaptchaType.ReCaptchaV3;
             return await base.SpecifyCaptcha(result, driver, additionalArguments, cancellationToken);
         }
         catch (Exception)

@@ -33,8 +33,8 @@ internal static class SolverFactory
                 return new ReCaptchaV2EnterpriseSolver(clientKey, webDriver);
             case CaptchaType.ReCaptchaV2EnterpriseProxyless:
                 return new ReCaptchaV2EnterpriseProxylessSolver(clientKey, webDriver);
-            case CaptchaType.ReCaptchaV3Proxyless:
-                return new ReCaptchaV3ProxylessSolver(clientKey, webDriver);
+            case CaptchaType.ReCaptchaV3:
+                return new RecaptchaV3Solver(clientKey, webDriver);
             case CaptchaType.ReCaptchaV3Enterprise:
                 return new ReCaptchaV3EnterpriseSolver(clientKey, webDriver);
             case CaptchaType.HCaptcha:
