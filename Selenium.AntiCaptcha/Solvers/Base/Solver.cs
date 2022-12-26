@@ -10,7 +10,7 @@ using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
-internal abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
+public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
     where TRequest: CaptchaRequest<TSolution>
     where TSolution: BaseSolution, new()
 {

@@ -12,7 +12,8 @@ public static class CaptchaTypeExtensions
         CaptchaType.GeeTestV3,
         CaptchaType.GeeTestV4,
         CaptchaType.ReCaptchaV2,
-        CaptchaType.ReCaptchaV2Enterprise
+        CaptchaType.ReCaptchaV2Enterprise,
+        CaptchaType.Turnstile
     };
     
     
@@ -27,7 +28,8 @@ public static class CaptchaTypeExtensions
         CaptchaType.ImageToText,
         CaptchaType.GeeTestV3Proxyless,
         CaptchaType.GeeTestV4Proxyless,
-        CaptchaType.AntiGate
+        CaptchaType.AntiGate,
+        CaptchaType.TurnstileProxyless
     };
 
     internal static bool IsProperlyDefined(this CaptchaType type)
@@ -56,6 +58,8 @@ public static class CaptchaTypeExtensions
             CaptchaType.GeeTestV4Proxyless => CaptchaType.GeeTestV4,
             CaptchaType.AntiGate => CaptchaType.AntiGate,
             CaptchaType.ReCaptchaV3Enterprise => CaptchaType.ReCaptchaV3Enterprise,
+            CaptchaType.Turnstile => CaptchaType.Turnstile,
+            CaptchaType.TurnstileProxyless => CaptchaType.Turnstile,
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -90,6 +94,8 @@ public static class CaptchaTypeExtensions
             CaptchaType.GeeTestV4 => typeof(GeeTestV4Solution),
             CaptchaType.GeeTestV4Proxyless => typeof(GeeTestV4Solution),
             CaptchaType.AntiGate => typeof(AntiGateSolution),
+            CaptchaType.Turnstile => typeof(TurnstileSolution),
+            CaptchaType.TurnstileProxyless => typeof(TurnstileSolution),
             _ => throw new ArgumentOutOfRangeException(nameof(captchaType), captchaType, null)
         };
     }

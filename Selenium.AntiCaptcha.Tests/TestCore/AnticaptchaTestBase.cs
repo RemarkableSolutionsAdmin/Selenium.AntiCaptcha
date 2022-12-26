@@ -105,5 +105,7 @@ public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>, IDi
             AssertSolveCaptchaResult((TaskResultResponse<AntiGateSolution>?)result);
         if (result is TaskResultResponse<ImageToTextSolution>)
             AssertSolveCaptchaResult((TaskResultResponse<ImageToTextSolution>?)result);
+        if (result is TaskResultResponse<TurnstileSolution>)
+            AssertSolveCaptchaResult((TaskResultResponse<TurnstileSolution>?)result);
     }
 }

@@ -17,6 +17,7 @@ internal static class SolutionExtensions
             nameof(ImageToTextSolution) => CaptchaType.ImageToText,
             nameof(AntiGateSolution) => CaptchaType.AntiGate,
             nameof(FunCaptchaSolution) => CaptchaType.FunCaptchaProxyless,
+            nameof(TurnstileSolution) => CaptchaType.TurnstileProxyless,
             _ => null,
         };
     }

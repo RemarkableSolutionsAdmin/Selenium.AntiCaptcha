@@ -6,9 +6,8 @@ using Selenium.AntiCaptcha.Internal.Extensions;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
-internal abstract class RecaptchaSolverBase<TRequest, TSolution> : Solver<TRequest, TSolution>
-    where TRequest : CaptchaRequest<TSolution>
-    where TSolution : RecaptchaSolution, new()
+internal abstract class RecaptchaSolverBase<TRequest> : Solver<TRequest, RecaptchaSolution>
+    where TRequest : CaptchaRequest<RecaptchaSolution>
 {
     protected override string GetSiteKey()
     {
@@ -38,7 +37,7 @@ internal abstract class RecaptchaSolverBase<TRequest, TSolution> : Solver<TReque
     }
     
     
-    protected override void FillResponseElement(TSolution solution, IWebElement? responseElement)
+    protected override void FillResponseElement(RecaptchaSolution solution, IWebElement? responseElement)
     {
         if (responseElement != null)
         {

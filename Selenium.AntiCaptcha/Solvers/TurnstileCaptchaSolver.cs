@@ -1,16 +1,18 @@
-﻿using AntiCaptchaApi.Net.Models.Solutions;
+﻿using System.Text.RegularExpressions;
+using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
 using OpenQA.Selenium;
+using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class ReCaptchaV2EnterpriseSolver : RecaptchaSolverBase <RecaptchaV2EnterpriseRequest>
+    internal class TurnstileCaptchaSolver : TurnstileSolverBase <TurnstileCaptchaRequest>
     {
-        protected override RecaptchaV2EnterpriseRequest BuildRequest(SolverAdditionalArguments additionalArguments)
+        protected override TurnstileCaptchaRequest BuildRequest(SolverAdditionalArguments additionalArguments)
         {
-            return new RecaptchaV2EnterpriseRequest
+            return new TurnstileCaptchaRequest
             {
                 WebsiteUrl = additionalArguments.Url,
                 WebsiteKey = additionalArguments.SiteKey,
@@ -19,7 +21,7 @@ namespace Selenium.AntiCaptcha.Solvers
             };
         }
 
-        public ReCaptchaV2EnterpriseSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        public TurnstileCaptchaSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
         {
         }
     }

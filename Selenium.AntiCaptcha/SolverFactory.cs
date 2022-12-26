@@ -57,6 +57,10 @@ internal static class SolverFactory
                 return new GeeTestV4ProxylessSolver(clientKey, webDriver);
             case CaptchaType.AntiGate:
                 return new AntiGateSolver(clientKey, webDriver);
+            case CaptchaType.Turnstile:
+                return new TurnstileCaptchaSolver(clientKey, webDriver);
+            case CaptchaType.TurnstileProxyless:
+                return new TurnstileProxylessCaptchaSolver(clientKey, webDriver);
             default:
                 throw new ArgumentOutOfRangeException(nameof(captchaType), captchaType, null);
         }

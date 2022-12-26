@@ -7,7 +7,7 @@ using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class RecaptchaV3Solver : RecaptchaSolverBase<RecaptchaV3Request, RecaptchaSolution>
+    internal class RecaptchaV3Solver : RecaptchaSolverBase<RecaptchaV3Request>
     {
         protected override RecaptchaV3Request BuildRequest(SolverAdditionalArguments additionalArguments)
         {

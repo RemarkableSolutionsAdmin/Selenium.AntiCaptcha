@@ -17,6 +17,8 @@
         GeeTestV3Proxyless,
         GeeTestV4,
         GeeTestV4Proxyless,
-        AntiGate
+        AntiGate,
+        Turnstile,
+        TurnstileProxyless
     }
 }

@@ -15,7 +15,8 @@ internal static class AllCaptchaTypesIdentifier
         new HCaptchaIdentifier(),
         new ImageToTextIdentifier(),
         new AntiGateIdentifier(),
-        new FunCaptchaIdentifier()
+        new FunCaptchaIdentifier(),
+        new TurnstileCaptchaIdentifier()
     };
 
     internal static async Task<List<CaptchaType>> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)

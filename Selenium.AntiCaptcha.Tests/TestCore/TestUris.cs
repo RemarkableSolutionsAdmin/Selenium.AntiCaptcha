@@ -15,20 +15,23 @@ public static class TestUris
             .Concat(ImageToText.Uris())
             .Concat(HCaptcha.Uris())
             .Concat(AntiGate.Uris())
-            .Concat(GeeTest.Uris());
+            .Concat(GeeTest.Uris())
+            .Concat(Turnstile.Uris());
 
     public static IEnumerable<object[]> TestableUris() =>        
         Recaptcha.Uris()
             .Concat(FunCaptcha.Uris())
             .Concat(HCaptcha.Uris())
             .Concat(GeeTest.Uris())
-            .Concat(ImageToText.Uris());
+            .Concat(ImageToText.Uris())
+            .Concat(Turnstile.Uris());
 
     public static IEnumerable<object[]> TestableUrisWithoutRecaptcha() =>        
         FunCaptcha.Uris()
             .Concat(HCaptcha.Uris())
             .Concat(GeeTest.Uris())
-            .Concat(ImageToText.Uris());
+            .Concat(ImageToText.Uris())
+            .Concat(Turnstile.Uris());
 
     public class Recaptcha
     {
@@ -71,9 +74,8 @@ public static class TestUris
                 public const CaptchaType Type = CaptchaType.ReCaptchaV2EnterpriseProxyless;
                 public static IEnumerable<object[]> Uris()
                 {
-                    yield return new object[] { new CaptchaUri(Steam, Type) };
+                    yield return new object[] { }; // TODO!
                 }
-                public const string Steam = "https://store.steampowered.com/join";
             }
 
             public static class NonEnterprise
@@ -108,6 +110,15 @@ public static class TestUris
         public const string Github = "https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home";
     }
 
+    public static class Turnstile
+    {
+        public const CaptchaType Type = CaptchaType.TurnstileProxyless;
+        public static IEnumerable<object[]> Uris()
+        {
+            yield return new object[] { new CaptchaUri(TurnStileDemo, Type) };
+        }
+        public const string TurnStileDemo = "https://react-turnstile.vercel.app/";
+    }
     public static class GeeTest
     {
         public static IEnumerable<object[]> Uris() => V4.Uris().Concat(V3.Uris());

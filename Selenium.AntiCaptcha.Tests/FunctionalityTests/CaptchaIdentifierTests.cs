@@ -119,6 +119,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
                     await TestNonGenericIdentifier(captchaUri);
                 }
             }
+            
             [Theory]
             [MemberData(nameof(TestUris.TestableUrisWithoutRecaptcha), MemberType = typeof(TestUris))]
             public async Task TestProxylessCaptchaUris(CaptchaUri captchaUri)
@@ -129,6 +130,13 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
                 }
             }
          
+            [Fact]
+            public async Task TestSingleCaptchaUri()
+            {
+                var captchaUri = new CaptchaUri(TestUris.GeeTest.V3.Zhiyou, CaptchaType.GeeTestV3Proxyless);
+                await TestNonGenericIdentifier(captchaUri);
+            }
+            
             [Theory]
             [MemberData(nameof(TestUris.TestableUrisWithoutRecaptcha), MemberType = typeof(TestUris))]
             public async Task TestProxyCaptchaUris(CaptchaUri captchaUri)
@@ -207,8 +215,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
                 ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
             });
         }
-        
-        
+
         [Theory]
         [InlineData(TestUris.FunCaptcha.FunCaptchaDemo, CaptchaType.FunCaptchaProxyless)]
         public async Task ShouldReturnProperFunCaptchaType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
@@ -227,6 +234,23 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         }
         
         
+        [Theory]
+        [InlineData(TestUris.Turnstile.TurnStileDemo, CaptchaType.TurnstileProxyless)]
+        public async Task ShouldReturnProperTurnstileType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
+        {
+            await TestIdentifier<TurnstileSolution>(websiteUrl, expectedType, null);
+        }
+
+        [Theory]
+        [InlineData(TestUris.Turnstile.TurnStileDemo, CaptchaType.Turnstile)]
+        public async Task ShouldReturnProperTurnstileType_WithProxy(string websiteUrl, CaptchaType expectedType)
+        {
+            await TestIdentifier<TurnstileSolution>(websiteUrl, expectedType, new SolverAdditionalArguments
+            {
+                ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
+            });
+        }
+
         [Theory]
         [InlineData(TestUris.ImageToText.Wikipedia, CaptchaType.ImageToText)]
         public async Task ShouldReturnProperImageToTextType_WithoutProxy(string websiteUrl, CaptchaType expectedType)
