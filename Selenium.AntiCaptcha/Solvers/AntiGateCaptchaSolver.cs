@@ -1,5 +1,6 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
+using AntiCaptchaApi.Net.Responses;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Models;
@@ -9,29 +10,29 @@ namespace Selenium.AntiCaptcha.Solvers
 {
     internal class AntiGateSolver : Solver<AntiGateRequest, AntiGateSolution>
     {
-        protected override AntiGateRequest BuildRequest(SolverAdditionalArguments additionalArguments)
+        protected override AntiGateRequest BuildRequest(SolverArguments arguments)
         {
             return new AntiGateRequest
             {
-                WebsiteUrl = additionalArguments.Url,
-                TemplateName = additionalArguments.TemplateName,
-                Variables = additionalArguments.Variables,
-                DomainsOfInterest = additionalArguments.DomainsOfInterest,
-                ProxyConfig = additionalArguments.ProxyConfig
+                WebsiteUrl = arguments.Url,
+                TemplateName = arguments.TemplateName,
+                Variables = arguments.Variables,
+                DomainsOfInterest = arguments.DomainsOfInterest,
+                ProxyConfig = arguments.ProxyConfig
             };
         }
 
-        protected override async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(
-            SolverAdditionalArguments solverAdditionalArguments)
+        protected override async Task<SolverArguments> FillMissingAdditionalArguments(
+            SolverArguments solverArguments)
         {
-            return await base.FillMissingAdditionalArguments(solverAdditionalArguments) with
+            return await base.FillMissingAdditionalArguments(solverArguments) with
             {
-                Variables = solverAdditionalArguments.Variables ?? new JObject(),
-                DomainsOfInterest = solverAdditionalArguments.DomainsOfInterest ?? new List<string>()
+                Variables = solverArguments.Variables,
+                DomainsOfInterest = solverArguments.DomainsOfInterest
             };
         }
 
-        public AntiGateSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        public AntiGateSolver(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
         {
         }
     }

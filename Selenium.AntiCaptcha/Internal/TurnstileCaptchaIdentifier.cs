@@ -21,7 +21,7 @@ internal class TurnstileCaptchaIdentifier  : ProxyCaptchaIdentifier
 
     public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(
         IWebDriver driver,
-        SolverAdditionalArguments additionalArguments,
+        SolverArguments arguments,
         CancellationToken cancellationToken)
     {
         try
@@ -33,7 +33,7 @@ internal class TurnstileCaptchaIdentifier  : ProxyCaptchaIdentifier
                 return null;
             }
 
-            return await base.SpecifyCaptcha(CaptchaType.TurnstileProxyless, driver, additionalArguments, cancellationToken);
+            return await base.SpecifyCaptcha(CaptchaType.TurnstileProxyless, driver, arguments, cancellationToken);
         }
         catch (Exception)
         {
@@ -43,9 +43,9 @@ internal class TurnstileCaptchaIdentifier  : ProxyCaptchaIdentifier
     
 
     public override Task<CaptchaType?> SpecifyCaptcha(CaptchaType originalType, IWebDriver driver,
-        SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)
+        SolverArguments arguments, CancellationToken cancellationToken)
     {
-        return IdentifyInCurrentFrameAsync(driver, additionalArguments, cancellationToken);
+        return IdentifyInCurrentFrameAsync(driver, arguments, cancellationToken);
     }
 
     private static IWebElement? GetTurnstileIFrame(IWebDriver driver)

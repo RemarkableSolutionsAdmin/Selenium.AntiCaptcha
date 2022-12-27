@@ -19,12 +19,12 @@ internal static class AllCaptchaTypesIdentifier
         new TurnstileCaptchaIdentifier()
     };
 
-    internal static async Task<List<CaptchaType>> IdentifyAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)
+    internal static async Task<List<CaptchaType>> IdentifyAsync(IWebDriver driver, SolverArguments arguments, CancellationToken cancellationToken)
     {
         var identifiedTypes = new List<CaptchaType>();
         foreach (var captchaIdentifier in CaptchaIdentifiers)
         {
-            var identifiedCaptcha = await captchaIdentifier.IdentifyInAllFramesAsync(driver, additionalArguments, cancellationToken);
+            var identifiedCaptcha = await captchaIdentifier.IdentifyInAllFramesAsync(driver, arguments, cancellationToken);
             
             if (identifiedCaptcha != null)
             {
@@ -41,11 +41,11 @@ internal static class AllCaptchaTypesIdentifier
         return CaptchaIdentifiers.Any(x => x.CanIdentify(captchaType));
     }
 
-    private static async Task<CaptchaType?> IdentifyCaptchaAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments, CaptchaType captchaType, CancellationToken cancellationToken)
+    private static async Task<CaptchaType?> IdentifyCaptchaAsync(IWebDriver driver, SolverArguments arguments, CaptchaType captchaType, CancellationToken cancellationToken)
     {
         foreach (var captchaIdentifier in CaptchaIdentifiers.Where(x => x.CanIdentify(captchaType)))
         {
-            var result = await captchaIdentifier.SpecifyCaptcha(captchaType, driver, additionalArguments, cancellationToken);
+            var result = await captchaIdentifier.SpecifyCaptcha(captchaType, driver, arguments, cancellationToken);
             if (result.HasValue)
             {
                 return result.Value;
@@ -56,11 +56,11 @@ internal static class AllCaptchaTypesIdentifier
 
     internal static async Task<CaptchaType?> IdentifyCaptchaAsync<TSolution>(
         IWebDriver driver, 
-        SolverAdditionalArguments additionalArguments,
+        SolverArguments arguments,
         CancellationToken cancellationToken)
         where TSolution : BaseSolution, new()
     {
         var result = new TSolution().GetCaptchaType();
-        return !result.HasValue ? result : await IdentifyCaptchaAsync(driver, additionalArguments, result.Value, cancellationToken);
+        return !result.HasValue ? result : await IdentifyCaptchaAsync(driver, arguments, result.Value, cancellationToken);
     }
 }

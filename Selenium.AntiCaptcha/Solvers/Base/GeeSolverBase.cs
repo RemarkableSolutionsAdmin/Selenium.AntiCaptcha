@@ -11,18 +11,18 @@ public abstract class GeeSolverBase<TRequest, TSolution> : Solver <TRequest, TSo
     where TRequest: CaptchaRequest<TSolution>
     where TSolution: BaseSolution, new()
 {
-    protected GeeSolverBase(string clientKey, IWebDriver driver) : base(clientKey, driver)
+    protected GeeSolverBase(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
     {
     }
     
-    protected override async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(
-        SolverAdditionalArguments solverAdditionalArguments)
+    protected override async Task<SolverArguments> FillMissingAdditionalArguments(
+        SolverArguments solverArguments)
     {
-        return await base.FillMissingAdditionalArguments(solverAdditionalArguments)
+        return await base.FillMissingAdditionalArguments(solverArguments)
             with
             {
-                Gt = solverAdditionalArguments.Gt ?? await AcquireGt(solverAdditionalArguments.MaxPageLoadWaitingTimeInMilliseconds),
-                Challenge = solverAdditionalArguments.Challenge ?? GetChallenge(Driver)
+                Gt = solverArguments.Gt ?? await AcquireGt(),
+                Challenge = solverArguments.Challenge ?? GetChallenge(Driver)
             };
     }
 
@@ -42,18 +42,18 @@ public abstract class GeeSolverBase<TRequest, TSolution> : Solver <TRequest, TSo
         return result != null ? result.Groups[1].Value : string.Empty;
     }
 
-    private async Task<string> AcquireGt(int maxPageLoadWaitingTimeInMs)
+    private async Task<string> AcquireGt()
     {
         var timePassedInMs = 0;
         while (true)
         {
             var result = GetGt();
 
-            if (!string.IsNullOrEmpty(result) || timePassedInMs >= maxPageLoadWaitingTimeInMs) 
+            if (!string.IsNullOrEmpty(result) || timePassedInMs >= SolverConfig.MaxPageLoadWaitingTimeInMilliseconds) 
                 return result;
 
-            await Task.Delay(WaitingStepTime);
-            timePassedInMs += WaitingStepTime;
+            await Task.Delay(SolverConfig.WaitingStepTimeInMilliseconds);
+            timePassedInMs += SolverConfig.WaitingStepTimeInMilliseconds;
         }
     }
         

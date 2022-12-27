@@ -15,7 +15,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         var proxyType = captchaUri.ExpectedType.ToProxyType();
         if (proxyType.IsProxyType())
         {
-            await TestNonGenericIdentifier(captchaUri with { ExpectedType = proxyType }, new SolverAdditionalArguments
+            await TestNonGenericIdentifier(captchaUri with { ExpectedType = proxyType }, new SolverArguments
             {
                 ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
             });
@@ -144,7 +144,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
                 var proxyType = captchaUri.ExpectedType.ToProxyType();
                 if (!proxyType.IsProxylessType())
                 {
-                    await TestNonGenericIdentifier(captchaUri with { ExpectedType = proxyType }, new SolverAdditionalArguments
+                    await TestNonGenericIdentifier(captchaUri with { ExpectedType = proxyType }, new SolverArguments
                     {
                         ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
                     });
@@ -171,7 +171,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         [InlineData(TestUris.GeeTest.V3.GeeTestV3Demo, CaptchaType.GeeTestV3)]
         public async Task ShouldReturnProperGeeV3TestType_WithProxy(string websiteUrl, CaptchaType expectedType)
         {
-            await TestIdentifier<GeeTestV3Solution>(websiteUrl, expectedType, new SolverAdditionalArguments
+            await TestIdentifier<GeeTestV3Solution>(websiteUrl, expectedType, new SolverArguments
             {
                 ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
             });
@@ -190,7 +190,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         [InlineData(TestUris.GeeTest.V4.GeeTestV4Demo, CaptchaType.GeeTestV4)]
         public async Task ShouldReturnProperGeeV4TestType_WithProxy(string websiteUrl, CaptchaType expectedType)
         {
-            await TestIdentifier<GeeTestV4Solution>(websiteUrl, expectedType, new SolverAdditionalArguments
+            await TestIdentifier<GeeTestV4Solution>(websiteUrl, expectedType, new SolverArguments
             {
                 ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
             });
@@ -210,7 +210,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         [InlineData(TestUris.Recaptcha.V2.NonEnterprise.RecaptchaV2DemoCheckbox, CaptchaType.ReCaptchaV2)]
         public async Task ShouldReturnProperRecaptchaType_WithProxy(string websiteUrl, CaptchaType expectedType)
         {
-            await TestIdentifier<RecaptchaSolution>(websiteUrl, expectedType, new SolverAdditionalArguments
+            await TestIdentifier<RecaptchaSolution>(websiteUrl, expectedType, new SolverArguments
             {
                 ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
             });
@@ -227,7 +227,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         [InlineData(TestUris.FunCaptcha.FunCaptchaDemo, CaptchaType.FunCaptcha)]
         public async Task ShouldReturnProperFunCaptchaType_WithProxy(string websiteUrl, CaptchaType expectedType)
         {
-            await TestIdentifier<FunCaptchaSolution>(websiteUrl, expectedType, new SolverAdditionalArguments
+            await TestIdentifier<FunCaptchaSolution>(websiteUrl, expectedType, new SolverArguments
             {
                 ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
             });
@@ -245,7 +245,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         [InlineData(TestUris.Turnstile.TurnStileDemo, CaptchaType.Turnstile)]
         public async Task ShouldReturnProperTurnstileType_WithProxy(string websiteUrl, CaptchaType expectedType)
         {
-            await TestIdentifier<TurnstileSolution>(websiteUrl, expectedType, new SolverAdditionalArguments
+            await TestIdentifier<TurnstileSolution>(websiteUrl, expectedType, new SolverArguments
             {
                 ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
             });
@@ -284,9 +284,9 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         }
     }
     
-    protected async Task TestNonGenericIdentifier(CaptchaUri captchaUri, SolverAdditionalArguments? additionalArguments = null)
+    protected async Task TestNonGenericIdentifier(CaptchaUri captchaUri, SolverArguments? additionalArguments = null)
     {
-        var solverAdditionalArguments = additionalArguments ?? new SolverAdditionalArguments();
+        var solverAdditionalArguments = additionalArguments ?? new SolverArguments();
         await SetDriverUrl(captchaUri.Uri);
         var identifiedTypes = await AllCaptchaTypesIdentifier.IdentifyAsync(Driver, solverAdditionalArguments, CancellationToken.None);
         var testFailed = identifiedTypes.Count != 1 || identifiedTypes[0] != captchaUri.ExpectedType;
@@ -294,24 +294,24 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         Assert.False(testFailed, GetTestFailReasonText(captchaUri, solverAdditionalArguments, string.Join(", ", identifiedTypes.Select(x => x.ToString()))));
     }
 
-    private static string GetTestFailReasonText(CaptchaUri captchaUri, SolverAdditionalArguments? additionalArguments, string foundTypesNames)
+    private static string GetTestFailReasonText(CaptchaUri captchaUri, SolverArguments? additionalArguments, string foundTypesNames)
     {
         return $"Test non generic identifier failed for url: {captchaUri.Uri}. \n" +
                $"Expected type {captchaUri.ExpectedType}, but found {foundTypesNames}\n" +
                $"ProxyConfig was {additionalArguments?.ProxyConfig}";
     }
     
-    protected async Task TestIdentifier<TSolution>(string websiteUri, CaptchaType expectedType, SolverAdditionalArguments? additionalArguments = null)
+    protected async Task TestIdentifier<TSolution>(string websiteUri, CaptchaType expectedType, SolverArguments? additionalArguments = null)
         where TSolution : BaseSolution, new()
     {
         var captchaUri = new CaptchaUri(websiteUri, expectedType);
         await TestIdentifier<TSolution>(captchaUri, additionalArguments);
     }
 
-    protected async Task TestIdentifier<TSolution>(CaptchaUri captchaUri, SolverAdditionalArguments? additionalArguments = null)
+    protected async Task TestIdentifier<TSolution>(CaptchaUri captchaUri, SolverArguments? additionalArguments = null)
         where TSolution : BaseSolution, new()
     {
-        var solverAdditionalArguments = additionalArguments ?? new SolverAdditionalArguments();
+        var solverAdditionalArguments = additionalArguments ?? new SolverArguments();
         await SetDriverUrl(captchaUri.Uri);
         var type = await AllCaptchaTypesIdentifier.IdentifyCaptchaAsync<TSolution>(Driver, solverAdditionalArguments, CancellationToken.None); 
         var testFailed = type == null || type != captchaUri.ExpectedType;

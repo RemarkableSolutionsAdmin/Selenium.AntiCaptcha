@@ -1,4 +1,5 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
+using AntiCaptchaApi.Net.Requests;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha;
 using Selenium.AntiCaptcha.Enums;
@@ -15,7 +16,7 @@ public class WebDriverExtensionsTests : AnticaptchaTestBase
     [Fact]
     public async Task ShouldThrowException_WhenSolutionTypeAndCaptchaTypeDoNotMatch()
     {
-        await Assert.ThrowsAsync<ArgumentException>(() => Driver.SolveCaptchaAsync<GeeTestV3Solution>(ClientKey, new SolverAdditionalArguments(CaptchaType: CaptchaType.ReCaptchaV2)));
+        await Assert.ThrowsAsync<ArgumentException>(() => Driver.SolveCaptchaAsync<GeeTestV3Solution>(ClientKey, new SolverArguments(CaptchaType: CaptchaType.ReCaptchaV2)));
     }
 
     public class FramesTreeTraversingTests : WebDriverExtensionsTests
@@ -110,6 +111,12 @@ public class WebDriverExtensionsTests : AnticaptchaTestBase
             var frameBeforeTraversingThrough = Driver.GetCurrentFrame();
             Driver.GetFullFramesTree();
             Assert.Equal(frameBeforeTraversingThrough, Driver.GetCurrentFrame());
+        }
+
+        [Fact]
+        public async Task Test()
+        {
+            Driver.SolveCaptchaAsync(ClientKey, new FunCaptchaRequest());
         }
     }
 

@@ -18,10 +18,10 @@ public class HCaptchaIdentifier : ProxyCaptchaIdentifier
         IdentifiableTypes.AddRange(HCaptchaTypes);
     }
 
-    public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
+    public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver, SolverArguments arguments,
         CancellationToken cancellationToken)
     {
-        return ContainsHCaptchaIFrame(driver) ? await base.SpecifyCaptcha(CaptchaType.HCaptchaProxyless, driver, additionalArguments, cancellationToken) : null;
+        return ContainsHCaptchaIFrame(driver) ? await base.SpecifyCaptcha(CaptchaType.HCaptchaProxyless, driver, arguments, cancellationToken) : null;
     }
     
     private static bool ContainsHCaptchaIFrame(IWebDriver driver)

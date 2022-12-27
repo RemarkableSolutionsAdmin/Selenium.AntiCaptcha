@@ -10,20 +10,20 @@ namespace Selenium.AntiCaptcha.Solvers
 {
     internal class GeeTestV4Solver : GeeTestV4SolverBase<GeeTestV4Request>
     {
-        protected override GeeTestV4Request BuildRequest(SolverAdditionalArguments additionalArguments)
+        protected override GeeTestV4Request BuildRequest(SolverArguments arguments)
         {
             return  new GeeTestV4Request
             {
-                WebsiteUrl = additionalArguments.Url,
-                Gt = additionalArguments.Gt,
-                InitParameters = additionalArguments.InitParameters,
-                ProxyConfig = additionalArguments.ProxyConfig,
-                UserAgent = additionalArguments.UserAgent,
-                Challenge = additionalArguments.Challenge
+                WebsiteUrl = arguments.Url,
+                Gt = arguments.Gt,
+                InitParameters = arguments.InitParameters,
+                ProxyConfig = arguments.ProxyConfig,
+                UserAgent = arguments.UserAgent,
+                Challenge = arguments.Challenge
             };
         }
         
-        public GeeTestV4Solver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        public GeeTestV4Solver(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
         {
         }
     }

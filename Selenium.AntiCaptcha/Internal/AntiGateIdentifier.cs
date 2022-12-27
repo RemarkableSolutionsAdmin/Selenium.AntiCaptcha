@@ -12,7 +12,7 @@ public class AntiGateIdentifier : ProxyCaptchaIdentifier
     }
 
 
-    public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
+    public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver, SolverArguments arguments,
         CancellationToken cancellationToken)
     {
         return null; //TODO!
@@ -20,8 +20,8 @@ public class AntiGateIdentifier : ProxyCaptchaIdentifier
 
     //TODO!
     public override async Task<CaptchaType?> SpecifyCaptcha(CaptchaType originalType, IWebDriver driver,
-        SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)
+        SolverArguments arguments, CancellationToken cancellationToken)
     {
-        return await base.SpecifyCaptcha(originalType, driver, additionalArguments, cancellationToken);
+        return await base.SpecifyCaptcha(originalType, driver, arguments, cancellationToken);
     }
 }

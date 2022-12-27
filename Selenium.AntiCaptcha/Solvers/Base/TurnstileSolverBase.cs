@@ -4,14 +4,15 @@ using AntiCaptchaApi.Net.Requests;
 using AntiCaptchaApi.Net.Requests.Abstractions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Internal.Extensions;
+using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
-public abstract class TurnstileSolverBase<TRequest> : Solver <TRequest, TurnstileSolution>
+public abstract class TurnstileSolverBase<TRequest> : GeeSolverBase <TRequest, TurnstileSolution>
     where TRequest : CaptchaRequest<TurnstileSolution>
 {
     
-    protected TurnstileSolverBase(string clientKey, IWebDriver driver) : base(clientKey, driver)
+    protected TurnstileSolverBase(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
     {
     }
     

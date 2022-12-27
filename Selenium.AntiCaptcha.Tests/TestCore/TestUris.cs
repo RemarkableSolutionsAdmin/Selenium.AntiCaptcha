@@ -74,8 +74,9 @@ public static class TestUris
                 public const CaptchaType Type = CaptchaType.ReCaptchaV2EnterpriseProxyless;
                 public static IEnumerable<object[]> Uris()
                 {
-                    yield return new object[] { }; // TODO!
+                    yield return new object[] { new CaptchaUri(Steam, Type) };
                 }
+                public const string Steam = "https://store.steampowered.com/join";
             }
 
             public static class NonEnterprise
@@ -154,11 +155,9 @@ public static class TestUris
         {
             yield return new object[] { new CaptchaUri(Wikipedia, Type) };
             yield return new object[] { new CaptchaUri(DemoCaptcha, Type) };
-            yield return new object[] { new CaptchaUri(Steam, Type) };
         }
         public const string Wikipedia = "https://en.wikipedia.org/w/index.php?title=Special:CreateAccount&returnto=Main+Page";
         public const string DemoCaptcha = "https://democaptcha.com/demo-form-eng/image.html";
-        public const string Steam = "https://store.steampowered.com/join";
     }
 
     public static class AntiGate

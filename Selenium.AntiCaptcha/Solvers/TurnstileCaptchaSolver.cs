@@ -10,18 +10,18 @@ namespace Selenium.AntiCaptcha.Solvers
 {
     internal class TurnstileCaptchaSolver : TurnstileSolverBase <TurnstileCaptchaRequest>
     {
-        protected override TurnstileCaptchaRequest BuildRequest(SolverAdditionalArguments additionalArguments)
+        protected override TurnstileCaptchaRequest BuildRequest(SolverArguments arguments)
         {
             return new TurnstileCaptchaRequest
             {
-                WebsiteUrl = additionalArguments.Url,
-                WebsiteKey = additionalArguments.SiteKey,
-                UserAgent = additionalArguments.UserAgent,
-                ProxyConfig = additionalArguments.ProxyConfig,
+                WebsiteUrl = arguments.Url,
+                WebsiteKey = arguments.SiteKey,
+                UserAgent = arguments.UserAgent,
+                ProxyConfig = arguments.ProxyConfig,
             };
         }
 
-        public TurnstileCaptchaSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        public TurnstileCaptchaSolver(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
         {
         }
     }

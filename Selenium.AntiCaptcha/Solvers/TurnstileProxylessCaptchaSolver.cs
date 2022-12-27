@@ -10,16 +10,16 @@ namespace Selenium.AntiCaptcha.Solvers
 {
     internal class TurnstileProxylessCaptchaSolver : TurnstileSolverBase <TurnstileCaptchaProxylessRequest>
     {
-        protected override TurnstileCaptchaProxylessRequest BuildRequest(SolverAdditionalArguments additionalArguments)
+        protected override TurnstileCaptchaProxylessRequest BuildRequest(SolverArguments arguments)
         {
             return new TurnstileCaptchaProxylessRequest
             {
-                WebsiteUrl = additionalArguments.Url,
-                WebsiteKey = additionalArguments.SiteKey
+                WebsiteUrl = arguments.Url,
+                WebsiteKey = arguments.SiteKey
             };
         }
 
-        public TurnstileProxylessCaptchaSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        public TurnstileProxylessCaptchaSolver(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
         {
         }
     }

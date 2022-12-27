@@ -2,12 +2,11 @@
 using AntiCaptchaApi.Net.Requests.Abstractions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Internal.Helpers;
+using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
-internal abstract class FunCaptchaSolverBase<TRequest, TSolution> : Solver<TRequest, TSolution>
-    where TRequest : CaptchaRequest<TSolution>
-    where TSolution : FunCaptchaSolution, new()
+public abstract class FunCaptchaSolverBase<TRequest> : Solver<TRequest, FunCaptchaSolution> where TRequest : CaptchaRequest<FunCaptchaSolution>
 {
     protected override string GetSiteKey()
     {
@@ -23,7 +22,7 @@ internal abstract class FunCaptchaSolverBase<TRequest, TSolution> : Solver<TRequ
         return PageSourceSearcher.FindFunCaptchaSiteKey(Driver);
     }
 
-    protected FunCaptchaSolverBase(string clientKey, IWebDriver driver) : base(clientKey, driver)
+    protected FunCaptchaSolverBase(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
     {
     }
 }

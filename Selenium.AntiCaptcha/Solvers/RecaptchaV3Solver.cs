@@ -9,30 +9,30 @@ namespace Selenium.AntiCaptcha.Solvers
 {
     internal class RecaptchaV3Solver : RecaptchaSolverBase<RecaptchaV3Request>
     {
-        protected override RecaptchaV3Request BuildRequest(SolverAdditionalArguments additionalArguments)
+        protected override RecaptchaV3Request BuildRequest(SolverArguments arguments)
         {
             return new RecaptchaV3Request
             {
-                WebsiteUrl = additionalArguments.Url,
-                WebsiteKey = additionalArguments.SiteKey,
-                MinScore = additionalArguments.MinScore!.Value,
-                PageAction = additionalArguments.PageAction,
-                IsEnterprise = additionalArguments.IsEnterprise,
-                ApiDomain = additionalArguments.ApiDomain
+                WebsiteUrl = arguments.Url,
+                WebsiteKey = arguments.SiteKey,
+                MinScore = arguments.MinScore!.Value,
+                PageAction = arguments.PageAction,
+                IsEnterprise = arguments.IsEnterprise,
+                ApiDomain = arguments.ApiDomain
             };
         }
 
-        protected override async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(
-            SolverAdditionalArguments solverAdditionalArguments)
+        protected override async Task<SolverArguments> FillMissingAdditionalArguments(
+            SolverArguments solverArguments)
         {
-            return await base.FillMissingAdditionalArguments(solverAdditionalArguments) with
+            return await base.FillMissingAdditionalArguments(solverArguments) with
             {
-                MinScore = solverAdditionalArguments.MinScore ?? AnticaptchaDefaultValues.MinScore,
-                IsEnterprise = solverAdditionalArguments.IsEnterprise ?? false
+                MinScore = solverArguments.MinScore ?? AnticaptchaDefaultValues.MinScore,
+                IsEnterprise = solverArguments.IsEnterprise ?? false
             };
         }
 
-        public RecaptchaV3Solver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        public RecaptchaV3Solver(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
         {
         }
     }

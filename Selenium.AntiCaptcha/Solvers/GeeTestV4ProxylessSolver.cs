@@ -9,18 +9,18 @@ namespace Selenium.AntiCaptcha.Solvers
 {
     internal class GeeTestV4ProxylessSolver : GeeTestV4SolverBase<GeeTestV4ProxylessRequest>
     {
-        protected override GeeTestV4ProxylessRequest BuildRequest(SolverAdditionalArguments additionalArguments)
+        protected override GeeTestV4ProxylessRequest BuildRequest(SolverArguments arguments)
         {
             return  new GeeTestV4ProxylessRequest
             {
-                WebsiteUrl = additionalArguments.Url,
-                Challenge = additionalArguments.Challenge,
-                Gt = additionalArguments.Gt,
-                InitParameters = additionalArguments.InitParameters
+                WebsiteUrl = arguments.Url,
+                Challenge = arguments.Challenge,
+                Gt = arguments.Gt,
+                InitParameters = arguments.InitParameters
             };
         }
 
-        public GeeTestV4ProxylessSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        public GeeTestV4ProxylessSolver(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
         {
         }
     }

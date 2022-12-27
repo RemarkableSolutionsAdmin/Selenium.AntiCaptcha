@@ -17,27 +17,26 @@ namespace Selenium.AntiCaptcha.Solvers
             return string.Empty;
         }
 
-        protected override ImageToTextRequest BuildRequest(SolverAdditionalArguments additionalArguments)
+        protected override ImageToTextRequest BuildRequest(SolverArguments arguments)
         {
-            if (!string.IsNullOrEmpty(additionalArguments.ImageFilePath))
+            if (!string.IsNullOrEmpty(arguments.ImageFilePath))
             {
                 return new ImageToTextRequest
                 {
-                    Phrase = additionalArguments.Phrase,
-                    Case = additionalArguments.Case,
-                    Numeric = additionalArguments.Numeric,
-                    Math = additionalArguments.Math,
-                    MinLength = additionalArguments.MinLength,
-                    MaxLength = additionalArguments.MaxLength,
-                    Comment = additionalArguments.Comment,
-                    FilePath = additionalArguments.ImageFilePath
+                    Phrase = arguments.Phrase,
+                    Case = arguments.Case,
+                    Numeric = arguments.Numeric,
+                    Math = arguments.Math,
+                    MinLength = arguments.MinLength,
+                    MaxLength = arguments.MaxLength,
+                    Comment = arguments.Comment,
+                    FilePath = arguments.ImageFilePath
                 };
             }
 
             var bodyBase64 = string.Empty;
-            if (additionalArguments.ImageElement == null)
+            if (arguments.ImageElement == null)
             {
-                
                 var possibleImageSource = PageSourceSearcher.FindSingleImageSourceForImageToText(Driver);
 
                 if (string.IsNullOrEmpty(possibleImageSource))
@@ -56,14 +55,14 @@ namespace Selenium.AntiCaptcha.Solvers
             
             return new ImageToTextRequest
             {
-                BodyBase64 = additionalArguments.ImageElement?.DownloadSourceAsBase64String() ?? bodyBase64,           
-                Phrase = additionalArguments.Phrase,
-                Case = additionalArguments.Case,
-                Numeric = additionalArguments.Numeric,
-                Math = additionalArguments.Math,
-                MinLength = additionalArguments.MinLength,
-                MaxLength = additionalArguments.MaxLength,
-                Comment = additionalArguments.Comment,
+                BodyBase64 = arguments.ImageElement?.DownloadSourceAsBase64String() ?? bodyBase64,           
+                Phrase = arguments.Phrase,
+                Case = arguments.Case,
+                Numeric = arguments.Numeric,
+                Math = arguments.Math,
+                MinLength = arguments.MinLength,
+                MaxLength = arguments.MaxLength,
+                Comment = arguments.Comment,
             };
         }
 
@@ -74,7 +73,7 @@ namespace Selenium.AntiCaptcha.Solvers
             responseElement?.SendKeys(solution.Text);
         }
 
-        public ImageToTextSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        public ImageToTextSolver(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
         {
         }
     }

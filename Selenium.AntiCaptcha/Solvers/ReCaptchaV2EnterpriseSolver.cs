@@ -8,18 +8,18 @@ namespace Selenium.AntiCaptcha.Solvers
 {
     internal class ReCaptchaV2EnterpriseSolver : RecaptchaSolverBase <RecaptchaV2EnterpriseRequest>
     {
-        protected override RecaptchaV2EnterpriseRequest BuildRequest(SolverAdditionalArguments additionalArguments)
+        protected override RecaptchaV2EnterpriseRequest BuildRequest(SolverArguments arguments)
         {
             return new RecaptchaV2EnterpriseRequest
             {
-                WebsiteUrl = additionalArguments.Url,
-                WebsiteKey = additionalArguments.SiteKey,
-                UserAgent = additionalArguments.UserAgent,
-                ProxyConfig = additionalArguments.ProxyConfig,
+                WebsiteUrl = arguments.Url,
+                WebsiteKey = arguments.SiteKey,
+                UserAgent = arguments.UserAgent,
+                ProxyConfig = arguments.ProxyConfig,
             };
         }
 
-        public ReCaptchaV2EnterpriseSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        public ReCaptchaV2EnterpriseSolver(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
         {
         }
     }

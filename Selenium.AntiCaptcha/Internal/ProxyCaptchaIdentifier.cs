@@ -14,15 +14,15 @@ public abstract class ProxyCaptchaIdentifier : ICaptchaIdentifier
         return IdentifiableTypes.Contains(type);
     }
 
-    public abstract Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
+    public abstract Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver, SolverArguments arguments,
         CancellationToken cancellationToken);
 
-    public async Task<CaptchaType?> IdentifyInAllFramesAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)
+    public async Task<CaptchaType?> IdentifyInAllFramesAsync(IWebDriver driver, SolverArguments arguments, CancellationToken cancellationToken)
     {        
         var currentFrame = driver.GetCurrentFrame();
         try
         {
-            return await IdentifyInCurrentFrameAsync(driver, additionalArguments, cancellationToken);
+            return await IdentifyInCurrentFrameAsync(driver, arguments, cancellationToken);
         }
         catch
         {
@@ -36,9 +36,9 @@ public abstract class ProxyCaptchaIdentifier : ICaptchaIdentifier
 
 
     public virtual async Task<CaptchaType?> SpecifyCaptcha(CaptchaType originalType, IWebDriver driver,
-        SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)
+        SolverArguments arguments, CancellationToken cancellationToken)
     {
-        if (additionalArguments.ProxyConfig == null || string.IsNullOrEmpty(additionalArguments.ProxyConfig.ProxyAddress))
+        if (arguments.ProxyConfig == null || string.IsNullOrEmpty(arguments.ProxyConfig.ProxyAddress))
         {
             return originalType;
         }

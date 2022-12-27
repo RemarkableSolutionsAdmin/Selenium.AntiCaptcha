@@ -6,23 +6,22 @@ using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class FunCaptchaSolver : FunCaptchaSolverBase<FunCaptchaRequest, FunCaptchaSolution>
+    internal class FunCaptchaSolver : FunCaptchaSolverBase<FunCaptchaRequest>
     {
-
-        protected override FunCaptchaRequest BuildRequest(SolverAdditionalArguments additionalArguments)
+        protected override FunCaptchaRequest BuildRequest(SolverArguments arguments)
         {
             return new FunCaptchaRequest
             {
-                WebsiteUrl = additionalArguments.Url,
-                WebsitePublicKey = additionalArguments.SiteKey,
-                FunCaptchaApiJsSubdomain = additionalArguments.FunCaptchaApiJsSubdomain,
-                Data = additionalArguments.Data,
-                UserAgent = additionalArguments.UserAgent,
-                ProxyConfig = additionalArguments.ProxyConfig
+                WebsiteUrl = arguments.Url,
+                WebsitePublicKey = arguments.SiteKey,
+                FunCaptchaApiJsSubdomain = arguments.FunCaptchaApiJsSubdomain,
+                Data = arguments.Data,
+                UserAgent = arguments.UserAgent,
+                ProxyConfig = arguments.ProxyConfig
             };
         }
 
-        public FunCaptchaSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        public FunCaptchaSolver(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
         {
         }
     }

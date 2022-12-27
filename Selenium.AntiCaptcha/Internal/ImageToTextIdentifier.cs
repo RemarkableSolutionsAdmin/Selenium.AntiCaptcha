@@ -15,22 +15,22 @@ public class ImageToTextIdentifier : ProxyCaptchaIdentifier
     }
 
     public override async Task<CaptchaType?> SpecifyCaptcha(CaptchaType originalType, IWebDriver driver,
-        SolverAdditionalArguments additionalArguments, CancellationToken cancellationToken)
+        SolverArguments arguments, CancellationToken cancellationToken)
     {
         return originalType;
     }
 
-    public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver, SolverAdditionalArguments additionalArguments,
+    public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver, SolverArguments arguments,
         CancellationToken cancellationToken)
     {
-        var base64 = additionalArguments.ImageElement?.DownloadSourceAsBase64String();
+        var base64 = arguments.ImageElement?.DownloadSourceAsBase64String();
         
         if (!string.IsNullOrEmpty(base64))
         {
             return CaptchaType.ImageToText;
         }
 
-        if (!string.IsNullOrEmpty(additionalArguments.ImageFilePath))
+        if (!string.IsNullOrEmpty(arguments.ImageFilePath))
         {
             return CaptchaType.ImageToText;
         }

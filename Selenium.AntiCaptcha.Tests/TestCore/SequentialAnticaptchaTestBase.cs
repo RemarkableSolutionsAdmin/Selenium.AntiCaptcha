@@ -6,10 +6,10 @@ namespace Selenium.Anticaptcha.Tests.TestCore;
 public class SequentialAnticaptchaTestBase : AnticaptchaTestBase
 {
     
-    protected readonly SolverAdditionalArguments _solverProxyAdditionalArguments;
+    protected readonly SolverArguments SolverProxyArguments;
     public SequentialAnticaptchaTestBase(WebDriverFixture fixture) : base(fixture)
     {
-        _solverProxyAdditionalArguments = new SolverAdditionalArguments
+        SolverProxyArguments = new SolverArguments
         {
             ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
         };

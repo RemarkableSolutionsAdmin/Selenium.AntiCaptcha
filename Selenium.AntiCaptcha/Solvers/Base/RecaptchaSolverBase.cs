@@ -3,10 +3,11 @@ using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests.Abstractions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Internal.Extensions;
+using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
-internal abstract class RecaptchaSolverBase<TRequest> : Solver<TRequest, RecaptchaSolution>
+internal abstract class RecaptchaSolverBase<TRequest> : GeeSolverBase <TRequest, RecaptchaSolution>
     where TRequest : CaptchaRequest<RecaptchaSolution>
 {
     protected override string GetSiteKey()
@@ -51,7 +52,7 @@ internal abstract class RecaptchaSolverBase<TRequest> : Solver<TRequest, Recaptc
         }
     }
 
-    protected RecaptchaSolverBase(string clientKey, IWebDriver driver) : base(clientKey, driver)
+    protected RecaptchaSolverBase(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
     {
     }
 }

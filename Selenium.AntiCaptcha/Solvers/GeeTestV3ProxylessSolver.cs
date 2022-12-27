@@ -10,19 +10,19 @@ namespace Selenium.AntiCaptcha.Solvers
 {
     internal class GeeTestV3ProxylessSolver : GeeTestV3SolverBase<GeeTestV3ProxylessRequest>
     {
-        protected override GeeTestV3ProxylessRequest BuildRequest(SolverAdditionalArguments additionalArguments)
+        protected override GeeTestV3ProxylessRequest BuildRequest(SolverArguments arguments)
         {
             return  new GeeTestV3ProxylessRequest
             {
-                WebsiteUrl = additionalArguments.Url,
-                Challenge = additionalArguments.Challenge,
-                GeetestApiServerSubdomain = additionalArguments.GeetestApiServerSubdomain,
-                GeetestGetLib = additionalArguments.GeetestGetLib,
-                Gt = additionalArguments.Gt,
+                WebsiteUrl = arguments.Url,
+                Challenge = arguments.Challenge,
+                GeetestApiServerSubdomain = arguments.GeetestApiServerSubdomain,
+                GeetestGetLib = arguments.GeetestGetLib,
+                Gt = arguments.Gt,
             };
         }
 
-        public GeeTestV3ProxylessSolver(string clientKey, IWebDriver driver) : base(clientKey, driver)
+        public GeeTestV3ProxylessSolver(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
         {
         }
     }

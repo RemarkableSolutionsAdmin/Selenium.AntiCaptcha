@@ -10,18 +10,17 @@ using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
-public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
+public abstract class Solver<TRequest, TSolution> : ISolver <TRequest, TSolution>
     where TRequest: CaptchaRequest<TSolution>
     where TSolution: BaseSolution, new()
 {
-    private string _clientKey;
     protected IWebDriver Driver;
-    protected const int WaitingStepTime = 500;
+    private AnticaptchaClient _anticaptchaClient;
+    public SolverConfig SolverConfig { get; set; } 
 
-    public Solver(string clientKey, IWebDriver driver)
+    public Solver(string clientKey, IWebDriver driver, SolverConfig solverConfig)
     {
-        _clientKey = clientKey;
-        Driver = driver;
+        Configure(driver, clientKey, solverConfig);
     }
 
     protected virtual string GetSiteKey()
@@ -39,69 +38,81 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
         return result != null ? result.Groups[1].Value : string.Empty;
     }
 
-    protected async Task<string> AcquireSiteKey(int maxPageLoadWaitingTimeInMs)
+    protected async Task<string> AcquireSiteKey()
     {
         var timePassedInMs = 0;
         while (true)
         {
             var result = GetSiteKey();
 
-            if (!string.IsNullOrEmpty(result) || timePassedInMs >= maxPageLoadWaitingTimeInMs) 
+            if (!string.IsNullOrEmpty(result) || timePassedInMs >= SolverConfig.MaxPageLoadWaitingTimeInMilliseconds) 
                 return result;
 
-            await Task.Delay(WaitingStepTime);
-            timePassedInMs += WaitingStepTime;
+            await Task.Delay(SolverConfig.WaitingStepTimeInMilliseconds);
+            timePassedInMs += SolverConfig.WaitingStepTimeInMilliseconds;
         }
     }
 
 
-    protected abstract TRequest BuildRequest(SolverAdditionalArguments additionalArguments);
+    protected abstract TRequest BuildRequest(SolverArguments arguments);
 
     protected virtual void FillResponseElement(TSolution solution, IWebElement? responseElement)
     {
         
     }
 
-    protected virtual async Task<SolverAdditionalArguments> FillMissingAdditionalArguments(SolverAdditionalArguments solverAdditionalArguments)
+    protected virtual async Task<SolverArguments> FillMissingAdditionalArguments(SolverArguments solverArguments)
     {
-        return solverAdditionalArguments with
+        return solverArguments with
         {
-            Url = solverAdditionalArguments.Url ?? Driver.Url,
-            SiteKey = string.IsNullOrEmpty(solverAdditionalArguments.SiteKey) ?
-                await AcquireSiteKey(solverAdditionalArguments.MaxPageLoadWaitingTimeInMilliseconds) : null,
-            UserAgent = solverAdditionalArguments.UserAgent ?? Constants.AnticaptchaDefaultValues.UserAgent
+            Url = solverArguments.Url ?? Driver.Url,
+            SiteKey = string.IsNullOrEmpty(solverArguments.SiteKey) ? await AcquireSiteKey() : null,
+            UserAgent = solverArguments.UserAgent ?? Constants.AnticaptchaDefaultValues.UserAgent
         };
     }
     
-    public async Task<TaskResultResponse<TSolution>> SolveAsync(SolverAdditionalArguments additionalArguments,
-        CancellationToken cancellationToken)
+    public async Task<TaskResultResponse<TSolution>> SolveAsync(SolverArguments arguments,
+        ActionArguments actionArguments,
+        CancellationToken cancellationToken = default)
     {
-        var anticaptchaClient = new AnticaptchaClient(_clientKey);
-        additionalArguments = await FillMissingAdditionalArguments(additionalArguments);
-        var request = BuildRequest(additionalArguments);
-        var result = await anticaptchaClient.SolveCaptchaAsync(request, maxSeconds: additionalArguments.MaxTimeOutTimeInSeconds, cancellationToken: cancellationToken);
+        arguments = await FillMissingAdditionalArguments(arguments);
+        var request = BuildRequest(arguments);
+        return await SolveCaptchaAsync(request, actionArguments, cancellationToken);
+    }
+
+    private async Task<TaskResultResponse<TSolution>> SolveCaptchaAsync(TRequest request, ActionArguments actionArguments, CancellationToken cancellationToken)
+    {
+        var result = await _anticaptchaClient
+            .SolveCaptchaAsync(request, maxSeconds: SolverConfig.MaxTimeOutTimeInMilliseconds, cancellationToken: cancellationToken);
 
         if (result.Status == TaskStatusType.Ready && result.Solution.IsValid())
         {
-            var cookies = (result.Solution as AntiGateSolution)?.Cookies; 
+            var cookies = (result.Solution as AntiGateSolution)?.Cookies;
             if (cookies != null)
-                AddCookies(Driver, cookies, additionalArguments.ShouldResetCookiesBeforeAdd);
+                AddCookies(Driver, cookies, actionArguments.ShouldResetCookiesBeforeAdd);
 
-            if (additionalArguments.ResponseElement != null)
+            if (actionArguments.ResponseElement != null)
             {
-                FillResponseElement(result.Solution, additionalArguments.ResponseElement);
+                FillResponseElement(result.Solution, actionArguments.ResponseElement);
             }
-            
-            additionalArguments.SubmitElement?.Click();
+
+            actionArguments.SubmitElement?.Click();
         }
 
         return result;
     }
 
-    public void Reconfigure(IWebDriver driver, string clientKey)
+
+    public async Task<TaskResultResponse<TSolution>> SolveAsync(TRequest request, ActionArguments actionArguments, CancellationToken cancellationToken)
+    {
+        return await SolveCaptchaAsync(request, actionArguments, cancellationToken);
+    }
+
+    public void Configure(IWebDriver driver, string clientKey, SolverConfig solverConfig)
     {
         Driver = driver;
-        _clientKey = clientKey;
+        _anticaptchaClient = new AnticaptchaClient(clientKey);
+        SolverConfig = solverConfig;
     }
 
     private static void AddCookies(IWebDriver driver, JObject? cookies, bool shouldClearCookies)
