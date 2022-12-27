@@ -1,4 +1,5 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
+using Selenium.AntiCaptcha;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal;
 using Selenium.AntiCaptcha.Internal.Extensions;
@@ -276,7 +277,7 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
     {
         foreach (var enumValue in Enum.GetValues(typeof(CaptchaType)))
         {
-            var canIdentify = AllCaptchaTypesIdentifier.CanIdentifyCaptcha((CaptchaType)enumValue);
+            var canIdentify = CaptchaIdentifier.CanIdentifyCaptcha((CaptchaType)enumValue);
             if (canIdentify)
                 continue;
             Assert.Null(enumValue);
@@ -284,38 +285,38 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
         }
     }
     
-    protected async Task TestNonGenericIdentifier(CaptchaUri captchaUri, SolverArguments? additionalArguments = null)
+    protected async Task TestNonGenericIdentifier(CaptchaUri captchaUri, SolverArguments? solverArguments = null)
     {
-        var solverAdditionalArguments = additionalArguments ?? new SolverArguments();
+        solverArguments ??= new SolverArguments();
         await SetDriverUrl(captchaUri.Uri);
-        var identifiedTypes = await AllCaptchaTypesIdentifier.IdentifyAsync(Driver, solverAdditionalArguments, CancellationToken.None);
+        var identifiedTypes = await CaptchaIdentifier.IdentifyAsync(Driver, solverArguments, CancellationToken.None);
         var testFailed = identifiedTypes.Count != 1 || identifiedTypes[0] != captchaUri.ExpectedType;
         
-        Assert.False(testFailed, GetTestFailReasonText(captchaUri, solverAdditionalArguments, string.Join(", ", identifiedTypes.Select(x => x.ToString()))));
+        Assert.False(testFailed, GetTestFailReasonText(captchaUri, solverArguments, string.Join(", ", identifiedTypes.Select(x => x.ToString()))));
     }
 
-    private static string GetTestFailReasonText(CaptchaUri captchaUri, SolverArguments? additionalArguments, string foundTypesNames)
+    private static string GetTestFailReasonText(CaptchaUri captchaUri, SolverArguments? solverArguments, string foundTypesNames)
     {
         return $"Test non generic identifier failed for url: {captchaUri.Uri}. \n" +
                $"Expected type {captchaUri.ExpectedType}, but found {foundTypesNames}\n" +
-               $"ProxyConfig was {additionalArguments?.ProxyConfig}";
+               $"ProxyConfig was {solverArguments?.ProxyConfig}";
     }
     
-    protected async Task TestIdentifier<TSolution>(string websiteUri, CaptchaType expectedType, SolverArguments? additionalArguments = null)
+    protected async Task TestIdentifier<TSolution>(string websiteUri, CaptchaType expectedType, SolverArguments? solverArguments = null)
         where TSolution : BaseSolution, new()
     {
         var captchaUri = new CaptchaUri(websiteUri, expectedType);
-        await TestIdentifier<TSolution>(captchaUri, additionalArguments);
+        await TestIdentifier<TSolution>(captchaUri, solverArguments);
     }
 
-    protected async Task TestIdentifier<TSolution>(CaptchaUri captchaUri, SolverArguments? additionalArguments = null)
+    protected async Task TestIdentifier<TSolution>(CaptchaUri captchaUri, SolverArguments? solverArguments = null)
         where TSolution : BaseSolution, new()
     {
-        var solverAdditionalArguments = additionalArguments ?? new SolverArguments();
+        solverArguments ??= new SolverArguments();
         await SetDriverUrl(captchaUri.Uri);
-        var type = await AllCaptchaTypesIdentifier.IdentifyCaptchaAsync<TSolution>(Driver, solverAdditionalArguments, CancellationToken.None); 
+        var type = await CaptchaIdentifier.IdentifyCaptchaAsync<TSolution>(Driver, solverArguments, CancellationToken.None); 
         var testFailed = type == null || type != captchaUri.ExpectedType;
-        Assert.False(testFailed, GetTestFailReasonText(captchaUri, solverAdditionalArguments, type.ToString()));
+        Assert.False(testFailed, GetTestFailReasonText(captchaUri, solverArguments, type.ToString()));
     }
     public CaptchaIdentifierTests(WebDriverFixture fixture) : base(fixture) {}
 }

@@ -22,10 +22,10 @@ namespace Selenium.AntiCaptcha.Solvers
             };
         }
 
-        protected override async Task<SolverArguments> FillMissingAdditionalArguments(
+        protected override async Task<SolverArguments> FillMissingSolverArguments(
             SolverArguments solverArguments)
         {
-            return await base.FillMissingAdditionalArguments(solverArguments) with
+            return await base.FillMissingSolverArguments(solverArguments) with
             {
                 Variables = solverArguments.Variables,
                 DomainsOfInterest = solverArguments.DomainsOfInterest

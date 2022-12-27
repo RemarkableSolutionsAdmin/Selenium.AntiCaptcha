@@ -15,10 +15,10 @@ public abstract class GeeSolverBase<TRequest, TSolution> : Solver <TRequest, TSo
     {
     }
     
-    protected override async Task<SolverArguments> FillMissingAdditionalArguments(
+    protected override async Task<SolverArguments> FillMissingSolverArguments(
         SolverArguments solverArguments)
     {
-        return await base.FillMissingAdditionalArguments(solverArguments)
+        return await base.FillMissingSolverArguments(solverArguments)
             with
             {
                 Gt = solverArguments.Gt ?? await AcquireGt(),

@@ -61,7 +61,7 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TRequest, TSolution
         
     }
 
-    protected virtual async Task<SolverArguments> FillMissingAdditionalArguments(SolverArguments solverArguments)
+    protected virtual async Task<SolverArguments> FillMissingSolverArguments(SolverArguments solverArguments)
     {
         return solverArguments with
         {
@@ -75,7 +75,7 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TRequest, TSolution
         ActionArguments actionArguments,
         CancellationToken cancellationToken = default)
     {
-        arguments = await FillMissingAdditionalArguments(arguments);
+        arguments = await FillMissingSolverArguments(arguments);
         var request = BuildRequest(arguments);
         return await SolveCaptchaAsync(request, actionArguments, cancellationToken);
     }

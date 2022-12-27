@@ -1,12 +1,13 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
+using Selenium.AntiCaptcha.Internal;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
 
-namespace Selenium.AntiCaptcha.Internal;
+namespace Selenium.AntiCaptcha;
 
-internal static class AllCaptchaTypesIdentifier
+public static class CaptchaIdentifier
 {
     private static readonly List<ICaptchaIdentifier> CaptchaIdentifiers = new()
     {
@@ -19,7 +20,7 @@ internal static class AllCaptchaTypesIdentifier
         new TurnstileCaptchaIdentifier()
     };
 
-    internal static async Task<List<CaptchaType>> IdentifyAsync(IWebDriver driver, SolverArguments arguments, CancellationToken cancellationToken)
+    public static async Task<List<CaptchaType>> IdentifyAsync(IWebDriver driver, SolverArguments arguments, CancellationToken cancellationToken)
     {
         var identifiedTypes = new List<CaptchaType>();
         foreach (var captchaIdentifier in CaptchaIdentifiers)
@@ -36,7 +37,7 @@ internal static class AllCaptchaTypesIdentifier
     }
     
 
-    internal static bool CanIdentifyCaptcha(CaptchaType captchaType)
+    public static bool CanIdentifyCaptcha(CaptchaType captchaType)
     {
         return CaptchaIdentifiers.Any(x => x.CanIdentify(captchaType));
     }
@@ -54,10 +55,7 @@ internal static class AllCaptchaTypesIdentifier
         return captchaType;
     }
 
-    internal static async Task<CaptchaType?> IdentifyCaptchaAsync<TSolution>(
-        IWebDriver driver, 
-        SolverArguments arguments,
-        CancellationToken cancellationToken)
+    public static async Task<CaptchaType?> IdentifyCaptchaAsync<TSolution>(IWebDriver driver, SolverArguments arguments, CancellationToken cancellationToken)
         where TSolution : BaseSolution, new()
     {
         var result = new TSolution().GetCaptchaType();

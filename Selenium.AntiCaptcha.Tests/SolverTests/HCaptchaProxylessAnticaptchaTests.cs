@@ -14,7 +14,7 @@ public class HCaptchaProxylessAnticaptchaTests : SequentialAnticaptchaTestBase
     public async Task SolveGeneric_HCaptchaWithCaptchaTypeSpecified()
     {
         await SetDriverUrl(TestUris.HCaptcha.EntiwicklerEbay);
-        var result = await Driver.SolveCaptchaAsync<HCaptchaSolution>(clientKey: ClientKey, additionalArguments: new SolverArguments
+        var result = await Driver.SolveCaptchaAsync<HCaptchaSolution>(clientKey: ClientKey, solverArguments: new SolverArguments
         {
             CaptchaType = CaptchaType.HCaptchaProxyless,
         });
@@ -33,7 +33,7 @@ public class HCaptchaProxylessAnticaptchaTests : SequentialAnticaptchaTestBase
     public async Task SolveNonGeneric_HCaptchaWithCaptchaTypeSpecified()
     {
         await SetDriverUrl(TestUris.HCaptcha.EntiwicklerEbay);
-        var result = await Driver.SolveCaptchaAsync(clientKey: ClientKey, additionalArguments: new SolverArguments
+        var result = await Driver.SolveCaptchaAsync(clientKey: ClientKey, solverArguments: new SolverArguments
         {
             CaptchaType = CaptchaType.HCaptchaProxyless
         });

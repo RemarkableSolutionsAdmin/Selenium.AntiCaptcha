@@ -41,7 +41,7 @@ namespace Selenium.AntiCaptcha.Solvers
 
                 if (string.IsNullOrEmpty(possibleImageSource))
                 {
-                    throw new UnidentifiableCaptchaException("No image found in the arguments. Please provide one.");    
+                    throw new InsufficientSolverArgumentsException("No image found in the arguments. Please provide one.");    
                 }
 
                 var imageWebElement =  Driver.FindByXPathAllFrames($"//img[@src='{possibleImageSource}']");
@@ -49,7 +49,7 @@ namespace Selenium.AntiCaptcha.Solvers
                 
                 if (string.IsNullOrEmpty(bodyBase64))
                 {
-                    throw new UnidentifiableCaptchaException("No image found in the arguments. Please provide one.");    
+                    throw new InsufficientSolverArgumentsException("No image found in the arguments. Please provide one.");    
                 }
             }
             

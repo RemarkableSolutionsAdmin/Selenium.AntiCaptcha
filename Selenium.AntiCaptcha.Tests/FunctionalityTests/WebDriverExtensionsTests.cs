@@ -116,7 +116,6 @@ public class WebDriverExtensionsTests : AnticaptchaTestBase
         [Fact]
         public async Task Test()
         {
-            Driver.SolveCaptchaAsync(ClientKey, new FunCaptchaRequest());
         }
     }
 
