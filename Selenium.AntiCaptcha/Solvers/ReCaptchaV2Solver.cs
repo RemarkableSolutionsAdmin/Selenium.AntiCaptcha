@@ -1,21 +1,16 @@
 ﻿using AntiCaptchaApi.Net.Requests;
+using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class ReCaptchaV2Solver : RecaptchaSolverBase <RecaptchaV2Request>
+    internal class ReCaptchaV2Solver : RecaptchaSolverBase <IRecaptchaV2Request>
     {
-        protected override RecaptchaV2Request BuildRequest(SolverArguments arguments)
+        protected override IRecaptchaV2Request BuildRequest(SolverArguments arguments)
         {
-            return new RecaptchaV2Request
-            {
-                WebsiteUrl = arguments.WebsiteUrl,
-                WebsiteKey = arguments.WebsiteKey,
-                UserAgent = arguments.UserAgent,
-                ProxyConfig = arguments.ProxyConfig,
-            };
+            return new RecaptchaV2Request(arguments);
         }
 
         public ReCaptchaV2Solver(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)

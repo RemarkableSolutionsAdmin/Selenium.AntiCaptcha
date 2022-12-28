@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests.Abstractions;
+using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
@@ -8,7 +9,7 @@ using Selenium.AntiCaptcha.Models;
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
 internal abstract class RecaptchaSolverBase<TRequest> : Solver <TRequest, RecaptchaSolution>
-    where TRequest : CaptchaRequest<RecaptchaSolution>
+    where TRequest : ICaptchaRequest<RecaptchaSolution>
 {
     protected override string GetSiteKey()
     {

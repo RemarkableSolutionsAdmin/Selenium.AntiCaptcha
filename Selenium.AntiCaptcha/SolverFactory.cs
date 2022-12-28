@@ -1,5 +1,4 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
-using AntiCaptchaApi.Net.Requests.Abstractions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
@@ -11,7 +10,7 @@ namespace Selenium.AntiCaptcha;
 
 internal static class SolverFactory
 {
-    public static ISolver<CaptchaRequest<TSolution>, TSolution> GetSolver<TSolution>(IWebDriver webDriver, string clientKey, CaptchaType captchaType, SolverConfig solverConfig)
+    public static ISolver<TSolution> GetSolver<TSolution>(IWebDriver webDriver, string clientKey, CaptchaType captchaType, SolverConfig solverConfig)
         where TSolution : BaseSolution, new()
     {
         var solutionType = captchaType.GetSolutionType();
@@ -20,10 +19,7 @@ internal static class SolverFactory
         {
             throw new ArgumentException("Wrong solution type chosen to captcha type.");
         }
-
-        var solv = GetSolver(webDriver, clientKey, captchaType, solverConfig);
-        
-        return GetSolver(webDriver, clientKey, captchaType, solverConfig) as ISolver<CaptchaRequest<TSolution>, TSolution>;
+        return GetSolver(webDriver, clientKey, captchaType, solverConfig) as ISolver<TSolution>;
     }
     internal static ISolver GetSolver(IWebDriver webDriver, string clientKey, CaptchaType captchaType, SolverConfig solverConfig)
     {

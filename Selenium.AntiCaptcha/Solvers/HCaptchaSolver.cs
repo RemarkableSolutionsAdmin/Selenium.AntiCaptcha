@@ -1,23 +1,16 @@
 ﻿using AntiCaptchaApi.Net.Requests;
+using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class HCaptchaSolver : HCaptchaSolverBase<HCaptchaRequest>
+    internal class HCaptchaSolver : HCaptchaSolverBase<IHCaptchaRequest>
     {
-        protected override HCaptchaRequest BuildRequest(SolverArguments arguments)
+        protected override IHCaptchaRequest BuildRequest(SolverArguments arguments)
         {
-            return new HCaptchaRequest
-            {
-                WebsiteUrl = arguments.WebsiteUrl,
-                WebsiteKey = arguments.WebsiteKey,
-                UserAgent = arguments.UserAgent,
-                ProxyConfig = arguments.ProxyConfig,
-                IsInvisible = arguments.IsInvisible,
-                EnterprisePayload = arguments.EnterprisePayload
-            };
+            return new HCaptchaRequest(arguments);
         }
 
         public HCaptchaSolver(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)

@@ -1,5 +1,6 @@
 ﻿using AntiCaptchaApi.Net.Enums;
 using AntiCaptchaApi.Net.Models;
+using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 //using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
@@ -42,16 +43,16 @@ public record SolverArguments(
     string? ImageFilePath = null,
     bool? IsInvisible = null,
     Dictionary<string, string>? EnterprisePayload = null) 
-      // :
-          // IFunCaptchaRequest,
-          // IGeeTestV3Request,
-          // IGeeTestV4Request,
-          // IHCaptchaRequest,
-          // IImageToTextRequest,
-          // IRecaptchaV2EnterpriseRequest,
-          // IRecaptchaV2Request,
-          // IRecaptchaV3EnterpriseRequest,
-          // ITurnstileCaptchaRequest
+      :
+          IFunCaptchaRequest,
+          IGeeTestV3Request,
+          IGeeTestV4Request,
+          IHCaptchaRequest,
+          IImageToTextRequest,
+          IRecaptchaV2EnterpriseRequest,
+          IRecaptchaV2Request,
+          IRecaptchaV3EnterpriseRequest,
+          ITurnstileCaptchaRequest
 {
     public CaptchaType? CaptchaType { get; set; } = CaptchaType;
     public string? WebsiteUrl { get; set; } = WebsiteUrl;

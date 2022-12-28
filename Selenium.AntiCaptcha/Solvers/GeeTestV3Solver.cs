@@ -1,24 +1,16 @@
 ﻿using AntiCaptchaApi.Net.Requests;
+using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class GeeTestV3Solver : GeeTestV3SolverBase<GeeTestV3Request>
+    internal class GeeTestV3Solver : GeeTestV3SolverBase<IGeeTestV3Request>
     {
-        protected override GeeTestV3Request BuildRequest(SolverArguments arguments)
+        protected override IGeeTestV3Request BuildRequest(SolverArguments arguments)
         {
-            return  new GeeTestV3Request
-            {
-                WebsiteUrl = arguments.WebsiteUrl,
-                Challenge = arguments.Challenge,
-                GeetestApiServerSubdomain = arguments.GeetestApiServerSubdomain,
-                GeetestGetLib = arguments.GeetestGetLib,
-                Gt = arguments.Gt,
-                ProxyConfig = arguments.ProxyConfig,
-                UserAgent = arguments.UserAgent
-            };
+            return new GeeTestV3Request(arguments);
         }
 
         public GeeTestV3Solver(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)

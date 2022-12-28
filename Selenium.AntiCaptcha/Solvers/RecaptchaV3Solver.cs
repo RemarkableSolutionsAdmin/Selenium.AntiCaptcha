@@ -1,23 +1,16 @@
 ﻿using AntiCaptchaApi.Net.Requests;
+using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class RecaptchaV3Solver : RecaptchaSolverBase<RecaptchaV3Request>
+    internal class RecaptchaV3Solver : RecaptchaSolverBase<IRecaptchaV3Request>
     {
-        protected override RecaptchaV3Request BuildRequest(SolverArguments arguments)
+        protected override IRecaptchaV3Request BuildRequest(SolverArguments arguments)
         {
-            return new RecaptchaV3Request
-            {
-                WebsiteUrl = arguments.WebsiteUrl,
-                WebsiteKey = arguments.WebsiteKey,
-                MinScore = arguments.MinScore,
-                PageAction = arguments.PageAction,
-                IsEnterprise = arguments.IsEnterprise,
-                ApiDomain = arguments.ApiDomain
-            };
+            return new RecaptchaV3Request(arguments);
         }
 
         protected override async Task<SolverArguments> FillMissingSolverArguments(

@@ -20,17 +20,7 @@ namespace Selenium.AntiCaptcha.Solvers
         {
             if (!string.IsNullOrEmpty(arguments.ImageFilePath))
             {
-                return new ImageToTextRequest
-                {
-                    Phrase = arguments.Phrase,
-                    Case = arguments.Case,
-                    Numeric = arguments.Numeric,
-                    Math = arguments.Math,
-                    MinLength = arguments.MinLength,
-                    MaxLength = arguments.MaxLength,
-                    Comment = arguments.Comment,
-                    FilePath = arguments.ImageFilePath
-                };
+                return new ImageToTextRequest(arguments);
             }
 
             var bodyBase64 = string.Empty;

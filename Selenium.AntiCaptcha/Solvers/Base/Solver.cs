@@ -2,6 +2,7 @@
 using AntiCaptchaApi.Net.Enums;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests.Abstractions;
+using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using AntiCaptchaApi.Net.Responses;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
@@ -10,8 +11,8 @@ using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
-public abstract class Solver<TRequest, TSolution> : ISolver <TRequest, TSolution>
-    where TRequest: CaptchaRequest<TSolution>
+public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
+    where TRequest: ICaptchaRequest<TSolution>
     where TSolution: BaseSolution, new()
 {
     protected IWebDriver Driver;

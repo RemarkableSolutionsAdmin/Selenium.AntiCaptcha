@@ -1,12 +1,13 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests.Abstractions;
+using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
 public abstract class HCaptchaSolverBase<TRequest> : Solver <TRequest, HCaptchaSolution>
-    where TRequest : CaptchaRequest<HCaptchaSolution>
+    where TRequest : ICaptchaRequest<HCaptchaSolution>
 {
     protected HCaptchaSolverBase(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
     {

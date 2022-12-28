@@ -7,13 +7,10 @@ using Selenium.AntiCaptcha.Models;
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
 
-public interface ISolver<TRequest, TSolution> : ISolver
-    where TRequest : CaptchaRequest<TSolution>
+public interface ISolver<TSolution> : ISolver
     where TSolution : BaseSolution, new()
 {
     public Task<TaskResultResponse<TSolution>> SolveAsync(SolverArguments arguments, ActionArguments actionArguments,
-        CancellationToken cancellationToken);
-    public Task<TaskResultResponse<TSolution>> SolveAsync(TRequest request, ActionArguments actionArguments,
         CancellationToken cancellationToken);
     public void Configure(IWebDriver driver, string clientKey, SolverConfig solverConfig);
 }

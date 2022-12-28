@@ -1,12 +1,14 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests.Abstractions;
+using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Internal.Helpers;
 using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
-public abstract class FunCaptchaSolverBase<TRequest> : Solver<TRequest, FunCaptchaSolution> where TRequest : CaptchaRequest<FunCaptchaSolution>
+public abstract class FunCaptchaSolverBase<TRequest> : Solver<TRequest, FunCaptchaSolution> 
+    where TRequest : ICaptchaRequest<FunCaptchaSolution>
 {
     protected override string GetSiteKey()
     {
