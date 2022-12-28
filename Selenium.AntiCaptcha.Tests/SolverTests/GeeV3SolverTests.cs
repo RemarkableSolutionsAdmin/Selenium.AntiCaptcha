@@ -1,18 +1,16 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
 using Selenium.AntiCaptcha;
-using Selenium.Anticaptcha.Tests.TestCore;
+using Selenium.AntiCaptcha.Enums;
+using Selenium.Anticaptcha.Tests.Core;
+using Selenium.Anticaptcha.Tests.Core.Config;
+using Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests;
 
-public class GeeV3SolverTests : SequentialAnticaptchaTestBase
+public class GeeV3SolverTests : SolverTestBase <GeeTestV3Solution>
 {
-    [Fact]
-    public async Task GeeV3Test()
-    {
-        await SetDriverUrl(TestUris.GeeTest.V3.GeeTestV3Demo);
-        var result = await Driver.SolveCaptchaAsync<GeeTestV3Solution>(ClientKey);
-        AssertSolveCaptchaResult(result);
-    }
+    protected override string TestedUri { get; set; } = TestUris.GeeTest.V3.GeeTestV3Demo;
+    protected override CaptchaType CaptchaType { get; set; } = CaptchaType.GeeTestV3Proxyless;
 
 
     public GeeV3SolverTests(WebDriverFixture fixture) : base(fixture)

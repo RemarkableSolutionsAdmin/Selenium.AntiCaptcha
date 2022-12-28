@@ -2,98 +2,18 @@
 using AntiCaptchaApi.Net.Models.Solutions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha;
-using Selenium.Anticaptcha.Tests.TestCore;
+using Selenium.AntiCaptcha.Enums;
+using Selenium.Anticaptcha.Tests.Core;
+using Selenium.Anticaptcha.Tests.Core.Config;
+using Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests;
 
 
 [Category(TestCategories.Proxyless)]
-public class GeeV4ProxylessSolverTests : SequentialAnticaptchaTestBase
+public class GeeV4ProxylessSolverTests : GeeV4SolverTestBase
 {
-    [Fact]
-    public async Task Solve_CaptchaTypeSpecified()
-    {
-        await SetDriverUrl(TestUris.GeeTest.V4.GeeTestV4Demo);
-        var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
-        var slideButton = FindSlideButton(allButtonParents);
-        
-        Assert.NotNull(slideButton);
-        slideButton.Click();
-        Thread.Sleep(1000);
-        var result = await Driver.SolveCaptchaAsync<GeeTestV4Solution>(ClientKey);
-
-        AssertSolveCaptchaResult(result);
-    }
-        
-    [Fact]
-    public async Task Solve_WithoutCaptchaTypeSpecified()
-    {
-        await SetDriverUrl(TestUris.GeeTest.V4.GeeTestV4Demo);
-        var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
-        var slideButton = FindSlideButton(allButtonParents);
-        
-        Assert.NotNull(slideButton);
-        slideButton.Click();
-        Thread.Sleep(1000);
-        var result = await Driver.SolveCaptchaAsync<GeeTestV4Solution>(ClientKey);
-
-        AssertSolveCaptchaResult(result);
-    }
-
-    [Fact]
-    public async Task SolveNonGeneric_CaptchaTypeSpecified()
-    {
-        await SetDriverUrl(TestUris.GeeTest.V4.GeeTestV4Demo);
-        var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
-        var slideButton = FindSlideButton(allButtonParents);
-        
-        Assert.NotNull(slideButton);
-        slideButton.Click();
-        Thread.Sleep(1000);
-        var result = await Driver.SolveCaptchaAsync(ClientKey);
-
-        AssertSolveCaptchaResult(result);
-    }
-        
-    [Fact]
-    public async Task SolveNonGeneric_WithoutCaptchaTypeSpecified()
-    {
-        await SetDriverUrl(TestUris.GeeTest.V4.GeeTestV4Demo);
-        var allButtonParents = Driver.FindElements(By.XPath("//button/parent::*"));
-        var slideButton = FindSlideButton(allButtonParents);
-        
-        Assert.NotNull(slideButton);
-        slideButton.Click();
-        Thread.Sleep(1000);
-        var result = await Driver.SolveCaptchaAsync(ClientKey);
-
-        AssertSolveCaptchaResult(result);
-    }
-
-
-    private IWebElement FindSlideButton(IEnumerable<IWebElement> buttons)
-    {
-        try
-        {
-
-            foreach (var button in buttons)
-            {
-                var buttonText = button.Text;
-
-                if (buttonText.Contains("Slide"))
-                {
-                    return button;
-                }
-            }
-        }
-        catch (Exception)
-        {
-            
-        }
-
-        return null;
-    }
-
+    protected override CaptchaType CaptchaType { get; set; } = CaptchaType.GeeTestV4Proxyless;
 
     public GeeV4ProxylessSolverTests(WebDriverFixture fixture) : base(fixture)
     {

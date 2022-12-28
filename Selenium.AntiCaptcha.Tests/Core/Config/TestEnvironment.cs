@@ -1,7 +1,7 @@
 ﻿using AntiCaptchaApi.Net.Enums;
 using AntiCaptchaApi.Net.Models;
 
-namespace Selenium.Anticaptcha.Tests.TestCore;
+namespace Selenium.Anticaptcha.Tests.Core.Config;
 
 public static class TestEnvironment
 {

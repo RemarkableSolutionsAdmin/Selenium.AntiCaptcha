@@ -1,53 +1,22 @@
 using AntiCaptchaApi.Net.Models.Solutions;
 using Selenium.AntiCaptcha;
+using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Models;
-using Selenium.Anticaptcha.Tests.TestCore;
+using Selenium.Anticaptcha.Tests.Core;
+using Selenium.Anticaptcha.Tests.Core.Config;
+using Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests
 {
-    public class AntiGateSolverTests : SequentialAnticaptchaTestBase
+    public class AntiGateSolverTests : SolverTestBase  <AntiGateSolution>
     {
-        private readonly SolverArguments _solverArguments;
-        
-        [Fact]
-        public async Task Solve_CaptchaTypeSpecified()
-        {
-            await SetDriverUrl(TestUris.AntiGate.AntiCaptchaTuttorialAntiGate);
-            var result = await Driver.SolveCaptchaAsync<AntiGateSolution>(ClientKey, _solverArguments);
-            AssertSolveCaptchaResult(result);
-        }
-        
-        [Fact]
-        public async Task Solve_WithoutCaptchaTypeSpecified()
-        {
-            await SetDriverUrl(TestUris.AntiGate.AntiCaptchaTuttorialAntiGate);
-            var result = await Driver.SolveCaptchaAsync<AntiGateSolution>(ClientKey, _solverArguments);
-            AssertSolveCaptchaResult(result);
-        }
-
-        [Fact]
-        public async Task SolveNonGeneric_CaptchaTypeSpecified()
-        {
-            await SetDriverUrl(TestUris.AntiGate.AntiCaptchaTuttorialAntiGate);
-            var result = await Driver.SolveCaptchaAsync(ClientKey, _solverArguments);
-            AssertSolveCaptchaResult(result);
-        }
-        
-        [Fact]
-        public async Task SolveNonGeneric_WithoutCaptchaTypeSpecified()
-        {
-            await SetDriverUrl(TestUris.AntiGate.AntiCaptchaTuttorialAntiGate);
-            var result = await Driver.SolveCaptchaAsync(ClientKey, _solverArguments);
-            AssertSolveCaptchaResult(result);
-        }
+        protected override string TestedUri { get; set; } = TestUris.AntiGate.AntiCaptchaTuttorialAntiGate;
+        protected override CaptchaType CaptchaType { get; set; }  = CaptchaType.AntiGate;
 
         public AntiGateSolverTests(WebDriverFixture fixture) : base(fixture)
         {
-            _solverArguments = new SolverArguments
-            {
-                TemplateName = "CloudFlare cookies for a proxy",
-                ProxyConfig = TestEnvironment.GetCurrentTestProxyConfig()
-            };
+            SolverArgumentsWithoutCaptchaType.TemplateName = "CloudFlare cookies for a proxy";
+            SolverArgumentsWithCaptchaType.TemplateName = "CloudFlare cookies for a proxy";
         }
     }
 }

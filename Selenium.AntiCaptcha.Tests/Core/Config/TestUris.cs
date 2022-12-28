@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Selenium.AntiCaptcha.Enums;
+using Selenium.Anticaptcha.Tests.Core.Models;
 
-namespace Selenium.Anticaptcha.Tests.TestCore;
+namespace Selenium.Anticaptcha.Tests.Core.Config;
 
 
 [SuppressMessage("ReSharper", "IdentifierTypo")]

@@ -6,7 +6,9 @@ using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Internal.Models;
 using Selenium.AntiCaptcha.Models;
-using Selenium.Anticaptcha.Tests.TestCore;
+using Selenium.Anticaptcha.Tests.Core;
+using Selenium.Anticaptcha.Tests.Core.Config;
+using Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 
 namespace Selenium.Anticaptcha.Tests.FunctionalityTests;
 

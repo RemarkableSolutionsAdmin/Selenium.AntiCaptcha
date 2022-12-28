@@ -3,8 +3,10 @@ using AntiCaptchaApi.Net.Responses;
 using AntiCaptchaApi.Net.Responses.Abstractions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Internal.Extensions;
+using Selenium.Anticaptcha.Tests.Core.Config;
+using Xunit.Sdk;
 
-namespace Selenium.Anticaptcha.Tests.TestCore;
+namespace Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>, IDisposable
 {
     private readonly WebDriverFixture _fixture;
@@ -68,17 +70,24 @@ public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>, IDi
         }
         await WaitForLoad();
     }
+
+    protected static void Fail(string message)
+    {
+        throw new XunitException(message);
+    }
     
     protected static void AssertSolveCaptchaResult<TSolution>(TaskResultResponse<TSolution>? result)
         where TSolution : BaseSolution, new()
     {
         Assert.NotNull(result);
-        if (!string.IsNullOrEmpty(result.ErrorDescription))
+        if (!string.IsNullOrEmpty(result!.ErrorDescription))
         {
-            Assert.False(true, result?.ErrorDescription);
+            Fail($"{result.ErrorDescription}{Environment.NewLine}------------Request Payload----------{Environment.NewLine}" +
+                 $"{result.RawRequestPayload}{Environment.NewLine}------------Response Payload----------{Environment.NewLine}" +
+                 $"{result.RawResponse}{Environment.NewLine}{Environment.NewLine}");
         }
 
-        if (!string.IsNullOrEmpty(result.CreateTaskResponse.ErrorDescription))
+        if (!string.IsNullOrEmpty(result!.CreateTaskResponse.ErrorDescription))
         {
             Assert.Empty(result.CreateTaskResponse.ErrorDescription);
             Assert.NotNull(result.CreateTaskResponse.ErrorDescription);

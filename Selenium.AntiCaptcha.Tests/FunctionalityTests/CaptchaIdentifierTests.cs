@@ -4,7 +4,10 @@ using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
-using Selenium.Anticaptcha.Tests.TestCore;
+using Selenium.Anticaptcha.Tests.Core;
+using Selenium.Anticaptcha.Tests.Core.Config;
+using Selenium.Anticaptcha.Tests.Core.Models;
+using Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 
 namespace Selenium.Anticaptcha.Tests.FunctionalityTests;
 
@@ -159,7 +162,6 @@ public class CaptchaIdentifierTests : AnticaptchaTestBase
 
     public class IdentificationWithSolutionTypeSpecified : CaptchaIdentifierTests
     {
-        
         [Theory]
         [InlineData(TestUris.GeeTest.V3.GeeTestV3Demo, CaptchaType.GeeTestV3Proxyless)]
         public async Task ShouldReturnProperGeeV3TestType_WithoutProxy(string websiteUrl, CaptchaType expectedType)

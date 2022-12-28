@@ -1,23 +1,23 @@
 ﻿using System.ComponentModel;
 using AntiCaptchaApi.Net.Models.Solutions;
 using Selenium.AntiCaptcha;
-using Selenium.Anticaptcha.Tests.TestCore;
+using Selenium.AntiCaptcha.Enums;
+using Selenium.Anticaptcha.Tests.Core;
+using Selenium.Anticaptcha.Tests.Core.Config;
+using Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests;
 
 [Category(TestCategories.Proxyless)]
-public class GeeV3ProxylessSolverTests : SequentialAnticaptchaTestBase
+public class GeeV3ProxylessSolverTests : SolverTestBase<GeeTestV3Solution>
 {
-    [Fact]
-    public async Task GeeV3Test()
-    {
-        await SetDriverUrl(TestUris.GeeTest.V3.GeeTestV3Demo);
-        var result = await Driver.SolveCaptchaAsync<GeeTestV3Solution>(ClientKey);
-        AssertSolveCaptchaResult(result);
-    }
-
+    protected override string TestedUri { get; set; } = TestUris.GeeTest.V3.GeeTestV3Demo;
+    protected override CaptchaType CaptchaType { get; set; } = CaptchaType.GeeTestV3Proxyless;
+    
 
     public GeeV3ProxylessSolverTests(WebDriverFixture fixture) : base(fixture)
     {
+        SolverArgumentsWithCaptchaType.Gt = "b6e21f90a91a3c2d4a31fe84e10d0442";
+        SolverArgumentsWithCaptchaType.Challenge = "40cb68a93238c5b0f188ea88adfb07df";
     }
 }

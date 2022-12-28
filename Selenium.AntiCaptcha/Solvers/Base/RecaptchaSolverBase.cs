@@ -29,7 +29,7 @@ internal abstract class RecaptchaSolverBase<TRequest> : Solver <TRequest, Recapt
         if (!string.IsNullOrEmpty(recaptchaFrameSrc))
         {
             var regex = new Regex("k=(.*?)&");
-            var siteKey = regex.Match(Driver.GetAllPageSource()).Groups[1].Value;
+            var siteKey = regex.Match(recaptchaFrameSrc).Groups[1].Value;
 
             if (!string.IsNullOrEmpty(siteKey))
                 return siteKey;

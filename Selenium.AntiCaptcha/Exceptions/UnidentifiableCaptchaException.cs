@@ -11,7 +11,7 @@ public class UnidentifiableCaptchaException : ArgumentException
 
     private static string GetExceptionMessage(IReadOnlyList<CaptchaType> identifiedCaptchaTypes)
     {
-        if (identifiedCaptchaTypes.Any())
+        if (!identifiedCaptchaTypes.Any())
         {
             return "Unable to identify captcha. Did not find any captcha on current page.";
         }

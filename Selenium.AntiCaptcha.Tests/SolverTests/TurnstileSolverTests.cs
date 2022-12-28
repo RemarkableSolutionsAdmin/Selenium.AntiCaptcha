@@ -1,44 +1,18 @@
 using System.ComponentModel;
 using AntiCaptchaApi.Net.Models.Solutions;
 using Selenium.AntiCaptcha;
-using Selenium.Anticaptcha.Tests.TestCore;
+using Selenium.AntiCaptcha.Enums;
+using Selenium.Anticaptcha.Tests.Core;
+using Selenium.Anticaptcha.Tests.Core.Config;
+using Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests
 {
-    public class TurnstileSolverTests : SequentialAnticaptchaTestBase
+    public class TurnstileSolverTests : SolverTestBase<TurnstileSolution>
     {
-        [Fact]
-        public async Task Solve_WithCaptchaTypeSpecified()
-        {
-            await SetDriverUrl(TestUris.Turnstile.TurnStileDemo);
-            var result = await Driver.SolveCaptchaAsync<TurnstileSolution>(ClientKey, SolverProxyArguments);
-            AssertSolveCaptchaResult(result);
-        }
+        protected override string TestedUri { get; set; }  = TestUris.Turnstile.TurnStileDemo;
+        protected override CaptchaType CaptchaType { get; set; } =  CaptchaType.Turnstile;
         
-        [Fact]
-        public async Task Solve_WithoutCaptchaTypeSpecified()
-        {
-            await SetDriverUrl(TestUris.Turnstile.TurnStileDemo);
-            var result = await Driver.SolveCaptchaAsync<TurnstileSolution>(ClientKey, SolverProxyArguments);
-            AssertSolveCaptchaResult(result);
-        }
-
-         [Fact]
-        public async Task SolveNonGeneric_WithCaptchaTypeSpecified()
-        {
-            await SetDriverUrl(TestUris.Turnstile.TurnStileDemo);
-            var result = await Driver.SolveCaptchaAsync(ClientKey, SolverProxyArguments);
-            AssertSolveCaptchaResult(result);
-        }
-        
-        [Fact]
-        public async Task SolveNonGeneric_WithoutCaptchaTypeSpecified()
-        {
-            await SetDriverUrl(TestUris.Turnstile.TurnStileDemo);
-            var result = await Driver.SolveCaptchaAsync(ClientKey, SolverProxyArguments);
-            AssertSolveCaptchaResult(result);
-        }
-
         public TurnstileSolverTests(WebDriverFixture fixture) : base(fixture)
         {
         }

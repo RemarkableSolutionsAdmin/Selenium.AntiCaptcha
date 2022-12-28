@@ -3,52 +3,18 @@ using AntiCaptchaApi.Net.Models.Solutions;
 using Selenium.AntiCaptcha;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Models;
-using Selenium.Anticaptcha.Tests.TestCore;
+using Selenium.Anticaptcha.Tests.Core;
+using Selenium.Anticaptcha.Tests.Core.Config;
+using Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests;
 
 [Category(TestCategories.Proxyless)]
-public class HCaptchaProxylessAnticaptchaTests : SequentialAnticaptchaTestBase
+public class HCaptchaProxylessAnticaptchaTests : SolverTestBase<HCaptchaSolution>
 {
-    [Fact]
-    public async Task SolveGeneric_HCaptchaWithCaptchaTypeSpecified()
-    {
-        await SetDriverUrl(TestUris.HCaptcha.EntiwicklerEbay);
-        var result = await Driver.SolveCaptchaAsync<HCaptchaSolution>(clientKey: ClientKey, solverArguments: new SolverArguments
-        {
-            CaptchaType = CaptchaType.HCaptchaProxyless,
-        });
-        AssertSolveCaptchaResult(result);
-    }
+    protected override string TestedUri { get; set; } = TestUris.HCaptcha.ChartBoost;
+    protected override CaptchaType CaptchaType { get; set; } = CaptchaType.HCaptchaProxyless;
     
-    [Fact]
-    public async Task SolveGeneric_HCaptchaWithProxyWithoutCaptchaType()
-    {
-        await SetDriverUrl(TestUris.HCaptcha.EntiwicklerEbay);
-        var result = await Driver.SolveCaptchaAsync<HCaptchaSolution>(clientKey: ClientKey);
-        AssertSolveCaptchaResult(result);
-    }
-
-    [Fact]
-    public async Task SolveNonGeneric_HCaptchaWithCaptchaTypeSpecified()
-    {
-        await SetDriverUrl(TestUris.HCaptcha.EntiwicklerEbay);
-        var result = await Driver.SolveCaptchaAsync(clientKey: ClientKey, solverArguments: new SolverArguments
-        {
-            CaptchaType = CaptchaType.HCaptchaProxyless
-        });
-        AssertSolveCaptchaResult(result);
-    }
-    
-    
-    [Fact]
-    public async Task SolveNonGeneric_HCaptchaWithProxyWithoutCaptchaType()
-    {
-        await SetDriverUrl(TestUris.HCaptcha.EntiwicklerEbay);
-        var result = await Driver.SolveCaptchaAsync(clientKey: ClientKey);
-        AssertSolveCaptchaResult(result);
-    }
-
     public HCaptchaProxylessAnticaptchaTests(WebDriverFixture fixture) : base(fixture)
     {
     }
