@@ -1,5 +1,4 @@
-﻿using System.Text.Encodings.Web;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Internal.Extensions;
 

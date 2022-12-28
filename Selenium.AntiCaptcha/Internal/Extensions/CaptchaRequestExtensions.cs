@@ -1,5 +1,4 @@
-﻿using AntiCaptchaApi.Net.Internal.Validation.Validators;
-using AntiCaptchaApi.Net.Models.Solutions;
+﻿using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
 using AntiCaptchaApi.Net.Requests.Abstractions;
 using Selenium.AntiCaptcha.Enums;

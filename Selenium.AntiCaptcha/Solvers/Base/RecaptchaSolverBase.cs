@@ -7,7 +7,7 @@ using Selenium.AntiCaptcha.Models;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
-internal abstract class RecaptchaSolverBase<TRequest> : GeeSolverBase <TRequest, RecaptchaSolution>
+internal abstract class RecaptchaSolverBase<TRequest> : Solver <TRequest, RecaptchaSolution>
     where TRequest : CaptchaRequest<RecaptchaSolution>
 {
     protected override string GetSiteKey()

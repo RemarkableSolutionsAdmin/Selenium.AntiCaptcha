@@ -1,7 +1,5 @@
-﻿using AntiCaptchaApi.Net.Models.Solutions;
-using AntiCaptchaApi.Net.Requests;
+﻿using AntiCaptchaApi.Net.Requests;
 using OpenQA.Selenium;
-using Selenium.AntiCaptcha.Constants;
 using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
 
@@ -13,9 +11,9 @@ namespace Selenium.AntiCaptcha.Solvers
         {
             return new RecaptchaV3Request
             {
-                WebsiteUrl = arguments.Url,
-                WebsiteKey = arguments.SiteKey,
-                MinScore = arguments.MinScore!.Value,
+                WebsiteUrl = arguments.WebsiteUrl,
+                WebsiteKey = arguments.WebsiteKey,
+                MinScore = arguments.MinScore,
                 PageAction = arguments.PageAction,
                 IsEnterprise = arguments.IsEnterprise,
                 ApiDomain = arguments.ApiDomain
@@ -27,7 +25,6 @@ namespace Selenium.AntiCaptcha.Solvers
         {
             return await base.FillMissingSolverArguments(solverArguments) with
             {
-                MinScore = solverArguments.MinScore ?? AnticaptchaDefaultValues.MinScore,
                 IsEnterprise = solverArguments.IsEnterprise ?? false
             };
         }

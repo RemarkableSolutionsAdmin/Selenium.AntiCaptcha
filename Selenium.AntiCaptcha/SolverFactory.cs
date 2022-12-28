@@ -21,50 +21,33 @@ internal static class SolverFactory
             throw new ArgumentException("Wrong solution type chosen to captcha type.");
         }
 
+        var solv = GetSolver(webDriver, clientKey, captchaType, solverConfig);
+        
         return GetSolver(webDriver, clientKey, captchaType, solverConfig) as ISolver<CaptchaRequest<TSolution>, TSolution>;
     }
     internal static ISolver GetSolver(IWebDriver webDriver, string clientKey, CaptchaType captchaType, SolverConfig solverConfig)
     {
-        switch (captchaType)
+        return captchaType switch
         {
-            case CaptchaType.ReCaptchaV2:
-                return new ReCaptchaV2Solver(clientKey, webDriver, solverConfig);
-            case CaptchaType.ReCaptchaV2Proxyless:
-                return new ReCaptchaV2ProxylessSolver(clientKey, webDriver, solverConfig);
-            case CaptchaType.ReCaptchaV2Enterprise:
-                return new ReCaptchaV2EnterpriseSolver(clientKey, webDriver, solverConfig);
-            case CaptchaType.ReCaptchaV2EnterpriseProxyless:
-                return new ReCaptchaV2EnterpriseProxylessSolver(clientKey, webDriver, solverConfig);
-            case CaptchaType.ReCaptchaV3:
-                return new RecaptchaV3Solver(clientKey, webDriver, solverConfig);
-            case CaptchaType.ReCaptchaV3Enterprise:
-                return new ReCaptchaV3EnterpriseSolver(clientKey, webDriver, solverConfig);
-            case CaptchaType.HCaptcha:
-                return new HCaptchaSolver(clientKey, webDriver, solverConfig);
-            case CaptchaType.HCaptchaProxyless:
-                return new HCaptchaProxylessSolver(clientKey, webDriver, solverConfig);
-            case CaptchaType.FunCaptcha:
-                return new FunCaptchaSolver(clientKey, webDriver, solverConfig);
-            case CaptchaType.FunCaptchaProxyless:
-                return new FunCaptchaProxylessSolver(clientKey, webDriver, solverConfig);
-            case CaptchaType.ImageToText:
-                return new ImageToTextSolver(clientKey, webDriver, solverConfig);
-            case CaptchaType.GeeTestV3:
-                return new GeeTestV3Solver(clientKey, webDriver, solverConfig);
-            case CaptchaType.GeeTestV3Proxyless:
-                return new GeeTestV3ProxylessSolver(clientKey, webDriver, solverConfig);
-            case CaptchaType.GeeTestV4:
-                return new GeeTestV4Solver(clientKey, webDriver, solverConfig);
-            case CaptchaType.GeeTestV4Proxyless:
-                return new GeeTestV4ProxylessSolver(clientKey, webDriver, solverConfig);
-            case CaptchaType.AntiGate:
-                return new AntiGateSolver(clientKey, webDriver, solverConfig);
-            case CaptchaType.Turnstile:
-                return new TurnstileCaptchaSolver(clientKey, webDriver, solverConfig);
-            case CaptchaType.TurnstileProxyless:
-                return new TurnstileProxylessCaptchaSolver(clientKey, webDriver, solverConfig);
-            default:
-                throw new ArgumentOutOfRangeException(nameof(captchaType), captchaType, null);
-        }
+            CaptchaType.ReCaptchaV2 => new ReCaptchaV2Solver(clientKey, webDriver, solverConfig),
+            CaptchaType.ReCaptchaV2Proxyless => new ReCaptchaV2ProxylessSolver(clientKey, webDriver, solverConfig),
+            CaptchaType.ReCaptchaV2Enterprise => new ReCaptchaV2EnterpriseSolver(clientKey, webDriver, solverConfig),
+            CaptchaType.ReCaptchaV2EnterpriseProxyless => new ReCaptchaV2EnterpriseProxylessSolver(clientKey, webDriver, solverConfig),
+            CaptchaType.ReCaptchaV3 => new RecaptchaV3Solver(clientKey, webDriver, solverConfig),
+            CaptchaType.ReCaptchaV3Enterprise => new ReCaptchaV3EnterpriseSolver(clientKey, webDriver, solverConfig),
+            CaptchaType.HCaptcha => new HCaptchaSolver(clientKey, webDriver, solverConfig),
+            CaptchaType.HCaptchaProxyless => new HCaptchaProxylessSolver(clientKey, webDriver, solverConfig),
+            CaptchaType.FunCaptcha => new FunCaptchaSolver(clientKey, webDriver, solverConfig),
+            CaptchaType.FunCaptchaProxyless => new FunCaptchaProxylessSolver(clientKey, webDriver, solverConfig),
+            CaptchaType.ImageToText => new ImageToTextSolver(clientKey, webDriver, solverConfig),
+            CaptchaType.GeeTestV3 => new GeeTestV3Solver(clientKey, webDriver, solverConfig),
+            CaptchaType.GeeTestV3Proxyless => new GeeTestV3ProxylessSolver(clientKey, webDriver, solverConfig),
+            CaptchaType.GeeTestV4 => new GeeTestV4Solver(clientKey, webDriver, solverConfig),
+            CaptchaType.GeeTestV4Proxyless => new GeeTestV4ProxylessSolver(clientKey, webDriver, solverConfig),
+            CaptchaType.AntiGate => new AntiGateSolver(clientKey, webDriver, solverConfig),
+            CaptchaType.Turnstile => new TurnstileCaptchaSolver(clientKey, webDriver, solverConfig),
+            CaptchaType.TurnstileProxyless => new TurnstileProxylessCaptchaSolver(clientKey, webDriver, solverConfig),
+            _ => throw new ArgumentOutOfRangeException(nameof(captchaType), captchaType, null)
+        };
     }
 }

@@ -1,26 +1,20 @@
-﻿using System.Text.RegularExpressions;
+﻿using AntiCaptchaApi.Net.Models;
 using OpenQA.Selenium;
+using Selenium.AntiCaptcha.Constants;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
 
-namespace Selenium.AntiCaptcha.Internal;
+namespace Selenium.AntiCaptcha.CaptchaIdentifiers;
 
-internal class TurnstileCaptchaIdentifier  : ProxyCaptchaIdentifier
+public class TurnstileCaptchaIdentifier  : ProxyCaptchaIdentifier
 {
-    private readonly List<CaptchaType> _turnstileTypes = new()
-    {
-        CaptchaType.Turnstile,
-        CaptchaType.TurnstileProxyless,
-    };
-    
     public TurnstileCaptchaIdentifier()
     {
-        IdentifiableTypes.AddRange(_turnstileTypes);
+        IdentifiableTypes.AddRange(CaptchaTypeGroups.TurnstileTypes);
     }
 
-    public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(
-        IWebDriver driver,
+    public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver,
         SolverArguments arguments,
         CancellationToken cancellationToken)
     {

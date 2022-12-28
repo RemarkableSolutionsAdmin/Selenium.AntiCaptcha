@@ -1,39 +1,26 @@
-﻿using System.Text.RegularExpressions;
+﻿using AntiCaptchaApi.Net.Models;
 using OpenQA.Selenium;
+using Selenium.AntiCaptcha.Constants;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
 
-namespace Selenium.AntiCaptcha.Internal;
+namespace Selenium.AntiCaptcha.CaptchaIdentifiers;
 
-internal class RecaptchaIdentifier  : ProxyCaptchaIdentifier
+public class RecaptchaIdentifier  : ProxyCaptchaIdentifier
 {
-
-    private readonly List<CaptchaType> _recaptchaTypes = new()
-    {
-        CaptchaType.ReCaptchaV2,
-        CaptchaType.ReCaptchaV2Proxyless,
-        CaptchaType.ReCaptchaV2EnterpriseProxyless,
-        CaptchaType.ReCaptchaV2Enterprise,
-        CaptchaType.ReCaptchaV3,
-        CaptchaType.ReCaptchaV3Enterprise,
-    };
-    
     public RecaptchaIdentifier()
     {
-        IdentifiableTypes.AddRange(_recaptchaTypes);
+        IdentifiableTypes.AddRange(CaptchaTypeGroups.ReCaptchaTypes);
     }
 
-    public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(
-        IWebDriver driver,
+    public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver,
         SolverArguments arguments,
         CancellationToken cancellationToken)
     {
         try
         {
             var pageSource = driver.GetAllPageSource();
-
-
             var isEnterprise = IsRecaptchaEnterprise(pageSource);
             var recaptchaFrame = GetRecaptchaIFrame(driver);
 

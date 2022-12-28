@@ -6,7 +6,7 @@ namespace Selenium.AntiCaptcha.Models;
 public record AntiGateSolverArguments : SolverArguments
 {
     public AntiGateSolverArguments(AntiGateRequest request) :
-        base(Url: request.WebsiteUrl,
+        base(WebsiteUrl: request.WebsiteUrl,
             CaptchaType: Enums.CaptchaType.AntiGate,
             TemplateName: request.TemplateName,
             Variables: request.Variables,

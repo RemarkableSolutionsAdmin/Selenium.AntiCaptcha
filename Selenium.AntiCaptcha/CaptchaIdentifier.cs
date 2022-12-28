@@ -1,5 +1,6 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
 using OpenQA.Selenium;
+using Selenium.AntiCaptcha.CaptchaIdentifiers;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal;
 using Selenium.AntiCaptcha.Internal.Extensions;
@@ -35,7 +36,16 @@ public static class CaptchaIdentifier
         
         return identifiedTypes;
     }
-    
+
+    public static RecaptchaIdentifier GetRecaptchaIdentifier()
+    {
+        return (RecaptchaIdentifier)CaptchaIdentifiers.First(x => x.GetType() == typeof(RecaptchaIdentifier));
+    }
+
+    public static ICaptchaIdentifier GetSpecificIdentifier(CaptchaType captchaType)
+    {
+        return CaptchaIdentifiers.First(x => x.CanIdentify(captchaType));
+    }
 
     public static bool CanIdentifyCaptcha(CaptchaType captchaType)
     {

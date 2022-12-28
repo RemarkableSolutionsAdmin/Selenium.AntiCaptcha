@@ -1,8 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using AntiCaptchaApi.Net.Models.Solutions;
-using AntiCaptchaApi.Net.Requests;
+﻿using AntiCaptchaApi.Net.Requests;
 using OpenQA.Selenium;
-using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
 
@@ -14,7 +11,7 @@ namespace Selenium.AntiCaptcha.Solvers
         {
             return  new GeeTestV3Request
             {
-                WebsiteUrl = arguments.Url,
+                WebsiteUrl = arguments.WebsiteUrl,
                 Challenge = arguments.Challenge,
                 GeetestApiServerSubdomain = arguments.GeetestApiServerSubdomain,
                 GeetestGetLib = arguments.GeetestGetLib,

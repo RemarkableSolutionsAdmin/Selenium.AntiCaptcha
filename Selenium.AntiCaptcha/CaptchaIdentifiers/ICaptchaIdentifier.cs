@@ -2,7 +2,7 @@
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Models;
 
-namespace Selenium.AntiCaptcha.Internal;
+namespace Selenium.AntiCaptcha.CaptchaIdentifiers;
 
 public interface ICaptchaIdentifier
 {

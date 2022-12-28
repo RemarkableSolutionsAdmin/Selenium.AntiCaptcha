@@ -1,6 +1,5 @@
 ﻿using System.Text.RegularExpressions;
 using AntiCaptchaApi.Net.Models.Solutions;
-using AntiCaptchaApi.Net.Requests;
 using AntiCaptchaApi.Net.Requests.Abstractions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Internal.Extensions;

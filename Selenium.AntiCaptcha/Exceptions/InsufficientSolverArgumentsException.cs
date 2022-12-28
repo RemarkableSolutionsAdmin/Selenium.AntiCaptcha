@@ -1,6 +1,4 @@
-﻿using Selenium.AntiCaptcha.Enums;
-
-namespace Selenium.AntiCaptcha.Exceptions;
+﻿namespace Selenium.AntiCaptcha.Exceptions;
 
 public class InsufficientSolverArgumentsException : ArgumentException
 {

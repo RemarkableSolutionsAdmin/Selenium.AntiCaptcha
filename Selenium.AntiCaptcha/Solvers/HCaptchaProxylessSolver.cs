@@ -1,5 +1,4 @@
-﻿using AntiCaptchaApi.Net.Models.Solutions;
-using AntiCaptchaApi.Net.Requests;
+﻿using AntiCaptchaApi.Net.Requests;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
@@ -11,8 +10,8 @@ internal class HCaptchaProxylessSolver  : HCaptchaSolverBase<HCaptchaProxylessRe
     protected override HCaptchaProxylessRequest BuildRequest(SolverArguments arguments) =>
         new()
         {
-            WebsiteUrl = arguments.Url,
-            WebsiteKey = arguments.SiteKey,
+            WebsiteUrl = arguments.WebsiteUrl,
+            WebsiteKey = arguments.WebsiteKey,
             UserAgent = arguments.UserAgent
         };
     

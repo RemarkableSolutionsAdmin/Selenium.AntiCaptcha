@@ -1,11 +1,11 @@
-﻿using System.Text.RegularExpressions;
+﻿using AntiCaptchaApi.Net.Models;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Internal.Helpers;
 using Selenium.AntiCaptcha.Models;
 
-namespace Selenium.AntiCaptcha.Internal;
+namespace Selenium.AntiCaptcha.CaptchaIdentifiers;
 
 public class ImageToTextIdentifier : ProxyCaptchaIdentifier
 {

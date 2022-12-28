@@ -63,11 +63,13 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TRequest, TSolution
 
     protected virtual async Task<SolverArguments> FillMissingSolverArguments(SolverArguments solverArguments)
     {
+        var websiteKey = string.IsNullOrEmpty(solverArguments.WebsiteKey) ? await AcquireSiteKey() : null;
         return solverArguments with
         {
-            Url = solverArguments.Url ?? Driver.Url,
-            SiteKey = string.IsNullOrEmpty(solverArguments.SiteKey) ? await AcquireSiteKey() : null,
-            UserAgent = solverArguments.UserAgent ?? Constants.AnticaptchaDefaultValues.UserAgent
+            WebsiteUrl = solverArguments.WebsiteUrl ?? Driver.Url,
+            WebsiteKey = websiteKey,
+            WebsitePublicKey = solverArguments.WebsitePublicKey ?? websiteKey,
+            UserAgent = solverArguments.UserAgent
         };
     }
     

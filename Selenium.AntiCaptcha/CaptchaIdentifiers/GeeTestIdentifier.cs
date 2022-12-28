@@ -1,24 +1,18 @@
-﻿using OpenQA.Selenium;
+﻿using AntiCaptchaApi.Net.Models;
+using OpenQA.Selenium;
+using Selenium.AntiCaptcha.Constants;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
 
-namespace Selenium.AntiCaptcha.Internal;
+namespace Selenium.AntiCaptcha.CaptchaIdentifiers;
 
 public class GeeTestIdentifier : ProxyCaptchaIdentifier
 {
     public GeeTestIdentifier()
     {
-        IdentifiableTypes.AddRange(GeeTypes);
+        IdentifiableTypes.AddRange(CaptchaTypeGroups.GeeTestTypes);
     }
-    
-    private static List<CaptchaType> GeeTypes = new()
-    {
-        CaptchaType.GeeTestV3,
-        CaptchaType.GeeTestV3Proxyless,
-        CaptchaType.GeeTestV4,
-        CaptchaType.GeeTestV4Proxyless,
-    };
 
     public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver, SolverArguments arguments,
         CancellationToken cancellationToken)

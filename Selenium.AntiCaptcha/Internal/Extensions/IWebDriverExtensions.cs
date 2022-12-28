@@ -7,8 +7,6 @@ namespace Selenium.AntiCaptcha.Internal.Extensions;
 
 internal static class IWebDriverExtensions
 {
-    private const int MaxSearchDepth = 10;
-    
     public static void ForEachFrame(this IWebDriver driver, Action? action)
     {
         var currentFrame = driver.GetCurrentFrame();

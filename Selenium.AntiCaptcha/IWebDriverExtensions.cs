@@ -1,19 +1,33 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
-using AntiCaptchaApi.Net.Requests.Abstractions;
 using AntiCaptchaApi.Net.Responses;
 using AntiCaptchaApi.Net.Responses.Abstractions;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Exceptions;
-using Selenium.AntiCaptcha.Internal;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
-using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha
 {
     public static class IWebDriverExtensions
     {
+        public static async Task<TaskResultResponse<RecaptchaSolution>> SolveRecaptchaAsync(this IWebDriver driver,
+            string clientKey,
+            ActionArguments? actionArguments = null,
+            SolverConfig? solverConfig = null,
+            CancellationToken cancellationToken = default)
+        {
+            var recaptchaIdentifier = CaptchaIdentifier.GetRecaptchaIdentifier();
+            var solverArguments = new SolverArguments();
+            var captchaType = await recaptchaIdentifier.IdentifyInAllFramesAsync(driver, solverArguments, cancellationToken);
+            if (!captchaType.HasValue)
+            {
+                throw new InsufficientSolverArgumentsException("Could not identify the recaptcha type from arguments. Please provide captchaType or better solver arguments to enable identification of captcha on site.");
+            }
+            var solver = SolverFactory.GetSolver<RecaptchaSolution>(driver,  clientKey, captchaType.Value, solverConfig ?? new DefaultSolverConfig());
+            return await solver.SolveAsync(solverArguments, actionArguments ?? new ActionArguments(), cancellationToken);
+        }
+        
         public static async Task<BaseResponse> SolveCaptchaAsync(this IWebDriver driver,
             string clientKey,
             SolverArguments? solverArguments = null,
@@ -24,7 +38,7 @@ namespace Selenium.AntiCaptcha
             solverArguments ??= new SolverArguments();
             var captchaType = solverArguments.CaptchaType ?? await IdentifyCaptcha(driver, solverArguments, cancellationToken);
             dynamic solver = SolverFactory.GetSolver(driver, clientKey, captchaType, solverConfig ?? new DefaultSolverConfig());
-            return await solver.SolveAsync(solverArguments, actionArguments, cancellationToken);
+            return await solver.SolveAsync(solverArguments, actionArguments ?? new ActionArguments(), cancellationToken);
         }
 
         private static async Task<CaptchaType> IdentifyCaptcha(IWebDriver driver, SolverArguments arguments, CancellationToken cancellationToken = default)

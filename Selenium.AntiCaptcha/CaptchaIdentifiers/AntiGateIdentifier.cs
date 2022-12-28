@@ -1,8 +1,9 @@
-﻿using OpenQA.Selenium;
+﻿using AntiCaptchaApi.Net.Models;
+using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Models;
 
-namespace Selenium.AntiCaptcha.Internal;
+namespace Selenium.AntiCaptcha.CaptchaIdentifiers;
 
 public class AntiGateIdentifier : ProxyCaptchaIdentifier
 {    

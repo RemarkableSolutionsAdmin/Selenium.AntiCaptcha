@@ -1,19 +1,20 @@
-﻿using OpenQA.Selenium;
+﻿using AntiCaptchaApi.Net.Models;
+using OpenQA.Selenium;
+using Selenium.AntiCaptcha.Constants;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Internal.Helpers;
 using Selenium.AntiCaptcha.Models;
 
-namespace Selenium.AntiCaptcha.Internal;
+namespace Selenium.AntiCaptcha.CaptchaIdentifiers;
 
-internal class FunCaptchaIdentifier : ProxyCaptchaIdentifier
+public class FunCaptchaIdentifier : ProxyCaptchaIdentifier
 {
-
-    private readonly List<CaptchaType> _funcaptchaTypes = new()
+    public FunCaptchaIdentifier()
     {
-        CaptchaType.FunCaptcha, CaptchaType.FunCaptchaProxyless
-    };
-
+        IdentifiableTypes.AddRange(CaptchaTypeGroups.FunCaptchaTypes);
+    }
+    
     public override async Task<CaptchaType?> IdentifyInCurrentFrameAsync(IWebDriver driver, SolverArguments arguments,
         CancellationToken cancellationToken)
     {
@@ -36,11 +37,5 @@ internal class FunCaptchaIdentifier : ProxyCaptchaIdentifier
     {
         driver.SwitchTo().DefaultContent();
         return driver.FindByXPathAllFrames("//script[contains(@src, 'funcaptcha'") != null;
-    }
-    
-
-    public FunCaptchaIdentifier()
-    {
-        IdentifiableTypes.AddRange(_funcaptchaTypes);
     }
 }

@@ -1,42 +1,20 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
+using Selenium.AntiCaptcha.Constants;
 using Selenium.AntiCaptcha.Enums;
 
 namespace Selenium.AntiCaptcha.Internal.Extensions;
 
-public static class CaptchaTypeExtensions
+internal static class CaptchaTypeExtensions
 {
-    private static readonly List<CaptchaType> ProxyCaptchaTypes = new()
-    {
-        CaptchaType.FunCaptcha,
-        CaptchaType.HCaptcha,
-        CaptchaType.GeeTestV3,
-        CaptchaType.GeeTestV4,
-        CaptchaType.ReCaptchaV2,
-        CaptchaType.ReCaptchaV2Enterprise,
-        CaptchaType.Turnstile
-    };
-    
-    
-    private static readonly List<CaptchaType> ProxylessCaptchaTypes = new()
-    {
-        CaptchaType.ReCaptchaV2Proxyless,
-        CaptchaType.ReCaptchaV2EnterpriseProxyless,
-        CaptchaType.ReCaptchaV3,
-        CaptchaType.ReCaptchaV3Enterprise,
-        CaptchaType.HCaptchaProxyless,
-        CaptchaType.FunCaptchaProxyless,
-        CaptchaType.ImageToText,
-        CaptchaType.GeeTestV3Proxyless,
-        CaptchaType.GeeTestV4Proxyless,
-        CaptchaType.AntiGate,
-        CaptchaType.TurnstileProxyless
-    };
-
     internal static bool IsProperlyDefined(this CaptchaType type)
     {
-        return ProxyCaptchaTypes.Contains(type) || ProxylessCaptchaTypes.Contains(type);
+        return CaptchaTypeGroups.ProxyCaptchaTypes.Contains(type) || CaptchaTypeGroups.ProxylessCaptchaTypes.Contains(type);
     }
-    
+
+    public static bool IsRecaptcha(this CaptchaType type)
+    {
+        return CaptchaTypeGroups.ReCaptchaTypes.Contains(type);
+    }
     
     public static CaptchaType ToProxyType(this CaptchaType type)
     {
@@ -66,12 +44,12 @@ public static class CaptchaTypeExtensions
     
     public static bool IsProxyType(this CaptchaType captchaType)
     {
-        return ProxyCaptchaTypes.Contains(captchaType);
+        return CaptchaTypeGroups.ProxyCaptchaTypes.Contains(captchaType);
     }
     
     public static bool IsProxylessType(this CaptchaType captchaType)
     {
-        return ProxylessCaptchaTypes.Contains(captchaType);
+        return CaptchaTypeGroups.ProxylessCaptchaTypes.Contains(captchaType);
     }
     
     public static Type GetSolutionType(this CaptchaType captchaType)
