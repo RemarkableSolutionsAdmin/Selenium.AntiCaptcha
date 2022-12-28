@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel;
 using AntiCaptchaApi.Net.Models.Solutions;
-using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.Anticaptcha.Tests.Core;
 using Selenium.Anticaptcha.Tests.Core.Config;
 using Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 
-namespace Selenium.Anticaptcha.Tests.SolverTests;
+namespace Selenium.Anticaptcha.Tests.SolverTests.Proxyless;
 
 [Category(TestCategories.Proxyless)]
 public class ImageToTextAnticaptchaTests : SolverTestBase<ImageToTextSolution>

@@ -146,7 +146,7 @@ internal static class IWebDriverExtensions
     }
 
     //Must start from root.
-    internal static TreeNode<ExtendedWebElement> GetFramesTree(this IWebDriver driver)
+    internal static TreeNode<ExtendedWebElement>? GetFramesTree(this IWebDriver driver)
     {
         var currentHtmlElement = driver.GetCurrentFrame();
 

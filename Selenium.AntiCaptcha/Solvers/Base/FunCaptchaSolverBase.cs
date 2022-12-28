@@ -16,7 +16,7 @@ public abstract class FunCaptchaSolverBase<TRequest> : Solver<TRequest, FunCaptc
         {
             return Driver.FindElement(By.Id("funcaptcha")).GetAttribute("data-pkey");
         }
-        catch (Exception e)
+        catch (Exception)
         {
             // ignore
         }

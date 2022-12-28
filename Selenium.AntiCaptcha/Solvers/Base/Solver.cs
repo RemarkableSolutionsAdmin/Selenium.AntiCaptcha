@@ -17,9 +17,9 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
 {
     protected IWebDriver Driver;
     private AnticaptchaClient _anticaptchaClient;
-    public SolverConfig SolverConfig { get; set; } 
+    public SolverConfig SolverConfig { get; protected set; }
 
-    public Solver(string clientKey, IWebDriver driver, SolverConfig solverConfig)
+    protected Solver(string clientKey, IWebDriver driver, SolverConfig solverConfig)
     {
         Configure(driver, clientKey, solverConfig);
     }

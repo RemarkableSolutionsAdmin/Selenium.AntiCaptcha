@@ -17,14 +17,12 @@ public static class TestEnvironment
         !string.IsNullOrEmpty(ProxyPort) &&
         !string.IsNullOrEmpty(ProxyLogin) &&
         !string.IsNullOrEmpty(ProxyPassword);
-
-
-
+    
     public const string DriverBasedTestCollection = "Driver collection";
         
-    internal static TypedProxyConfig GetCurrentTestProxyConfig()
+    internal static ProxyConfig GetCurrentTestProxyConfig()
     {
-        return new TypedProxyConfig()
+        return new ProxyConfig()
         {
             ProxyType = ProxyTypeOption.Http,
             ProxyAddress = ProxyAddress,

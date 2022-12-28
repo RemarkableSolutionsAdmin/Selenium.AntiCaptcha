@@ -1,11 +1,10 @@
 using AntiCaptchaApi.Net.Models.Solutions;
-using Selenium.AntiCaptcha;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.Anticaptcha.Tests.Core;
 using Selenium.Anticaptcha.Tests.Core.Config;
 using Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 
-namespace Selenium.Anticaptcha.Tests.SolverTests
+namespace Selenium.Anticaptcha.Tests.SolverTests.Proxy
 {
     public class RecaptchaV2SolverTests : SolverTestBase<RecaptchaSolution>
     {

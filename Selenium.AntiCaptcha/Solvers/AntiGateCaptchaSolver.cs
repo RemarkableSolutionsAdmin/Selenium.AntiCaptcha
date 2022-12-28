@@ -1,23 +1,17 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
+using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class AntiGateSolver : Solver<AntiGateRequest, AntiGateSolution>
+    internal class AntiGateSolver : Solver<IAntiGateRequest, AntiGateSolution>
     {
-        protected override AntiGateRequest BuildRequest(SolverArguments arguments)
-        { 
-            return new AntiGateRequest
-            {
-                WebsiteUrl = arguments.WebsiteUrl,
-                TemplateName = arguments.TemplateName,
-                Variables = arguments.Variables,
-                DomainsOfInterest = arguments.DomainsOfInterest,
-                ProxyConfig = arguments.ProxyConfig
-            };
+        protected override IAntiGateRequest BuildRequest(SolverArguments arguments)
+        {
+            return new AntiGateRequest(arguments);
         }
 
         protected override async Task<SolverArguments> FillMissingSolverArguments(

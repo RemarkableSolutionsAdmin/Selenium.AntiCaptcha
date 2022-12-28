@@ -18,7 +18,7 @@ public static class IWebElementExtensions
 
             return Convert.ToBase64String(file);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return string.Empty;
         }

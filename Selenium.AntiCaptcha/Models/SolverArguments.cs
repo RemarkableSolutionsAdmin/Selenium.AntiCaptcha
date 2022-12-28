@@ -18,7 +18,7 @@ public record SolverArguments(
     string? RecaptchaDataSValue = null,
     IWebElement? ImageElement = null,
     string? UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116",
-    TypedProxyConfig? ProxyConfig = null,
+    ProxyConfig? ProxyConfig = null,
     string? FunCaptchaApiJsSubdomain = null,
     string? Data = null,
     JObject? Variables = null,
@@ -44,6 +44,7 @@ public record SolverArguments(
     bool? IsInvisible = null,
     Dictionary<string, string>? EnterprisePayload = null) 
       :
+          IAntiGateRequest,
           IFunCaptchaRequest,
           IGeeTestV3Request,
           IGeeTestV4Request,
@@ -59,7 +60,7 @@ public record SolverArguments(
     public string? WebsiteKey { get; set; } = WebsiteKey;
     public IWebElement? ImageElement { get; set; } = ImageElement;
     public string? UserAgent { get; set; } = UserAgent;
-    public TypedProxyConfig? ProxyConfig { get; set; } = ProxyConfig;
+    public ProxyConfig? ProxyConfig { get; set; } = ProxyConfig;
     public string? WebsitePublicKey { get; set; } = WebsitePublicKey;
     public string? FunCaptchaApiJsSubdomain { get; set; } = FunCaptchaApiJsSubdomain;
     public string? Data { get; set; } = Data;
