@@ -44,7 +44,7 @@ public class RecaptchaIdentifier  : ProxyCaptchaIdentifier
             else
             {
                 driver.SwitchTo().Frame(recaptchaFrame);
-                isV2Recaptcha = IsV2(driver);
+                isV2Recaptcha = true;
             }
 
             if (isV2Recaptcha == isV3Recaptcha)
@@ -95,7 +95,7 @@ public class RecaptchaIdentifier  : ProxyCaptchaIdentifier
 
     private static IWebElement? GetRecaptchaIFrame(IWebDriver driver)
     {
-        return driver.FindByXPathInCurrentFrame("//iframe[contains(@src, 'recaptcha')]");
+        return driver.FindByXPathInCurrentFrame("//iframe[contains(@src, 'recaptcha') and not(contains(@src, 'hcaptcha'))]");
     }
 
     private static bool IsV2(IWebDriver driver)

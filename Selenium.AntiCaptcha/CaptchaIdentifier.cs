@@ -62,7 +62,12 @@ public static class CaptchaIdentifier
                 return result.Value;
             }
         }
-        return captchaType;
+        if (arguments.ProxyConfig == null || string.IsNullOrEmpty(arguments.ProxyConfig.ProxyAddress))
+        {
+            return captchaType;
+        }
+
+        return captchaType.ToProxyType();
     }
 
     public static async Task<CaptchaType?> IdentifyCaptchaAsync<TSolution>(IWebDriver driver, SolverArguments arguments, CancellationToken cancellationToken)
