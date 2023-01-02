@@ -74,7 +74,7 @@ public abstract class SolverTestBase<TSolution> : AnticaptchaTestBase
         await SetDriverUrl(TestedUri);
         await BeforeTestAction();
         var result = await Driver.SolveCaptchaAsync<TSolution>(ClientKey, solverArguments);
-        AssertSolveCaptchaResult(result);
+        AssertSolveCaptchaResult(result, expectedCaptchaType: CaptchaType);
         await AfterTestAction();
     }
 
@@ -83,7 +83,7 @@ public abstract class SolverTestBase<TSolution> : AnticaptchaTestBase
         await SetDriverUrl(TestedUri);
         await BeforeTestAction();
         var result = await Driver.SolveCaptchaAsync(ClientKey, solverArguments);
-        AssertSolveCaptchaResult(result);
+        AssertSolveCaptchaResult(result, expectedCaptchaType: CaptchaType);
         await AfterTestAction();
     }
 

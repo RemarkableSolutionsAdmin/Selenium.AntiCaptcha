@@ -15,7 +15,14 @@ public abstract class HCaptchaSolverBase<TRequest> : Solver <TRequest, HCaptchaS
     
     protected override void FillResponseElement(HCaptchaSolution solution, IWebElement? responseElement)
     {
-        responseElement ??= Driver.FindElement(By.Name("h-captcha-response"));
-        responseElement?.SendKeys(solution.GRecaptchaResponse);
+        try
+        {
+            responseElement ??= Driver.FindElement(By.Name("h-captcha-response"));
+            responseElement?.SendKeys(solution.GRecaptchaResponse);
+        }
+        catch (Exception e)
+        {
+            // ignore
+        }
     }
 }

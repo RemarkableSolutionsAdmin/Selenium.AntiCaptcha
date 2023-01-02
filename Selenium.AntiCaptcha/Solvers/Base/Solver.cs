@@ -94,11 +94,7 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
             if (cookies != null)
                 AddCookies(Driver, cookies, actionArguments.ShouldResetCookiesBeforeAdd);
 
-            if (actionArguments.ResponseElement != null)
-            {
-                FillResponseElement(result.Solution, actionArguments.ResponseElement);
-            }
-
+            FillResponseElement(result.Solution, actionArguments.ResponseElement);
             actionArguments.SubmitElement?.Click();
         }
 

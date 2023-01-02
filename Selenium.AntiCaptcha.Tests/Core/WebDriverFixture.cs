@@ -20,7 +20,9 @@ public class WebDriverFixture : IDisposable
             Driver.Close();
             Driver.Dispose();
         }
-        Driver = new ChromeDriver(Environment.CurrentDirectory);
+        var options = new ChromeOptions();
+
+        Driver = new ChromeDriver(Environment.CurrentDirectory, options);
     }
 
     public void Dispose()

@@ -2,6 +2,7 @@
 using AntiCaptchaApi.Net.Responses;
 using AntiCaptchaApi.Net.Responses.Abstractions;
 using OpenQA.Selenium;
+using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.Anticaptcha.Tests.Core.Config;
 using Xunit.Sdk;
@@ -76,7 +77,7 @@ public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>, IDi
         throw new XunitException(message);
     }
     
-    protected static void AssertSolveCaptchaResult<TSolution>(TaskResultResponse<TSolution>? result)
+    protected static void AssertSolveCaptchaResult<TSolution>(TaskResultResponse<TSolution>? result, CaptchaType expectedCaptchaType)
         where TSolution : BaseSolution, new()
     {
         Assert.NotNull(result);
@@ -96,25 +97,27 @@ public abstract class AnticaptchaTestBase : IClassFixture<WebDriverFixture>, IDi
         Assert.False(result.IsErrorResponse);
         Assert.NotNull(result.Solution);
         Assert.True(result.Solution.IsValid());
+        var expectedCaptchaTypeText = expectedCaptchaType.ToString();
+        Assert.Contains($"\"{expectedCaptchaType.ToString()}\"", result.CreateTaskResponse.RawRequestPayload);
     }
 
-    protected static void AssertSolveCaptchaResult(BaseResponse result)
+    protected static void AssertSolveCaptchaResult(BaseResponse result, CaptchaType expectedCaptchaType)
     {
         if (result is TaskResultResponse<RecaptchaSolution>)
-            AssertSolveCaptchaResult((TaskResultResponse<RecaptchaSolution>?)result);
+            AssertSolveCaptchaResult((TaskResultResponse<RecaptchaSolution>?)result, expectedCaptchaType);
         if (result is TaskResultResponse<HCaptchaSolution>)
-            AssertSolveCaptchaResult((TaskResultResponse<HCaptchaSolution>?)result);
+            AssertSolveCaptchaResult((TaskResultResponse<HCaptchaSolution>?)result, expectedCaptchaType);
         if (result is TaskResultResponse<FunCaptchaSolution>)
-            AssertSolveCaptchaResult((TaskResultResponse<FunCaptchaSolution>?)result);
+            AssertSolveCaptchaResult((TaskResultResponse<FunCaptchaSolution>?)result, expectedCaptchaType);
         if (result is TaskResultResponse<GeeTestV3Solution>)
-            AssertSolveCaptchaResult((TaskResultResponse<GeeTestV3Solution>?)result);
+            AssertSolveCaptchaResult((TaskResultResponse<GeeTestV3Solution>?)result, expectedCaptchaType);
         if (result is TaskResultResponse<GeeTestV4Solution>)
-            AssertSolveCaptchaResult((TaskResultResponse<GeeTestV4Solution>?)result);
+            AssertSolveCaptchaResult((TaskResultResponse<GeeTestV4Solution>?)result, expectedCaptchaType);
         if (result is TaskResultResponse<AntiGateSolution>)
-            AssertSolveCaptchaResult((TaskResultResponse<AntiGateSolution>?)result);
+            AssertSolveCaptchaResult((TaskResultResponse<AntiGateSolution>?)result, expectedCaptchaType);
         if (result is TaskResultResponse<ImageToTextSolution>)
-            AssertSolveCaptchaResult((TaskResultResponse<ImageToTextSolution>?)result);
+            AssertSolveCaptchaResult((TaskResultResponse<ImageToTextSolution>?)result, expectedCaptchaType);
         if (result is TaskResultResponse<TurnstileSolution>)
-            AssertSolveCaptchaResult((TaskResultResponse<TurnstileSolution>?)result);
+            AssertSolveCaptchaResult((TaskResultResponse<TurnstileSolution>?)result, expectedCaptchaType);
     }
 }

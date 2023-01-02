@@ -49,7 +49,8 @@ internal abstract class RecaptchaSolverBase<TRequest> : Solver <TRequest, Recapt
         {
             var js = Driver as IJavaScriptExecutor;
             js?.ExecuteScript($"window.localStorage.setItem('_grecaptcha','{solution.GRecaptchaResponse}');");
-            js?.ExecuteScript($"document.getElementById('g-recaptcha-response').innerText='{solution.GRecaptchaResponse}';");
+            js?.ExecuteScript($"if(document.getElementById('g-recaptcha-response') != null) " +
+                              $"document.getElementById('g-recaptcha-response').innerText='{solution.GRecaptchaResponse}';");
         }
     }
 
