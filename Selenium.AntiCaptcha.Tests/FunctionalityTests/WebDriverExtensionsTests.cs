@@ -45,9 +45,9 @@ public class WebDriverExtensionsTests : AnticaptchaTestBase
         public async Task ShouldBuildFramesTree_AndReturnToOriginalFrame_FromBottom()
         {
             var rootFrame = Driver.GetCurrentFrame();
-            var bottomFrame = GetDeepestFrame(null, 0);
+            var bottomFrame = GetDeepestFrame(null, null, 0);
             var rootElement = Driver.GetCurrentRootWebElement();
-            Driver.SwitchTo().Frame(Driver.FindIFramesInCurrentFrame().First().WebElement);
+            Driver.SwitchTo().Frame(Driver.FindIFramesInFrame(rootFrame).First().WebElement);
             var currentFrame = Driver.GetCurrentFrame();
             Driver.GetFullFramesTree();
             var afterOperationFrame = Driver.GetCurrentFrame();
@@ -61,21 +61,21 @@ public class WebDriverExtensionsTests : AnticaptchaTestBase
             Assert.Equal(currentFrame.WebElement, afterOperationFrame.WebElement);
         }
 
-        private (IWebElement? frame, int level) GetDeepestFrame(IWebElement? frame, int level)
+        private (IWebElement? frame, int level) GetDeepestFrame(ExtendedWebElement? rootFrame, IWebElement? frame, int level)
         {
             if (frame != null)
             {
-                if (!Driver.TryToSwitchToFrame(new ExtendedWebElement(frame)))
+                if (!Driver.TryToSwitchToFrame(new ExtendedWebElement(frame, Driver.GetAllElementAttributes(frame), rootFrame)))
                 {
                     return (null, 0);
                 }
             }
-
-            var children = Driver.FindIFramesInCurrentFrame();
+            rootFrame = Driver.GetCurrentFrame();
+            var children = Driver.FindIFramesInFrame(rootFrame);
 
             if (children.Any())
             {
-                var childrenFrames = children.Select(x => GetDeepestFrame(x, level + 1)).ToList();
+                var childrenFrames = children.Select(x => GetDeepestFrame(rootFrame, x, level + 1)).ToList();
                 var maxLevel = childrenFrames.Max(x => x.level);
                 return childrenFrames.First(x => x.level == maxLevel);
             }
@@ -90,7 +90,7 @@ public class WebDriverExtensionsTests : AnticaptchaTestBase
             await SetDriverUrl(TestUri);
             var rootFrame = Driver.GetCurrentFrame();
             var rootElement = Driver.GetCurrentRootWebElement();
-            Driver.SwitchTo().Frame(Driver.FindIFramesInCurrentFrame().First().WebElement);
+            Driver.SwitchTo().Frame(Driver.FindIFramesInFrame(rootFrame).First().WebElement);
             var currentFrame = Driver.GetCurrentFrame();
             Driver.GetFullFramesTree();
             var afterOperationFrame = Driver.GetCurrentFrame();
@@ -112,11 +112,6 @@ public class WebDriverExtensionsTests : AnticaptchaTestBase
             var frameBeforeTraversingThrough = Driver.GetCurrentFrame();
             Driver.GetFullFramesTree();
             Assert.Equal(frameBeforeTraversingThrough, Driver.GetCurrentFrame());
-        }
-
-        [Fact]
-        public async Task Test()
-        {
         }
     }
 

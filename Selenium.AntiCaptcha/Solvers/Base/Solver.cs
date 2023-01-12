@@ -1,5 +1,6 @@
 ﻿using AntiCaptchaApi.Net;
 using AntiCaptchaApi.Net.Enums;
+using AntiCaptchaApi.Net.Internal.Validation;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests.Abstractions;
 using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
@@ -57,7 +58,7 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
 
     protected abstract TRequest BuildRequest(SolverArguments arguments);
 
-    protected virtual void FillResponseElement(TSolution solution, IWebElement? responseElement)
+    protected virtual async Task FillResponseElement(TSolution solution, IWebElement? responseElement)
     {
         
     }
@@ -85,21 +86,22 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
 
     private async Task<TaskResultResponse<TSolution>> SolveCaptchaAsync(TRequest request, ActionArguments actionArguments, CancellationToken cancellationToken)
     {
+
         var result = await _anticaptchaClient
             .SolveCaptchaAsync(request, maxSeconds: SolverConfig.MaxTimeOutTimeInMilliseconds, cancellationToken: cancellationToken);
-
         if (result.Status == TaskStatusType.Ready && result.Solution.IsValid())
         {
             var cookies = (result.Solution as AntiGateSolution)?.Cookies;
             if (cookies != null)
                 AddCookies(Driver, cookies, actionArguments.ShouldResetCookiesBeforeAdd);
 
-            FillResponseElement(result.Solution, actionArguments.ResponseElement);
+            await FillResponseElement(result.Solution, actionArguments.ResponseElement);
             actionArguments.SubmitElement?.Click();
         }
 
         return result;
     }
+    
 
 
     public async Task<TaskResultResponse<TSolution>> SolveAsync(TRequest request, ActionArguments actionArguments, CancellationToken cancellationToken)

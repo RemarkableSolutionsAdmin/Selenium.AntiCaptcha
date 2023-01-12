@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using AntiCaptchaApi.Net.Models.Solutions;
+using Selenium.AntiCaptcha;
 using Selenium.AntiCaptcha.Enums;
 using Selenium.Anticaptcha.Tests.Core;
 using Selenium.Anticaptcha.Tests.Core.Config;

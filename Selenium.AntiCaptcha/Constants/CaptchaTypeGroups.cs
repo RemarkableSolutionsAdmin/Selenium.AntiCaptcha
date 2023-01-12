@@ -65,5 +65,4 @@ public static class CaptchaTypeGroups
         CaptchaType.FunCaptcha, 
         CaptchaType.FunCaptchaProxyless
     };
-
 }

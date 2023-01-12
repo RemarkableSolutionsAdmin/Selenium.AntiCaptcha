@@ -56,7 +56,7 @@ namespace Selenium.AntiCaptcha.Solvers
         }
 
 
-        protected override void FillResponseElement(ImageToTextSolution solution, IWebElement? responseElement)
+        protected override async Task FillResponseElement(ImageToTextSolution solution, IWebElement? responseElement)
         {
             responseElement ??= Driver.FindElement(By.Name("captchaWord"));
             responseElement?.SendKeys(solution.Text);

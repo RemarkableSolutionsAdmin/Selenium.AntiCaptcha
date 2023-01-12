@@ -7,18 +7,17 @@ namespace Selenium.AntiCaptcha.Internal.Extensions;
 
 internal static class IWebDriverExtensions
 {
-    public static void ForEachFrame(this IWebDriver driver, Action? action)
+    public static void ForEachFrame(this IWebDriver driver, ExtendedWebElement? currentFrame, Action<ExtendedWebElement?> action)
     {
-        var currentFrame = driver.GetCurrentFrame();
         try
         {
-            action?.Invoke();
-            var frames = driver.FindIFramesInCurrentFrame();
+            action.Invoke(currentFrame);
+            var frames = driver.FindIFramesInFrame(currentFrame);
             foreach (var frame in frames)
             {
                 if (!driver.TryToSwitchToFrame(frame))
                     continue;
-                driver.ForEachFrame(action);
+                driver.ForEachFrame(frame, action);
                 driver.SwitchTo().ParentFrame();
             }
 
@@ -53,21 +52,28 @@ internal static class IWebDriverExtensions
 
     public static IWebElement? FindByXPathAllFrames(this IWebDriver driver, params string[] xPathPatterns)
     {
+        return driver.FindByXPathAllFrames(null, xPathPatterns);
+    }
+
+    private static IWebElement? FindByXPathAllFrames(this IWebDriver driver, ExtendedWebElement? parentElement, params string[] xPathPatterns)
+    {
         if (!xPathPatterns.Any())
             return null;
-        
+
         var result = driver.FindByXPathInCurrentFrame(xPathPatterns);
+        
         if (result != null)
         {
             return result;
         }
 
-        var childrenFrames = driver.FindIFramesInCurrentFrame();
+        parentElement ??= driver.GetCurrentFrame();
+        var childrenFrames = driver.FindIFramesInFrame(parentElement);
         foreach (var frame in childrenFrames)
         {
             if (driver.TryToSwitchToFrame(frame))
             {
-                result = driver.FindByXPathAllFrames(xPathPatterns);
+                result = driver.FindByXPathAllFrames(parentElement, xPathPatterns);
                 if (result != null)
                 {
                     return result;
@@ -79,9 +85,9 @@ internal static class IWebDriverExtensions
         return null;
     }
 
-    public static IList<ExtendedWebElement> FindIFramesInCurrentFrame(this IWebDriver driver)
+    public static IList<ExtendedWebElement> FindIFramesInFrame(this IWebDriver driver, ExtendedWebElement? currentFrame)
     {
-        return driver.FindElements(By.TagName("iframe")).Select(x => new ExtendedWebElement(x)).ToList();
+        return driver.FindElements(By.TagName("iframe")).Select(x => new ExtendedWebElement(x, driver.GetAllElementAttributes(x), currentFrame)).ToList();
     }
 
     public static IEnumerable<ExtendedWebElement> FindManyByXPathAllFrames(this IWebDriver driver, params string[] xPathPatterns)
@@ -92,7 +98,7 @@ internal static class IWebDriverExtensions
         var result = new List<ExtendedWebElement>();
         try
         {
-            driver.ForEachFrame(() => result.AddRange(driver.FindManyByXPathCurrentFrame(xPathPatterns).Select(x => new ExtendedWebElement(x))));
+            driver.ForEachFrame(currentFrame, frame => result.AddRange(driver.FindManyByXPathCurrentFrame(xPathPatterns).Select(x => new ExtendedWebElement(x, driver.GetAllElementAttributes(x), frame))));
             return result;
         }
         catch (Exception)
@@ -105,6 +111,75 @@ internal static class IWebDriverExtensions
         }
     }
 
+    public static IEnumerable<string> FindManyValuesByXPathAllFrames(this IWebDriver driver, string attributeName, params string[] xPathPatterns)
+    {
+        if (!xPathPatterns.Any())
+            return new List<string>();
+        var currentFrame = driver.GetCurrentFrame();
+        var result = new List<string>();
+        try
+        {
+            driver.ForEachFrame(currentFrame,  _ => result.AddRange(driver.FindManyValuesByXPathCurrentFrame(attributeName, xPathPatterns).Select(x => x)));
+            return result;
+        }
+        catch (Exception)
+        {
+            return new List<string>();
+        }
+        finally
+        {
+            driver.TryToSwitchToFrame(currentFrame);
+        }
+    }
+
+    public static async Task SetValueForElementWithIdInAllFrames(this IWebDriver driver, string id, string value)
+    {
+        var currentFrame = driver.GetCurrentFrame();
+        try
+        {
+            driver.ForEachFrame(currentFrame, frame => driver.SetValueForElementWithIdInCurrentFrame(id, value, frame));
+        }
+        catch (Exception)
+        {
+            
+        }
+        finally
+        {
+            driver.TryToSwitchToFrame(currentFrame);
+        }
+    }
+
+    private static void SetValueForElementWithIdInCurrentFrame(this IWebDriver driver, string id, string value, ExtendedWebElement? frameWebElement)
+    {
+        try
+        {
+            var js = driver as IJavaScriptExecutor;
+            var elements = driver.FindElements(By.Id(id));
+
+            if (elements != null && elements.Any())
+            {
+                foreach (var element in elements)
+                {
+                    try
+                    {
+                        js!.ExecuteScript("arguments[0].setAttribute(arguments[1],arguments[2])", element, "value", value);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
+                    js!.ExecuteScript("arguments[0].setAttribute(arguments[1],arguments[2])", element, "value", value);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }   
+    }
+    
+    
     public static List<IWebElement> FindManyByXPathCurrentFrame(this IWebDriver driver, params string[] xPathPatterns)
     {
         var results = new List<IWebElement>();
@@ -122,13 +197,30 @@ internal static class IWebDriverExtensions
 
         return results;
     }
+    public static List<string> FindManyValuesByXPathCurrentFrame(this IWebDriver driver, string attributeName, params string[] xPathPatterns)
+    {
+        var results = new List<string>();
+        foreach (var xPathPattern in xPathPatterns)
+        {
+            try
+            {
+                results.AddRange(driver.FindElements(By.XPath(xPathPattern)).Select(x => x.GetAttribute(attributeName)).ToList());
+            }
+            catch (Exception)
+            {
+                // continue;
+            }
+        }
+
+        return results;
+    }
 
     public static string GetAllPageSource(this IWebDriver driver)
     {
         var currentFrame = driver.GetCurrentFrame();
         if(currentFrame?.IsRoot is false)
             driver.SwitchTo().DefaultContent();
-        var result = GatherAllPageSourcesInFrames(driver);
+        var result = GatherAllPageSourcesInFrames(driver, driver.GetCurrentFrame());
         driver.TryToSwitchToFrame(currentFrame);
         return result;
     }
@@ -142,19 +234,37 @@ internal static class IWebDriverExtensions
             throw new MultipleHtmlRootElementFoundWhileTraversingSiteException();
         }
 
-        return new ExtendedWebElement(inputWebElements.Single());
+        var attributes = driver.GetAllElementAttributes(inputWebElements.Single());
+        return new ExtendedWebElement(inputWebElements.Single(), attributes);
     }
+    
+    
+    public static Dictionary<string, object> GetAllElementAttributes(this IWebDriver driver, IWebElement element)
+    {
+        try
+        {
+            var ex = driver as IJavaScriptExecutor;
+            return (Dictionary<string, object>)
+                ex.ExecuteScript("var items = { }; for (index = 0; index < arguments[0].attributes.length; ++index) { items[arguments[0].attributes[index].name] = arguments[0].attributes[index].value }; return items;",
+                    element is ExtendedWebElement extendedWebElement ? extendedWebElement.WebElement : element);
+        }
+        catch (Exception e)
+        {
+            return new Dictionary<string, object>();
+        }
+    }
+
 
     //Must start from root.
     internal static TreeNode<ExtendedWebElement>? GetFramesTree(this IWebDriver driver)
     {
-        var currentHtmlElement = driver.GetCurrentFrame();
+        var currentFrame = driver.GetCurrentFrame();
 
-        if (currentHtmlElement == null)
+        if (currentFrame == null)
             return null;
         
-        var result = new TreeNode<ExtendedWebElement>(currentHtmlElement);
-        var iframes = driver.FindIFramesInCurrentFrame();
+        var result = new TreeNode<ExtendedWebElement>(currentFrame);
+        var iframes = driver.FindIFramesInFrame(currentFrame);
 
         foreach (var frame in iframes)
         {
@@ -255,7 +365,7 @@ internal static class IWebDriverExtensions
     public static ExtendedWebElement? GetCurrentFrame(this IWebDriver driver) //TODO Refresh cache.
     {
         var inputWebElement = driver.GetCurrentRootWebElement();
-        var inputChildrenFrames = FindIFramesInCurrentFrame(driver);
+        var inputChildrenFrames = driver.FindIFramesInFrame(inputWebElement);
         
         if (inputWebElement == null)
         {
@@ -264,11 +374,11 @@ internal static class IWebDriverExtensions
 
         driver.SwitchTo().ParentFrame();
         
-        var childrenFrames = FindIFramesInCurrentFrame(driver);
+        var childrenFrames = driver.FindIFramesInFrame(inputWebElement);
 
         if (childrenFrames.All(frame => inputChildrenFrames.Any(frame2 => frame2.Equals(frame))))
         {
-            return new ExtendedWebElement(inputWebElement, true);
+            return inputWebElement;
         }
         
         foreach (var frame in childrenFrames)
@@ -278,7 +388,7 @@ internal static class IWebDriverExtensions
                 var currentRootWebElement = driver.GetCurrentRootWebElement();
                 if (Equals(currentRootWebElement, inputWebElement))
                 {
-                    return new ExtendedWebElement(frame.WebElement);
+                    return new ExtendedWebElement(frame.WebElement, driver.GetAllElementAttributes(frame), frame);
                 }
             }
         }
@@ -287,18 +397,18 @@ internal static class IWebDriverExtensions
     }
     
 
-    private static string GatherAllPageSourcesInFrames(IWebDriver driver)
+    private static string GatherAllPageSourcesInFrames(IWebDriver driver, ExtendedWebElement? extendedWebElement)
     {
         var builder = new StringBuilder();
         builder.Append(driver.PageSource);
         
-        var childrenFrames = driver.FindIFramesInCurrentFrame();
+        var childrenFrames = driver.FindIFramesInFrame(extendedWebElement);
         
         foreach (var iframe in childrenFrames)
         {
             if (driver.TryToSwitchToFrame(iframe))
             {
-                builder.Append(GatherAllPageSourcesInFrames(driver));
+                builder.Append(GatherAllPageSourcesInFrames(driver, iframe));
                 driver.SwitchTo().ParentFrame();
             }
         }
@@ -312,8 +422,4 @@ internal static class IWebDriverExtensions
     public static bool DoesAtLeastOneOfTheElementsExist(this IWebDriver driver, IEnumerable<string> xPaths) =>
         xPaths.Any(xpath => driver.FindByXPathInCurrentFrame(xpath) != null);
 
-    public static bool DoesAtLeastOneOfTheElementsExistInAllFrames(this IWebDriver driver, IEnumerable<string> xPaths)
-    {
-        return xPaths.Any(xpath => driver.FindByXPathAllFrames(xpath) != null);
-    }
 }

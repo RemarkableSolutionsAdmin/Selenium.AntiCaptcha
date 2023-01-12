@@ -3,6 +3,7 @@ using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests.Abstractions;
 using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using OpenQA.Selenium;
+using Selenium.AntiCaptcha.Exceptions;
 using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
 
@@ -39,7 +40,7 @@ internal abstract class RecaptchaSolverBase<TRequest> : Solver <TRequest, Recapt
     }
     
     
-    protected override void FillResponseElement(RecaptchaSolution solution, IWebElement? responseElement)
+    protected override async Task FillResponseElement(RecaptchaSolution solution, IWebElement? responseElement)
     {
         if (responseElement != null)
         {
@@ -47,10 +48,32 @@ internal abstract class RecaptchaSolverBase<TRequest> : Solver <TRequest, Recapt
         }
         else
         {
-            var js = Driver as IJavaScriptExecutor;
-            js?.ExecuteScript($"window.localStorage.setItem('_grecaptcha','{solution.GRecaptchaResponse}');");
-            js?.ExecuteScript($"if(document.getElementById('g-recaptcha-response') != null) " +
-                              $"document.getElementById('g-recaptcha-response').innerText='{solution.GRecaptchaResponse}';");
+            try
+            {           
+                var recaptchaElementIds = Driver
+                    .FindManyValuesByXPathAllFrames(
+                        "id",
+                        "//input[@type='hidden' and contains(@id, 'recaptcha') ] | //textarea[contains(@id, 'g-recaptcha-response')]")
+                    .Distinct()
+                    .ToList();
+
+
+                foreach (var elementId in recaptchaElementIds)
+                {
+                    try
+                    {
+                        await Driver.SetValueForElementWithIdInAllFrames(elementId, "!@#!@#");
+                    }
+                    catch (Exception)
+                    {
+                        // ignore
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
         }
     }
 

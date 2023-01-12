@@ -13,7 +13,7 @@ public abstract class HCaptchaSolverBase<TRequest> : Solver <TRequest, HCaptchaS
     {
     }
     
-    protected override void FillResponseElement(HCaptchaSolution solution, IWebElement? responseElement)
+    protected override async Task FillResponseElement(HCaptchaSolution solution, IWebElement? responseElement)
     {
         try
         {

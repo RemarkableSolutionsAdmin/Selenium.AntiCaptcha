@@ -1,25 +1,32 @@
 ﻿using System.Collections.ObjectModel;
 using System.Drawing;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Remote;
+using Selenium.AntiCaptcha.Internal.Extensions;
 
 namespace Selenium.AntiCaptcha.Internal.Models;
 
 internal class ExtendedWebElement : IWebElement
 {
     public IWebElement WebElement { get; private set; }
-    
-    private ExtendedWebElement(IWebElement webElement)
-    {
-        WebElement = webElement;
-    }
+    public ExtendedWebElement? ParentFrameElement { get; private set; }
+    public Dictionary<string, object> CachedAttributes { get; private set; }
 
-    internal ExtendedWebElement(IWebElement webElement, bool isRoot = false, bool isFrame = false) : this(webElement)
+
+    public ExtendedWebElement(IWebElement webElement, ExtendedWebElement? parentFrameElement, Dictionary<string, object> cachedAttributes)
     {
-          IsRoot = isRoot;
+          WebElement = webElement;
+          ParentFrameElement = parentFrameElement;
+          CachedAttributes = cachedAttributes;
+    }
+    
+    internal ExtendedWebElement(IWebElement webElement, Dictionary<string, object> cachedAttributes, ExtendedWebElement? parentFrameElement = null, bool isFrame = false) : this(webElement, parentFrameElement, cachedAttributes)
+    {
           IsFrame = isFrame;
     }
-
-    public bool IsRoot { get; private set; }
+      
+    public bool IsRoot => ParentFrameElement == null;
+    
     public bool IsFrame { get; private set; }
     public IWebElement FindElement(By by)
     {
