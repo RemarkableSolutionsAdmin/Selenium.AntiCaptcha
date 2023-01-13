@@ -62,7 +62,7 @@ internal abstract class RecaptchaSolverBase<TRequest> : Solver <TRequest, Recapt
                 {
                     try
                     {
-                        await Driver.SetValueForElementWithIdInAllFrames(elementId, "!@#!@#");
+                        await Driver.SetValueForElementWithIdInAllFrames(elementId, solution.GRecaptchaResponse);
                     }
                     catch (Exception)
                     {
