@@ -6,7 +6,7 @@ using Selenium.AntiCaptcha.Solvers.Base;
 
 namespace Selenium.AntiCaptcha.Solvers
 {
-    internal class ReCaptchaV3EnterpriseSolver : RecaptchaSolverBase<IRecaptchaV3EnterpriseRequest>
+    internal class ReCaptchaV3EnterpriseSolver : RecaptchaEnterpriseSolverBase<IRecaptchaV3EnterpriseRequest>
     {
         protected override IRecaptchaV3EnterpriseRequest BuildRequest(SolverArguments arguments)
         {
