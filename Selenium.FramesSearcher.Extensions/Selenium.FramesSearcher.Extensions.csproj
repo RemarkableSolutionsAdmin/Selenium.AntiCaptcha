@@ -3,7 +3,22 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Version>1.0.0</Version>
+        <Authors>RemarkableSolutions</Authors>
+        <PackageProjectUrl>https://github.com/RemarkableSolutionsAdmin/Selenium.AntiCaptcha</PackageProjectUrl>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <RepositoryUrl>https://github.com/RemarkableSolutionsAdmin/Selenium.AntiCaptcha</RepositoryUrl>
+        <PackageTags>Selenium IWebDriver Extensions iframes</PackageTags>
         <Nullable>enable</Nullable>
+        <Title>Selenium.FramesSearcher.Extensions</Title>
+        <Description>Selenium IWebDriver Extensions to look for elements inside of iframes</Description>
+        <Copyright>Copyright (c) Remarkable Solutions 2022</Copyright>
+        <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+        <PublishRepositoryUrl>True</PublishRepositoryUrl>
+        <IncludeSymbols>True</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PackageVersion>1.0.0</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>

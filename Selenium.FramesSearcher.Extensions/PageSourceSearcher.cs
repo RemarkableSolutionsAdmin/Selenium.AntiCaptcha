@@ -5,9 +5,7 @@ namespace Selenium.FramesSearcher.Extensions;
 
 public static class PageSourceSearcher
 {
-    private const string SiteKeyRegexPattern = @"(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})";
-    private const string FunCaptchaRegexSiteKey1 = $"funcaptcha+.{{0,100}}{SiteKeyRegexPattern}";
-    private const string FunCaptchaRegexSiteKey2 = $"{SiteKeyRegexPattern}.{{0,100}}funcaptcha";
+    private const string FunCaptchaRegexSiteKeyPattern = @"(?:funcaptcha\.com|arkoselabs\.com){1}.{0,200}(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})";
     public static string FindFunCaptchaSiteKey(IWebDriver driver)
     {       
         try
@@ -20,19 +18,12 @@ public static class PageSourceSearcher
         }
 
         var pageSource = driver.GetAllPageSource();
-        var match = pageSource.GetFirstRegexThatFits(false, FunCaptchaRegexSiteKey1, FunCaptchaRegexSiteKey2);
+        var match = pageSource.GetFirstRegexThatFits(true, FunCaptchaRegexSiteKeyPattern);
 
         if (match == null || match.Groups.Count == 0)
             return string.Empty;
 
         return match.Groups[1].Value;
-    }
-
-    public static string FindSiteKey(IWebDriver driver)
-    {
-        var pageSource = driver.GetAllPageSource();
-        var match = pageSource.GetFirstRegexThatFits(false, SiteKeyRegexPattern);
-        return match != null ? match.Groups[1].Value : string.Empty;
     }
 
     public static string FindSingleImageSourceForImageToText(IWebDriver driver)
