@@ -163,13 +163,12 @@ internal static class IWebDriverExtensions
                     try
                     {
                         js!.ExecuteScript("arguments[0].setAttribute(arguments[1],arguments[2])", element, "value", value);
+                        js!.ExecuteScript($"document.getElementById('{id}').value = '{value}'");
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
-                        throw;
+                        // ignore
                     }
-                    js!.ExecuteScript("arguments[0].setAttribute(arguments[1],arguments[2])", element, "value", value);
                 }
             }
         }

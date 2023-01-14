@@ -53,7 +53,7 @@ internal abstract class RecaptchaSolverBase<TRequest> : Solver <TRequest, Recapt
                 var recaptchaElementIds = Driver
                     .FindManyValuesByXPathAllFrames(
                         "id",
-                        "//input[@type='hidden' and contains(@id, 'recaptcha') ] | //textarea[contains(@id, 'g-recaptcha-response')]")
+                        "//textarea[contains(@id, 'g-recaptcha-response')]")
                     .Distinct()
                     .ToList();
 
