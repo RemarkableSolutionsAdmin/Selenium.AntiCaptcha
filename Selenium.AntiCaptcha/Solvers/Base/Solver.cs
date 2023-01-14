@@ -1,14 +1,12 @@
 ﻿using AntiCaptchaApi.Net;
 using AntiCaptchaApi.Net.Enums;
-using AntiCaptchaApi.Net.Internal.Validation;
 using AntiCaptchaApi.Net.Models.Solutions;
-using AntiCaptchaApi.Net.Requests.Abstractions;
 using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using AntiCaptchaApi.Net.Responses;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
-using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
+using Selenium.FramesSearcher.Extensions;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
@@ -31,7 +29,7 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
 
         var patterns = new List<string>
         {
-            "sitekey(?:&quot;:&quot;|\".*:.*\"|=[^\\D]+?){1}([\\w\\d-]+)",
+            @"sitekey=""?([\w\d-]+)""?",
             "gt=(.*?)&",
             "captcha_id=(.*?)&",
         };

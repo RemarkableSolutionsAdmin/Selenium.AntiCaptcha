@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 using AntiCaptchaApi.Net.Models.Solutions;
-using Selenium.AntiCaptcha.Enums;
-using Selenium.AntiCaptcha.Internal.Extensions;
-using Selenium.Anticaptcha.Tests.Core;
-using Selenium.Anticaptcha.Tests.Core.Config;
 using Selenium.Anticaptcha.Tests.Core.SolverTestBases;
+using Selenium.CaptchaIdentifier.Enums;
+using Selenium.FramesSearcher.Extensions;
+using Tests.Common.Config;
+using Tests.Common.Core;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests.Proxyless;
 

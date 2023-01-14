@@ -2,10 +2,9 @@
 using AntiCaptchaApi.Net.Requests;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Exceptions;
-using Selenium.AntiCaptcha.Internal.Extensions;
-using Selenium.AntiCaptcha.Internal.Helpers;
 using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
+using Selenium.FramesSearcher.Extensions;
 
 namespace Selenium.AntiCaptcha.Solvers
 {

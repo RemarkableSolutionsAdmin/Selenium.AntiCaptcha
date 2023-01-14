@@ -2,32 +2,16 @@
 using AntiCaptchaApi.Net.Responses;
 using AntiCaptchaApi.Net.Responses.Abstractions;
 using OpenQA.Selenium;
-using Selenium.AntiCaptcha.Enums;
 using Selenium.AntiCaptcha.Exceptions;
-using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
+using Selenium.CaptchaIdentifier;
+using Selenium.CaptchaIdentifier.Enums;
+using Selenium.CaptchaIdentifier.Extensions;
 
 namespace Selenium.AntiCaptcha
 {
     public static class IWebDriverExtensions
     {
-        public static async Task<TaskResultResponse<RecaptchaSolution>> SolveRecaptchaAsync(this IWebDriver driver,
-            string clientKey,
-            ActionArguments? actionArguments = null,
-            SolverConfig? solverConfig = null,
-            CancellationToken cancellationToken = default)
-        {
-            var recaptchaIdentifier = CaptchaIdentifier.GetRecaptchaIdentifier();
-            var solverArguments = new SolverArguments();
-            var captchaType = await recaptchaIdentifier.IdentifyInAllFramesAsync(driver, solverArguments, cancellationToken);
-            if (!captchaType.HasValue)
-            {
-                throw new InsufficientSolverArgumentsException("Could not identify the recaptcha type from arguments. Please provide captchaType or better solver arguments to enable identification of captcha on site.");
-            }
-            var solver = SolverFactory.GetSolver<RecaptchaSolution>(driver,  clientKey, captchaType.Value, solverConfig ?? new DefaultSolverConfig());
-            return await solver.SolveAsync(solverArguments, actionArguments ?? new ActionArguments(), cancellationToken);
-        }
-        
         public static async Task<BaseResponse> SolveCaptchaAsync(this IWebDriver driver,
             string clientKey,
             SolverArguments? solverArguments = null,
@@ -43,7 +27,7 @@ namespace Selenium.AntiCaptcha
 
         private static async Task<CaptchaType> IdentifyCaptcha(IWebDriver driver, SolverArguments arguments, CancellationToken cancellationToken = default)
         {          
-            var identifiedCaptchaTypes = await CaptchaIdentifier.IdentifyAsync(driver, arguments, cancellationToken);
+            var identifiedCaptchaTypes = await driver.IdentifyCaptchaAsync(arguments.ImageElement, arguments.ProxyConfig, cancellationToken);
 
             if (identifiedCaptchaTypes.Count != 1)
                 throw new UnidentifiableCaptchaException(identifiedCaptchaTypes);
@@ -60,7 +44,7 @@ namespace Selenium.AntiCaptcha
             CancellationToken cancellationToken = default) where TSolution : BaseSolution, new()
         {
             solverArguments ??= new SolverArguments();
-            var captchaType = solverArguments.CaptchaType ?? await CaptchaIdentifier.IdentifyCaptchaAsync<TSolution>(driver, solverArguments, cancellationToken);
+            var captchaType = solverArguments.CaptchaType ?? await driver.IdentifyCaptchaAsync<TSolution>(solverArguments.ImageElement, solverArguments.ProxyConfig, cancellationToken);
 
             if (!captchaType.HasValue)
             {

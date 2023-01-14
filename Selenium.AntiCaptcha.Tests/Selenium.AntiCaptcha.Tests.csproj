@@ -10,7 +10,6 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-        <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="109.0.5414.7400" />
         <PackageReference Include="xunit" Version="2.4.1" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,13 +22,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="chromedriver.exe">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </AdditionalFiles>
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Selenium.AntiCaptcha\Selenium.AntiCaptcha.csproj" />
+      <ProjectReference Include="..\Tests.Common\Tests.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>

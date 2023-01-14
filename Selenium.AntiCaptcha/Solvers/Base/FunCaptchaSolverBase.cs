@@ -1,9 +1,8 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
-using AntiCaptchaApi.Net.Requests.Abstractions;
 using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using OpenQA.Selenium;
-using Selenium.AntiCaptcha.Internal.Helpers;
 using Selenium.AntiCaptcha.Models;
+using Selenium.FramesSearcher.Extensions;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
 

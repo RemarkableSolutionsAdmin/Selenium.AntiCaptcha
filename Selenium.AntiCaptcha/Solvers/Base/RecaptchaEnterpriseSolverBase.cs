@@ -2,8 +2,8 @@
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using OpenQA.Selenium;
-using Selenium.AntiCaptcha.Internal.Extensions;
 using Selenium.AntiCaptcha.Models;
+using Selenium.FramesSearcher.Extensions;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
 
@@ -19,7 +19,7 @@ internal abstract class RecaptchaEnterpriseSolverBase<TRequest> : RecaptchaSolve
     {
         return (await base.FillMissingSolverArguments(solverArguments)) with
         {
-            EnterprisePayload = GetEnterprisePayload()
+            EnterprisePayload = solverArguments.EnterprisePayload ?? GetEnterprisePayload()
         };
     }
 
@@ -28,7 +28,8 @@ internal abstract class RecaptchaEnterpriseSolverBase<TRequest> : RecaptchaSolve
         var result = new Dictionary<string, string>();
         var recaptchaFramesSources = Driver
             .FindManyByXPathAllFrames("//iframe[contains(@src, 'recaptcha') and contains(@src, 'enterprise')]")
-            .Select(x => x.GetAttribute("src")).ToList();
+            .Select(x => x.GetAttribute("src"))
+            .ToList();
 
         var regex = new Regex(@"(?:(?:(\w+)=([\w-]+)))");
         foreach (var recaptchaFrameSource in recaptchaFramesSources)

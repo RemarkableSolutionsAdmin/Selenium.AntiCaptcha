@@ -18,7 +18,7 @@
     <PublishRepositoryUrl>True</PublishRepositoryUrl>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <PackageVersion>1.4.4</PackageVersion>
+    <PackageVersion>1.5.0</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,5 +31,10 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>Selenium.Anticaptcha.Tests</_Parameter1>
     </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Selenium.CaptchaIdentifier\Selenium.CaptchaIdentifier.csproj" />
+    <ProjectReference Include="..\Selenium.FramesSearcher.Extensions\Selenium.FramesSearcher.Extensions.csproj" />
   </ItemGroup>
 </Project>

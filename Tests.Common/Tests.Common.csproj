@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AntiCaptchaApi.Net" Version="1.2.11" />
+      <PackageReference Include="Microsoft.PowerShell.SDK" Version="6.2.7" />
+      <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="109.0.5414.7400" />
+      <PackageReference Include="xunit" Version="2.4.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Selenium.CaptchaIdentifier\Selenium.CaptchaIdentifier.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="chromedriver.exe">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </AdditionalFiles>
+    </ItemGroup>
+
+</Project>

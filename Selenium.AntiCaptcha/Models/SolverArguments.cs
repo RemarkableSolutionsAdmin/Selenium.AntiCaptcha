@@ -1,10 +1,12 @@
 ﻿using AntiCaptchaApi.Net.Enums;
 using AntiCaptchaApi.Net.Models;
 using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
-//using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
-using Selenium.AntiCaptcha.Enums;
+using Selenium.CaptchaIdentifier.Enums;
+
+//using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
+
 namespace Selenium.AntiCaptcha.Models;
 
 public record SolverArguments(
