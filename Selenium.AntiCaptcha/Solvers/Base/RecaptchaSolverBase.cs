@@ -38,13 +38,13 @@ internal abstract class RecaptchaSolverBase<TRequest> : Solver <TRequest, Recapt
     }
     
     
-    protected override async Task FillResponseElement(RecaptchaSolution solution, IWebElement? responseElement)
+    protected override async Task FillResponseElement(RecaptchaSolution solution, ActionArguments actionArguments)
     {
-        if (responseElement != null)
+        if (actionArguments.ResponseElement != null)
         {
-            responseElement.SendKeys(solution.GRecaptchaResponse);
+            actionArguments.ResponseElement.SendKeys(solution.GRecaptchaResponse);
         }
-        else
+        else if(actionArguments.ShouldFindAndFillAccordingResponseElements)
         {
             try
             {           

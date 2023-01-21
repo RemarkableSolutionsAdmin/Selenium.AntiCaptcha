@@ -55,10 +55,22 @@ namespace Selenium.AntiCaptcha.Solvers
         }
 
 
-        protected override async Task FillResponseElement(ImageToTextSolution solution, IWebElement? responseElement)
+        protected override async Task FillResponseElement(ImageToTextSolution solution, ActionArguments actionArguments)
         {
-            responseElement ??= Driver.FindElement(By.Name("captchaWord"));
-            responseElement?.SendKeys(solution.Text);
+            try
+            {
+                var responseElement = actionArguments.ResponseElement;
+                if (actionArguments.ShouldFindAndFillAccordingResponseElements)
+                {
+                    responseElement ??= Driver.FindElement(By.Name("captchaWord"));   
+                }
+
+                responseElement?.SendKeys(solution.Text);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
 
         public ImageToTextSolver(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)

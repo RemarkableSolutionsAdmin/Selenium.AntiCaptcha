@@ -127,9 +127,9 @@ public abstract class SolverTestBase<TSolution> : WebDriverBasedTestBase
         var stringBuilder = new StringBuilder();
 
         AppendTitleWithValue(stringBuilder, nameof(TaskResultResponse<TSolution>.ErrorDescription), result.ErrorDescription);
-        AppendTitleWithValue(stringBuilder, nameof(TaskResultResponse<TSolution>.RawRequestPayload), result.RawRequestPayload);
+        AppendTitleWithValue(stringBuilder, nameof(TaskResultResponse<TSolution>.RawPayload), result.RawPayload);
         AppendTitleWithValue(stringBuilder, nameof(TaskResultResponse<TSolution>.RawResponse), result.RawResponse);
-        AppendTitleWithValue(stringBuilder, nameof(TaskResultResponse<TSolution>.CreateTaskResponse.RawRequestPayload), result.CreateTaskResponse?.RawRequestPayload);
+        AppendTitleWithValue(stringBuilder, nameof(TaskResultResponse<TSolution>.CreateTaskResponse.RawPayload), result.CreateTaskResponse?.RawPayload);
         AppendTitleWithValue(stringBuilder, nameof(TaskResultResponse<TSolution>.CreateTaskResponse.RawResponse), result.CreateTaskResponse?.RawResponse);
         
         return stringBuilder.ToString();

@@ -31,7 +31,7 @@ public record SolverArguments(
     string? Challenge = null,
     string? Gt = null,
     Dictionary<string, string>? InitParameters = null,
-    double MinScore = 0.3,
+    decimal MinScore = 0.3m,
     string? PageAction = null,
     string? ApiDomain = null,
     bool? IsEnterprise = null,
@@ -44,6 +44,9 @@ public record SolverArguments(
     string? Comment = null,
     string? ImageFilePath = null,
     bool? IsInvisible = null,
+    ClientConfig? ClientConfig = null,
+    string? LanguagePool = null,
+    string? CallbackUrl = null,
     Dictionary<string, string>? EnterprisePayload = null) 
       :
           IAntiGateRequest,
@@ -74,7 +77,7 @@ public record SolverArguments(
     public string? Challenge { get; set; } = Challenge;
     public string? Gt { get; set; } = Gt;
     public Dictionary<string, string>? InitParameters { get; set; } = InitParameters;
-    public double MinScore { get; set; } = MinScore;
+    public decimal MinScore { get; set; } = MinScore;
     public string? PageAction { get; set; } = PageAction;
     public string? ApiDomain { get; set; } = ApiDomain;
     public bool? IsEnterprise { get; set; } = IsEnterprise;
@@ -92,4 +95,7 @@ public record SolverArguments(
     public Dictionary<string, string>? EnterprisePayload { get; set; } = EnterprisePayload;
     public string? Cookies { get; set; } = Cookies;
     public string? RecaptchaDataSValue { get; set; } = RecaptchaDataSValue;
+    public string? LanguagePool { get; set; } = LanguagePool;
+    public string? CallbackUrl { get; set; } = CallbackUrl;
+    public ClientConfig ClientConfig { get; set; } = ClientConfig ?? new ClientConfig();
 }

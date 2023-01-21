@@ -11,16 +11,44 @@ public abstract class FunCaptchaSolverBase<TRequest> : Solver<TRequest, FunCaptc
 {
     protected override string GetSiteKey()
     {
-        try
-        {
-            return Driver.FindElement(By.Id("funcaptcha")).GetAttribute("data-pkey");
-        }
-        catch (Exception)
-        {
-            // ignore
-        }
- 
         return PageSourceSearcher.FindFunCaptchaSiteKey(Driver);
+    }
+
+    protected override async Task FillResponseElement(FunCaptchaSolution solution, ActionArguments actionArguments)
+    {
+        if (actionArguments.ResponseElement != null)
+        {
+            actionArguments.ResponseElement.SendKeys(solution.Token);
+        }
+        else if(actionArguments.ShouldFindAndFillAccordingResponseElements)
+        {
+            try
+            {           
+                var recaptchaElementIds = Driver
+                    .FindManyValuesByXPathAllFrames(
+                        "id",
+                        "//input[@id='fc-token' or @id='FunCaptcha-Token' or @id='verification-token']") // verification-token
+                    .Distinct()
+                    .ToList();
+
+
+                foreach (var elementId in recaptchaElementIds)
+                {
+                    try
+                    {
+                        await Driver.SetValueForElementWithIdInAllFrames(elementId, solution.Token);
+                    }
+                    catch (Exception)
+                    {
+                        // ignore
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
+        }
     }
 
     protected FunCaptchaSolverBase(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)

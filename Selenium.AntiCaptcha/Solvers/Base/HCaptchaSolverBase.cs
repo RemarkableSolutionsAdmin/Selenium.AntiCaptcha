@@ -12,12 +12,20 @@ public abstract class HCaptchaSolverBase<TRequest> : Solver <TRequest, HCaptchaS
     {
     }
     
-    protected override async Task FillResponseElement(HCaptchaSolution solution, IWebElement? responseElement)
+    protected override async Task FillResponseElement(HCaptchaSolution solution, ActionArguments actionArguments)
     {
         try
         {
-            responseElement ??= Driver.FindElement(By.Name("h-captcha-response"));
-            responseElement?.SendKeys(solution.GRecaptchaResponse);
+            var responseElement = actionArguments.ResponseElement;
+            if (actionArguments.ShouldFindAndFillAccordingResponseElements)
+            {
+                responseElement ??= Driver.FindElement(By.Name("h-captcha-response"));
+            }
+
+            if (responseElement != null)
+            {
+                actionArguments.ResponseElement?.SendKeys(solution.GRecaptchaResponse);   
+            }
         }
         catch (Exception e)
         {

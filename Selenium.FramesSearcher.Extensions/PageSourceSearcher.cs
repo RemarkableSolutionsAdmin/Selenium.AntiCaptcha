@@ -5,7 +5,7 @@ namespace Selenium.FramesSearcher.Extensions;
 
 public static class PageSourceSearcher
 {
-    private const string FunCaptchaRegexSiteKeyPattern = @"(?:funcaptcha\.com|arkoselabs\.com){1}.{0,200}(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})";
+    private const string FunCaptchaRegexSiteKeyPattern = @"(?:funcaptcha|arkoselabs){1}.{0,200}(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})";
     public static string FindFunCaptchaSiteKey(IWebDriver driver)
     {       
         try

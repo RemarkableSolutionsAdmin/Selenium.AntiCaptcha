@@ -1,5 +1,6 @@
 ﻿using AntiCaptchaApi.Net;
 using AntiCaptchaApi.Net.Enums;
+using AntiCaptchaApi.Net.Models;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using AntiCaptchaApi.Net.Responses;
@@ -56,7 +57,7 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
 
     protected abstract TRequest BuildRequest(SolverArguments arguments);
 
-    protected virtual async Task FillResponseElement(TSolution solution, IWebElement? responseElement)
+    protected virtual async Task FillResponseElement(TSolution solution, ActionArguments actionArguments)
     {
         
     }
@@ -79,21 +80,21 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
     {
         arguments = await FillMissingSolverArguments(arguments);
         var request = BuildRequest(arguments);
-        return await SolveCaptchaAsync(request, actionArguments, cancellationToken);
+        return await SolveCaptchaAsync(request, arguments, actionArguments, cancellationToken);
     }
 
-    private async Task<TaskResultResponse<TSolution>> SolveCaptchaAsync(TRequest request, ActionArguments actionArguments, CancellationToken cancellationToken)
+    private async Task<TaskResultResponse<TSolution>> SolveCaptchaAsync(TRequest request, SolverArguments solverArguments, ActionArguments actionArguments, CancellationToken cancellationToken)
     {
-
+        _anticaptchaClient.Configure(solverArguments.ClientConfig);
         var result = await _anticaptchaClient
-            .SolveCaptchaAsync(request, maxSeconds: SolverConfig.MaxTimeOutTimeInMilliseconds, cancellationToken: cancellationToken);
+            .SolveCaptchaAsync(request, solverArguments.LanguagePool, solverArguments.CallbackUrl, cancellationToken: cancellationToken);
         if (result.Status == TaskStatusType.Ready && result.Solution.IsValid())
         {
             var cookies = (result.Solution as AntiGateSolution)?.Cookies;
             if (cookies != null)
                 AddCookies(Driver, cookies, actionArguments.ShouldResetCookiesBeforeAdd);
 
-            await FillResponseElement(result.Solution, actionArguments.ResponseElement);
+            await FillResponseElement(result.Solution, actionArguments);
             actionArguments.SubmitElement?.Click();
         }
 
@@ -104,7 +105,7 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
 
     public async Task<TaskResultResponse<TSolution>> SolveAsync(TRequest request, ActionArguments actionArguments, CancellationToken cancellationToken)
     {
-        return await SolveCaptchaAsync(request, actionArguments, cancellationToken);
+        return await SolveCaptchaAsync(request, new SolverArguments() ,actionArguments, cancellationToken);
     }
 
     public void Configure(IWebDriver driver, string clientKey, SolverConfig solverConfig)

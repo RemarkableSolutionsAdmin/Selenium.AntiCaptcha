@@ -17,11 +17,4 @@ public class AntiGateIdentifier : ProxyCaptchaIdentifier
     {
         return null; //TODO!
     }
-
-    //TODO!
-    public override async Task<CaptchaType?> SpecifyCaptcha(CaptchaType originalType, IWebDriver driver,
-        IWebElement? imageElement, ProxyConfig? proxyConfig, CancellationToken cancellationToken)
-    {
-        return await base.SpecifyCaptcha(originalType, driver, imageElement, proxyConfig, cancellationToken);
-    }
 }
