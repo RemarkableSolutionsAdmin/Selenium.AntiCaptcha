@@ -1,4 +1,4 @@
-﻿using AntiCaptchaApi.Net;
+﻿    using AntiCaptchaApi.Net;
 using AntiCaptchaApi.Net.Enums;
 using AntiCaptchaApi.Net.Models;
 using AntiCaptchaApi.Net.Models.Solutions;
@@ -18,12 +18,12 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
     protected IWebDriver Driver;
     private AnticaptchaClient _anticaptchaClient;
     public SolverConfig SolverConfig { get; protected set; }
-
+    
     protected Solver(string clientKey, IWebDriver driver, SolverConfig solverConfig)
     {
         Configure(driver, clientKey, solverConfig);
     }
-
+    
     protected virtual string GetSiteKey()
     {   
         var pageSource = Driver.GetAllPageSource();
@@ -41,17 +41,7 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
 
     protected async Task<string> AcquireSiteKey()
     {
-        var timePassedInMs = 0;
-        while (true)
-        {
-            var result = GetSiteKey();
-
-            if (!string.IsNullOrEmpty(result) || timePassedInMs >= SolverConfig.MaxPageLoadWaitingTimeInMilliseconds) 
-                return result;
-
-            await Task.Delay(SolverConfig.WaitingStepTimeInMilliseconds);
-            timePassedInMs += SolverConfig.WaitingStepTimeInMilliseconds;
-        }
+        return await AcquireElementValue(GetSiteKey);
     }
 
 
@@ -60,6 +50,21 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
     protected virtual async Task FillResponseElement(TSolution solution, ActionArguments actionArguments)
     {
         
+    }
+
+    protected async Task<string> AcquireElementValue(Func<string> getElementValueFunction) 
+    {
+        var timePassedInMs = 0;
+        while (true)
+        {
+            var result = getElementValueFunction.Invoke();
+
+            if (!string.IsNullOrEmpty(result) || timePassedInMs >= SolverConfig.MaxPageLoadWaitingTimeInMilliseconds) 
+                return result;
+
+            await Task.Delay(SolverConfig.WaitingStepTimeInMilliseconds);
+            timePassedInMs += SolverConfig.WaitingStepTimeInMilliseconds;
+        }
     }
 
     protected virtual async Task<SolverArguments> FillMissingSolverArguments(SolverArguments solverArguments)

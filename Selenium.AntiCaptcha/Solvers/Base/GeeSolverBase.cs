@@ -44,17 +44,7 @@ public abstract class GeeSolverBase<TRequest, TSolution> : Solver <TRequest, TSo
 
     private async Task<string> AcquireGt()
     {
-        var timePassedInMs = 0;
-        while (true)
-        {
-            var result = GetGt();
-
-            if (!string.IsNullOrEmpty(result) || timePassedInMs >= SolverConfig.MaxPageLoadWaitingTimeInMilliseconds) 
-                return result;
-
-            await Task.Delay(SolverConfig.WaitingStepTimeInMilliseconds);
-            timePassedInMs += SolverConfig.WaitingStepTimeInMilliseconds;
-        }
+        return await AcquireElementValue(GetGt);
     }
         
     private string GetChallenge(IWebDriver driver)
