@@ -1,6 +1,7 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
 using OpenQA.Selenium;
+using OpenQA.Selenium.DevTools.V99.Page;
 using Selenium.AntiCaptcha.Exceptions;
 using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
@@ -15,6 +16,11 @@ namespace Selenium.AntiCaptcha.Solvers
             return string.Empty;
         }
 
+        protected override Task<string> AcquireSiteKey()
+        {
+            return Task.FromResult(string.Empty);
+        }
+
         protected override ImageToTextRequest BuildRequest(SolverArguments arguments)
         {
             if (!string.IsNullOrEmpty(arguments.ImageFilePath))
@@ -22,28 +28,16 @@ namespace Selenium.AntiCaptcha.Solvers
                 return new ImageToTextRequest(arguments);
             }
 
-            var bodyBase64 = string.Empty;
-            if (arguments.ImageElement == null)
+            var imageBody = DownloadImageBody(arguments.ImageElement);
+
+            if (string.IsNullOrEmpty(imageBody))
             {
-                var possibleImageSource = PageSourceSearcher.FindSingleImageSourceForImageToText(Driver);
-
-                if (string.IsNullOrEmpty(possibleImageSource))
-                {
-                    throw new InsufficientSolverArgumentsException("No image found in the arguments. Please provide one.");    
-                }
-
-                var imageWebElement =  Driver.FindByXPathAllFrames($"//img[@src='{possibleImageSource}']");
-                bodyBase64 = imageWebElement?.DownloadSourceAsBase64String();
-                
-                if (string.IsNullOrEmpty(bodyBase64))
-                {
-                    throw new InsufficientSolverArgumentsException("No image found in the arguments. Please provide one.");    
-                }
+                throw new InsufficientSolverArgumentsException("Could not download the image from provided image element.");    
             }
             
             return new ImageToTextRequest
             {
-                BodyBase64 = arguments.ImageElement?.DownloadSourceAsBase64String() ?? bodyBase64,           
+                BodyBase64 = imageBody,           
                 Phrase = arguments.Phrase,
                 Case = arguments.Case,
                 Numeric = arguments.Numeric,
@@ -52,6 +46,31 @@ namespace Selenium.AntiCaptcha.Solvers
                 MaxLength = arguments.MaxLength,
                 Comment = arguments.Comment,
             };
+        }
+
+        private string DownloadImageBody(IWebElement? imageElement)
+        {
+            if (imageElement is not null)
+            {
+                return imageElement.DownloadSourceAsBase64String();
+            }
+
+            var possibleImageSource = PageSourceSearcher.FindSingleImageSourceForImageToText(Driver);
+
+            if (string.IsNullOrEmpty(possibleImageSource))
+            {
+                throw new InsufficientSolverArgumentsException("No image found in the arguments. Please provide one.");    
+            }
+
+            var imageWebElement =  Driver.FindByXPathAllFrames($"//img[@src='{possibleImageSource}']");
+            var bodyBase64 = imageWebElement?.DownloadSourceAsBase64String();
+                
+            if (string.IsNullOrEmpty(bodyBase64))
+            {
+                throw new InsufficientSolverArgumentsException("No image found in the arguments. Please provide one.");    
+            }
+
+            return bodyBase64;
         }
 
 

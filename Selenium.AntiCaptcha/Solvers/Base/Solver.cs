@@ -39,7 +39,7 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
         return result != null ? result.Groups[1].Value : string.Empty;
     }
 
-    protected async Task<string> AcquireSiteKey()
+    protected virtual async Task<string> AcquireSiteKey()
     {
         return await AcquireElementValue(GetSiteKey);
     }

@@ -9,12 +9,12 @@ using Tests.Common.Core;
 namespace Selenium.Anticaptcha.Tests.SolverTests.Proxyless;
 
 [Category(TestCategories.Proxyless)]
-public class ImageToTextAnticaptchaTests : SolverTestBase<ImageToTextSolution>
+public class ImageToTextSolverTests : SolverTestBase<ImageToTextSolution>
 {
     protected override string TestedUri { get; set; } = TestUris.ImageToText.Wikipedia;
     protected override CaptchaType CaptchaType { get; set; } = CaptchaType.ImageToText;
 
-    public ImageToTextAnticaptchaTests(WebDriverFixture fixture) : base(fixture)
+    public ImageToTextSolverTests(WebDriverFixture fixture) : base(fixture)
     {
         
     }
@@ -24,6 +24,5 @@ public class ImageToTextAnticaptchaTests : SolverTestBase<ImageToTextSolution>
         var imageElement = Driver.FindByXPathInCurrentFrame("//img[contains(@class, 'captcha')]");
         SolverArgumentsWithCaptchaType.ImageElement = imageElement;
         SolverArgumentsWithoutCaptchaType.ImageElement = imageElement;
-    
     }
 }

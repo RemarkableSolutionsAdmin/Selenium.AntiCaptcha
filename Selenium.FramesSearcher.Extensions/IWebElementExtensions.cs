@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Text.RegularExpressions;
 using OpenQA.Selenium;
 
 namespace Selenium.FramesSearcher.Extensions;
@@ -10,13 +11,22 @@ public static class IWebElementExtensions
         try
         {
             var elementSrc = element.GetAttribute("src");
-            byte[]? file;
-            using (WebClient webClient = new())
+            var isUrl = elementSrc.Contains("http");
+
+            if (isUrl)
             {
-                file = webClient.DownloadData(elementSrc);
+                byte[]? file;
+                using (WebClient webClient = new())
+                {
+                    file = webClient.DownloadData(elementSrc);
+                }
+
+                return Convert.ToBase64String(file);
             }
 
-            return Convert.ToBase64String(file);
+            var imageBase64Pattern = "(?:data:image/[^;]+;base64,)([^\"\n]+)";
+            var match = new Regex(imageBase64Pattern).Match(elementSrc);
+            return match.Success ? match.Groups[1].Value : string.Empty;
         }
         catch (Exception)
         {
