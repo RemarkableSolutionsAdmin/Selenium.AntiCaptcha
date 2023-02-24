@@ -5,6 +5,7 @@ using OpenQA.Selenium.DevTools.V99.Page;
 using Selenium.AntiCaptcha.Exceptions;
 using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;
+using Selenium.CaptchaIdentifier.Extensions;
 using Selenium.FramesSearcher.Extensions;
 
 namespace Selenium.AntiCaptcha.Solvers
@@ -55,7 +56,7 @@ namespace Selenium.AntiCaptcha.Solvers
                 return imageElement.DownloadSourceAsBase64String();
             }
 
-            var possibleImageSource = PageSourceSearcher.FindSingleImageSourceForImageToText(Driver);
+            var possibleImageSource = Driver.FindSingleImageSourceForImageToText();
 
             if (string.IsNullOrEmpty(possibleImageSource))
             {

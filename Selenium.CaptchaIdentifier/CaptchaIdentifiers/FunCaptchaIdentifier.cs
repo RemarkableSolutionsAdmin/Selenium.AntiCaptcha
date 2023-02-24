@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using Selenium.CaptchaIdentifier.Constants;
 using Selenium.CaptchaIdentifier.Enums;
+using Selenium.CaptchaIdentifier.Extensions;
 using Selenium.FramesSearcher.Extensions;
 
 namespace Selenium.CaptchaIdentifier.CaptchaIdentifiers;
@@ -28,7 +29,7 @@ public class FunCaptchaIdentifier : ProxyCaptchaIdentifier
     private bool IsThereAnElementWithPkey(IWebDriver driver)
     {
         driver.SwitchTo().DefaultContent();
-        return !string.IsNullOrEmpty(PageSourceSearcher.FindFunCaptchaSiteKey(driver));
+        return !string.IsNullOrEmpty(driver.FindFunCaptchaSiteKey());
     }
 
     private static bool IsThereFunCaptchaFunCaptchaScriptInAnyIFrames(IWebDriver driver)

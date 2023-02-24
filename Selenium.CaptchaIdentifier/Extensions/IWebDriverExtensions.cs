@@ -1,12 +1,13 @@
 ﻿using System.Text.RegularExpressions;
 using OpenQA.Selenium;
+using Selenium.FramesSearcher.Extensions;
 
-namespace Selenium.FramesSearcher.Extensions;
+namespace Selenium.CaptchaIdentifier.Extensions;
 
-public static class PageSourceSearcher
+public static class IWebDriverExtensions
 {
     private const string FunCaptchaRegexSiteKeyPattern = @"(?:funcaptcha|arkoselabs){1}.{0,200}(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})";
-    public static string FindFunCaptchaSiteKey(IWebDriver driver)
+    public static string FindFunCaptchaSiteKey(this IWebDriver driver)
     {       
         try
         {
@@ -26,7 +27,7 @@ public static class PageSourceSearcher
         return match.Groups[1].Value;
     }
 
-    public static string FindSingleImageSourceForImageToText(IWebDriver driver)
+    public static string FindSingleImageSourceForImageToText(this IWebDriver driver)
     {
         var pageSource = driver.GetAllPageSource();
 

@@ -2,6 +2,7 @@
 using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Models;
+using Selenium.CaptchaIdentifier.Extensions;
 using Selenium.FramesSearcher.Extensions;
 
 namespace Selenium.AntiCaptcha.Solvers.Base;
@@ -11,7 +12,7 @@ public abstract class FunCaptchaSolverBase<TRequest> : Solver<TRequest, FunCaptc
 {
     protected override string GetSiteKey()
     {
-        return PageSourceSearcher.FindFunCaptchaSiteKey(Driver);
+        return Driver.FindFunCaptchaSiteKey();
     }
 
     protected override async Task FillResponseElement(FunCaptchaSolution solution, ActionArguments actionArguments)

@@ -1,6 +1,7 @@
 ﻿using AntiCaptchaApi.Net.Models;
 using OpenQA.Selenium;
 using Selenium.CaptchaIdentifier.Enums;
+using Selenium.CaptchaIdentifier.Extensions;
 using Selenium.FramesSearcher.Extensions;
 
 namespace Selenium.CaptchaIdentifier.CaptchaIdentifiers;
@@ -33,7 +34,7 @@ public class ImageToTextIdentifier : ProxyCaptchaIdentifier
 
     private static bool DoesCaptchaImageElementExists(IWebDriver driver)
     {
-        var possibleCaptchaImageSources = PageSourceSearcher.FindSingleImageSourceForImageToText(driver);
+        var possibleCaptchaImageSources = driver.FindSingleImageSourceForImageToText();
         return !string.IsNullOrEmpty(possibleCaptchaImageSources);
 
     }
