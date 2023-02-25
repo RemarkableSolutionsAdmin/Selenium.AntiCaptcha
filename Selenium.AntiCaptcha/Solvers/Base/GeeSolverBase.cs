@@ -11,7 +11,8 @@ public abstract class GeeSolverBase<TRequest, TSolution> : Solver <TRequest, TSo
     where TRequest: ICaptchaRequest<TSolution>
     where TSolution: BaseSolution, new()
 {
-    protected GeeSolverBase(string clientKey, IWebDriver driver, SolverConfig solverConfig) : base(clientKey, driver, solverConfig)
+    protected GeeSolverBase(string clientKey, IWebDriver driver, SolverConfig solverConfig) 
+        : base(clientKey, driver, solverConfig)
     {
     }
     

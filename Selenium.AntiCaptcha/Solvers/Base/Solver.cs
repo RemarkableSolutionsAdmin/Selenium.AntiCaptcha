@@ -54,16 +54,16 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
 
     protected async Task<string> AcquireElementValue(Func<string> getElementValueFunction) 
     {
-        var timePassedInMs = 0;
+        var timePassedInMs = 0; //TODO: Actually count time and not add step waiting time
         while (true)
         {
             var result = getElementValueFunction.Invoke();
 
-            if (!string.IsNullOrEmpty(result) || timePassedInMs >= SolverConfig.MaxPageLoadWaitingTimeInMilliseconds) 
+            if (!string.IsNullOrEmpty(result) || timePassedInMs >= SolverConfig.PageLoadTimeoutLimitInMilliseconds) 
                 return result;
 
-            await Task.Delay(SolverConfig.WaitingStepTimeInMilliseconds);
-            timePassedInMs += SolverConfig.WaitingStepTimeInMilliseconds;
+            await Task.Delay(SolverConfig.StepWaitingTimeInMilliseconds);
+            timePassedInMs += SolverConfig.StepWaitingTimeInMilliseconds;
         }
     }
 
@@ -90,7 +90,6 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
 
     private async Task<TaskResultResponse<TSolution>> SolveCaptchaAsync(TRequest request, SolverArguments solverArguments, ActionArguments actionArguments, CancellationToken cancellationToken)
     {
-        _anticaptchaClient.Configure(solverArguments.ClientConfig);
         var result = await _anticaptchaClient
             .SolveCaptchaAsync(request, solverArguments.LanguagePool, solverArguments.CallbackUrl, cancellationToken: cancellationToken);
         if (result.Status == TaskStatusType.Ready && result.Solution.IsValid())
@@ -106,8 +105,6 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
         return result;
     }
     
-
-
     public async Task<TaskResultResponse<TSolution>> SolveAsync(TRequest request, ActionArguments actionArguments, CancellationToken cancellationToken)
     {
         return await SolveCaptchaAsync(request, new SolverArguments() ,actionArguments, cancellationToken);
@@ -116,8 +113,8 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
     public void Configure(IWebDriver driver, string clientKey, SolverConfig solverConfig)
     {
         Driver = driver;
-        _anticaptchaClient = new AnticaptchaClient(clientKey);
         SolverConfig = solverConfig;
+        _anticaptchaClient = new AnticaptchaClient(clientKey, solverConfig);
     }
 
     private static void AddCookies(IWebDriver driver, JObject? cookies, bool shouldClearCookies)

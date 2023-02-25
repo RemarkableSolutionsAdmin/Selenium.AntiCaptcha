@@ -75,7 +75,8 @@ public abstract class SolverTestBase<TSolution> : WebDriverBasedTestBase
     {
         await SetDriverUrl(TestedUri);
         await BeforeTestAction();
-        var result = await Driver.SolveCaptchaAsync<TSolution>(ClientKey, solverArguments);
+        var result = await Driver.SolveCaptchaAsync<TSolution>(ClientKey, solverArguments, 
+            solverConfig: new DefaultSolverConfig(timeoutLimitInSeconds: 20*60));
         AssertSolveCaptchaResult(result, expectedCaptchaType: CaptchaType);
         await AfterTestAction();
     }
@@ -127,34 +128,31 @@ public abstract class SolverTestBase<TSolution> : WebDriverBasedTestBase
         var stringBuilder = new StringBuilder();
 
         AppendTitleWithValue(stringBuilder, nameof(TaskResultResponse<TSolution>.ErrorDescription), result.ErrorDescription);
-        AppendTitleWithValue(stringBuilder, nameof(TaskResultResponse<TSolution>.RawPayload), result.RawPayload);
-        AppendTitleWithValue(stringBuilder, nameof(TaskResultResponse<TSolution>.RawResponse), result.RawResponse);
-        AppendTitleWithValue(stringBuilder, nameof(TaskResultResponse<TSolution>.CreateTaskResponse.RawPayload), result.CreateTaskResponse?.RawPayload);
-        AppendTitleWithValue(stringBuilder, nameof(TaskResultResponse<TSolution>.CreateTaskResponse.RawResponse), result.CreateTaskResponse?.RawResponse);
+        AppendTitleWithValue(stringBuilder, "Task result - " + nameof(TaskResultResponse<TSolution>.RawPayload), result.RawPayload);
+        AppendTitleWithValue(stringBuilder, "Task result - " + nameof(TaskResultResponse<TSolution>.RawResponse), result.RawResponse);
+        AppendTitleWithValue(stringBuilder, "Create Task - " + nameof(TaskResultResponse<TSolution>.CreateTaskResponse.RawPayload), result.CreateTaskResponse?.RawPayload);
+        AppendTitleWithValue(stringBuilder, "Create Task - " + nameof(TaskResultResponse<TSolution>.CreateTaskResponse) + nameof(TaskResultResponse<TSolution>.CreateTaskResponse.RawResponse), result.CreateTaskResponse?.RawResponse);
         
         return stringBuilder.ToString();
     }
 
-    private static StringBuilder AppendTitleWithValue(StringBuilder stringBuilder, string? title, string? value)
+    private static void AppendTitleWithValue(StringBuilder stringBuilder, string? title, string? value)
     {
         if (!string.IsNullOrEmpty(title) && !string.IsNullOrEmpty(value))
         {
             AppendTitle(stringBuilder, title);
             AppendWithNewLine(stringBuilder, value);   
         }
-        return stringBuilder;
     }
     
-    private static StringBuilder AppendTitle(StringBuilder stringBuilder, string title)
+    private static void AppendTitle(StringBuilder stringBuilder, string title)
     {
-        AppendWithNewLine(stringBuilder, $"----------{title}----------");
-        return stringBuilder;
+        AppendWithNewLine(stringBuilder, $"---------- {title} ----------");
     }
     
-    private static StringBuilder AppendWithNewLine(StringBuilder stringBuilder, string value)
+    private static void AppendWithNewLine(StringBuilder stringBuilder, string value)
     {
         stringBuilder.Append($"{Environment.NewLine}{value}{Environment.NewLine}");
-        return stringBuilder;
     }
 
     protected static void AssertSolveCaptchaResult(BaseResponse result, CaptchaType expectedCaptchaType)

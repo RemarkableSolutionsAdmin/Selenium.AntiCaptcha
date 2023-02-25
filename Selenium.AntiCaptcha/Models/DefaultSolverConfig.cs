@@ -1,7 +1,14 @@
 ﻿namespace Selenium.AntiCaptcha.Models;
 
-public record DefaultSolverConfig(
-    int MaxTimeOutTimeInMilliseconds = 5000, 
-    int MaxPageLoadWaitingTimeInMilliseconds = 30000, 
-    int WaitingStepTimeInMilliseconds = 500) 
-    : SolverConfig(MaxTimeOutTimeInMilliseconds, MaxPageLoadWaitingTimeInMilliseconds, WaitingStepTimeInMilliseconds);
+public class DefaultSolverConfig : SolverConfig
+{
+    public DefaultSolverConfig(
+        int pageLoadTimeoutLimitInMilliseconds = 30000,
+        int timeoutLimitInSeconds = 120, 
+        int solveAsyncMaxRetries = 1,
+        int stepDelayTimeInMilliseconds = 2000)
+        : base(pageLoadTimeoutLimitInMilliseconds, timeoutLimitInSeconds, solveAsyncMaxRetries, stepDelayTimeInMilliseconds)
+    {
+        
+    }
+}

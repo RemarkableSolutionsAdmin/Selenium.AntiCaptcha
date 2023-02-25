@@ -44,7 +44,6 @@ public record SolverArguments(
     string? Comment = null,
     string? ImageFilePath = null,
     bool? IsInvisible = null,
-    ClientConfig? ClientConfig = null,
     string? LanguagePool = null,
     string? CallbackUrl = null,
     Dictionary<string, string>? EnterprisePayload = null) 
@@ -97,5 +96,4 @@ public record SolverArguments(
     public string? RecaptchaDataSValue { get; set; } = RecaptchaDataSValue;
     public string? LanguagePool { get; set; } = LanguagePool;
     public string? CallbackUrl { get; set; } = CallbackUrl;
-    public ClientConfig ClientConfig { get; set; } = ClientConfig ?? new ClientConfig();
 }
