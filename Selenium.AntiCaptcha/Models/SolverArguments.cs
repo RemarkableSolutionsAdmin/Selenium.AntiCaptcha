@@ -19,7 +19,7 @@ public record SolverArguments(
     string? Cookies = null,
     string? RecaptchaDataSValue = null,
     IWebElement? ImageElement = null,
-    string? UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116",
+    string? UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
     ProxyConfig? ProxyConfig = null,
     string? FunCaptchaApiJsSubdomain = null,
     string? Data = null,

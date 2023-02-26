@@ -5,6 +5,7 @@ using Selenium.CaptchaIdentifier.Enums;
 using Selenium.FramesSearcher.Extensions;
 using Tests.Common.Config;
 using Tests.Common.Core;
+using Xunit.Abstractions;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests.Proxyless;
 
@@ -14,7 +15,7 @@ public class ImageToTextSolverTests : SolverTestBase<ImageToTextSolution>
     protected override string TestedUri { get; set; } = TestUris.ImageToText.Wikipedia;
     protected override CaptchaType CaptchaType { get; set; } = CaptchaType.ImageToText;
 
-    public ImageToTextSolverTests(WebDriverFixture fixture) : base(fixture)
+    public ImageToTextSolverTests(WebDriverFixture fixture, ITestOutputHelper output) : base(fixture, output)
     {
         
     }

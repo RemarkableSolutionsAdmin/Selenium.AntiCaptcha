@@ -1,4 +1,5 @@
-﻿    using AntiCaptchaApi.Net;
+﻿    using System.Diagnostics;
+    using AntiCaptchaApi.Net;
 using AntiCaptchaApi.Net.Enums;
 using AntiCaptchaApi.Net.Models;
 using AntiCaptchaApi.Net.Models.Solutions;
@@ -52,19 +53,21 @@ public abstract class Solver<TRequest, TSolution> : ISolver <TSolution>
         
     }
 
-    protected async Task<string> AcquireElementValue(Func<string> getElementValueFunction) 
+    protected async Task<string> AcquireElementValue(Func<string> getElementValueFunction)
     {
-        var timePassedInMs = 0; //TODO: Actually count time and not add step waiting time
-        while (true)
+        var stopWatch = new Stopwatch();
+        stopWatch.Start();
+        var result = string.Empty;
+        while (stopWatch.ElapsedMilliseconds <= SolverConfig.PageLoadTimeoutMs)
         {
-            var result = getElementValueFunction.Invoke();
-
-            if (!string.IsNullOrEmpty(result) || timePassedInMs >= SolverConfig.PageLoadTimeoutLimitInMilliseconds) 
+            result = getElementValueFunction.Invoke();
+            if (!string.IsNullOrEmpty(result)) 
                 return result;
 
-            await Task.Delay(SolverConfig.StepWaitingTimeInMilliseconds);
-            timePassedInMs += SolverConfig.StepWaitingTimeInMilliseconds;
+            await Task.Delay(SolverConfig.DelayTimeBetweenElementValueRetrievalMs);
         }
+
+        return result;
     }
 
     protected virtual async Task<SolverArguments> FillMissingSolverArguments(SolverArguments solverArguments)

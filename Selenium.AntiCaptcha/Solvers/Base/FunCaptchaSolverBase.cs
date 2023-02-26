@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests.Abstractions.Interfaces;
+using Newtonsoft.Json;
 using OpenQA.Selenium;
 using Selenium.AntiCaptcha.Models;
 using Selenium.CaptchaIdentifier.Extensions;
@@ -28,8 +29,9 @@ public abstract class FunCaptchaSolverBase<TRequest> : Solver<TRequest, FunCaptc
 
     private async Task<string?> AcquireFunCaptchaJsSubdomain()
     {
-        var arkoseScriptElements = Driver.FindManyByXPathAllFrames("//script[contains(@src, 'arkose')]");
-        var scriptSources = arkoseScriptElements.Select(x => x.GetAttribute("src"));
+        var scriptSources = Driver.FindManyValuesByXPathAllFrames("src", "//script[contains(@src, 'arkose')]")
+            .Distinct()
+            .ToList();
         var subdomainRegexPattern = @"(?:https?:)?\/\/((?!client\-api).+\.arkoselabs\.com)(?:.+funcaptcha_api\.js)";
         var regex = new Regex(subdomainRegexPattern);
         var subdomainMatches = scriptSources.Select(src => regex.Match(src)).Where(m => m.Success).Distinct().ToList();
@@ -38,8 +40,10 @@ public abstract class FunCaptchaSolverBase<TRequest> : Solver<TRequest, FunCaptc
 
     private async Task<string?> AcquireBlobData()
     {
-        var arkoseIframes = Driver.FindManyByXPathAllFrames("//iframe[contains(@src, 'arkose')]");
-        var iframeSources = arkoseIframes.Select(x => x.GetAttribute("src")).ToList();
+        var iframeSources = Driver.FindManyValuesByXPathAllFrames("src", "//iframe[contains(@src, 'arkose')]")
+            .Distinct()
+            .ToList();
+        
         var fieldsRegexPattern = @"(?:(?:(\w+)=([\.\%\w-]+)))";
         var regex = new Regex(fieldsRegexPattern);
         
@@ -55,7 +59,10 @@ public abstract class FunCaptchaSolverBase<TRequest> : Solver<TRequest, FunCaptc
 
                 if (key.ToLower().Contains("blob"))
                 {
-                    return value;
+                    return JsonConvert.SerializeObject(new Dictionary<string, string>()
+                    {
+                        {"blob", value}
+                    });
                 }
             }
 

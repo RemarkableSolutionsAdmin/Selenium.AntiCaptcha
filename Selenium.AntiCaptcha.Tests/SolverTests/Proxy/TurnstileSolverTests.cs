@@ -3,6 +3,7 @@ using Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 using Selenium.CaptchaIdentifier.Enums;
 using Tests.Common.Config;
 using Tests.Common.Core;
+using Xunit.Abstractions;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests.Proxy
 {
@@ -11,7 +12,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests.Proxy
         protected override string TestedUri { get; set; }  = TestUris.Turnstile.TurnStileDemo;
         protected override CaptchaType CaptchaType { get; set; } =  CaptchaType.Turnstile;
         
-        public TurnstileSolverTests(WebDriverFixture fixture) : base(fixture)
+        public TurnstileSolverTests(WebDriverFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
         }
     }

@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using Tests.Common.Config;
 
 namespace Tests.Common.Core;
 
@@ -22,7 +23,7 @@ public class WebDriverFixture : IDisposable
             Driver.Dispose();
         }
         var options = new ChromeOptions();
-
+        options.AddArgument($"--user-agent={TestEnvironment.UserAgent}");
         Driver = new ChromeDriver(Environment.CurrentDirectory, options);
     }
 

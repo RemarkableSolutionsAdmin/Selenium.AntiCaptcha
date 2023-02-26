@@ -7,6 +7,7 @@ using Tests.Common;
 using Tests.Common.Config;
 using Tests.Common.Core;
 using Tests.Common.Core.Models;
+using Xunit.Abstractions;
 
 namespace Selenium.CaptchaIdentifier.Tests.FunctionalityTests;
 
@@ -32,14 +33,14 @@ public class CaptchaIdentifierTests : WebDriverBasedTestBase
     
     public class IdentificationWithoutSolutionTypeSpecified : CaptchaIdentifierTests
     {
-        public IdentificationWithoutSolutionTypeSpecified(WebDriverFixture fixture) : base(fixture)
+        public IdentificationWithoutSolutionTypeSpecified(WebDriverFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
             
         }
 
         public class Recaptcha : IdentificationWithoutSolutionTypeSpecified
         {
-            public Recaptcha(WebDriverFixture fixture) : base(fixture)
+            public Recaptcha(WebDriverFixture fixture, ITestOutputHelper output) : base(fixture, output)
             {
             }
         
@@ -107,7 +108,7 @@ public class CaptchaIdentifierTests : WebDriverBasedTestBase
         
         public class OtherCaptcha : IdentificationWithoutSolutionTypeSpecified
         {
-            public OtherCaptcha(WebDriverFixture fixture) : base(fixture)
+            public OtherCaptcha(WebDriverFixture fixture, ITestOutputHelper output) : base(fixture, output)
             {
             }
             [Theory]
@@ -244,7 +245,7 @@ public class CaptchaIdentifierTests : WebDriverBasedTestBase
             await TestIdentifier<AntiGateSolution>(websiteUrl, expectedType, null);
         }
 
-        public IdentificationWithSolutionTypeSpecified(WebDriverFixture fixture) : base(fixture)
+        public IdentificationWithSolutionTypeSpecified(WebDriverFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
             
         }
@@ -300,5 +301,5 @@ public class CaptchaIdentifierTests : WebDriverBasedTestBase
             Fail(GetTestFailReasonText(captchaUri, proxyConfig, type.ToString() ?? "null"));   
         }
     }
-    public CaptchaIdentifierTests(WebDriverFixture fixture) : base(fixture) {}
+    public CaptchaIdentifierTests(WebDriverFixture fixture, ITestOutputHelper output) : base(fixture, output) {}
 }

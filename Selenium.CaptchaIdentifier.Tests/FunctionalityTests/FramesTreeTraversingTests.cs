@@ -3,6 +3,7 @@ using Selenium.FramesSearcher.Extensions;
 using Tests.Common;
 using Tests.Common.Config;
 using Tests.Common.Core;
+using Xunit.Abstractions;
 
 namespace Selenium.CaptchaIdentifier.Tests.FunctionalityTests;
 
@@ -14,7 +15,7 @@ namespace Selenium.CaptchaIdentifier.Tests.FunctionalityTests;
         // 1 1 1
         // 1
         
-        public FramesTreeTraversingTests(WebDriverFixture fixture) : base(fixture)
+        public FramesTreeTraversingTests(WebDriverFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
             SetDriverUrl(TestUri).Wait();
         }

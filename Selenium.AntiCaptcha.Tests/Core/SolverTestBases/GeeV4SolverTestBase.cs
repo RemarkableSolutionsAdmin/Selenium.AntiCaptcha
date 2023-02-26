@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using Tests.Common.Config;
 using Tests.Common.Core;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 
@@ -10,7 +11,7 @@ public abstract class GeeV4SolverTestBase : SolverTestBase<GeeTestV4Solution>
 {
     protected override string TestedUri { get; set; } = TestUris.GeeTest.V4.GeeTestV4Demo;
     
-    protected GeeV4SolverTestBase(WebDriverFixture fixture) : base(fixture)
+    protected GeeV4SolverTestBase(WebDriverFixture fixture, ITestOutputHelper output) : base(fixture, output)
     {
         
     }

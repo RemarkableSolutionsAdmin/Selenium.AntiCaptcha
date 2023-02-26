@@ -4,12 +4,16 @@ namespace Selenium.AntiCaptcha.Models;
 
 public class SolverConfig : ClientConfig
 {
-    public SolverConfig(int pageLoadTimeoutLimitInMilliseconds, int timeoutLimitInSeconds, int solveAsyncMaxRetries, int stepDelayTimeInMilliseconds)
+    public SolverConfig(int pageLoadTimeoutMs, int delayTimeBetweenElementValueRetrievalMs, int maxWaitForTaskResultTimeMs, int maxHttpRequestTimeMs, int solveAsyncRetries,
+        int delayTimeBetweenCheckingTaskResultMs)
     {
-        PageLoadTimeoutLimitInMilliseconds = pageLoadTimeoutLimitInMilliseconds;
-        MaxWaitingTimeInSeconds = timeoutLimitInSeconds;
-        SolveAsyncMaxRetries = solveAsyncMaxRetries;
-        StepWaitingTimeInMilliseconds = stepDelayTimeInMilliseconds;
+        MaxWaitForTaskResultTimeMs = maxWaitForTaskResultTimeMs;
+        PageLoadTimeoutMs = pageLoadTimeoutMs;
+        MaxHttpRequestTimeMs = maxHttpRequestTimeMs;
+        SolveAsyncRetries = solveAsyncRetries;
+        DelayTimeBetweenCheckingTaskResultMs = delayTimeBetweenCheckingTaskResultMs;
+        DelayTimeBetweenElementValueRetrievalMs = delayTimeBetweenElementValueRetrievalMs;
     }
-    public int PageLoadTimeoutLimitInMilliseconds { get; set; }
+    public int PageLoadTimeoutMs { get; set; }
+    public int DelayTimeBetweenElementValueRetrievalMs { get; set; }
 }

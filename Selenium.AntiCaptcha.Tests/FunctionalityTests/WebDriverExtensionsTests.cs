@@ -5,12 +5,13 @@ using Selenium.CaptchaIdentifier.Enums;
 using Tests.Common;
 using Tests.Common.Core;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Selenium.Anticaptcha.Tests.FunctionalityTests;
 
 public class WebDriverExtensionsTests : WebDriverBasedTestBase
 {
-    public WebDriverExtensionsTests(WebDriverFixture fixture) : base(fixture) {}
+    public WebDriverExtensionsTests(WebDriverFixture fixture, ITestOutputHelper output) : base(fixture, output) {}
     [Fact]
     public async Task ShouldThrowException_WhenSolutionTypeAndCaptchaTypeDoNotMatch()
     {

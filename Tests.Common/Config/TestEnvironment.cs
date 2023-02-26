@@ -6,7 +6,7 @@ namespace Tests.Common.Config;
 public static class TestEnvironment
 {
     public static string ClientKey = Environment.GetEnvironmentVariable("ClientKey");
-    public const string UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116";
+    public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36";
     public static string ProxyAddress => Environment.GetEnvironmentVariable("ProxyAddress");
     public static string ProxyPort => Environment.GetEnvironmentVariable("ProxyPort");
     public static string ProxyLogin => Environment.GetEnvironmentVariable("ProxyLogin");

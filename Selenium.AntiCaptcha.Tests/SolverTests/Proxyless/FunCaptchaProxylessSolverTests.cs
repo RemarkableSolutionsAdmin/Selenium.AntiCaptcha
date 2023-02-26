@@ -4,6 +4,7 @@ using Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 using Selenium.CaptchaIdentifier.Enums;
 using Tests.Common.Config;
 using Tests.Common.Core;
+using Xunit.Abstractions;
 
 namespace Selenium.Anticaptcha.Tests.SolverTests.Proxyless
 {
@@ -14,7 +15,7 @@ namespace Selenium.Anticaptcha.Tests.SolverTests.Proxyless
         protected override CaptchaType CaptchaType { get; set; }  = CaptchaType.FunCaptchaProxyless;
         
 
-        public FunCaptchaProxylessSolverTests(WebDriverFixture fixture) : base(fixture)
+        public FunCaptchaProxylessSolverTests(WebDriverFixture fixture, ITestOutputHelper output) : base(fixture, output)
         {
         }
     }

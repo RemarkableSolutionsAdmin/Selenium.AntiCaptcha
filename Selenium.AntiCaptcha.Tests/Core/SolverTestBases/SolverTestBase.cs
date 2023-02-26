@@ -1,7 +1,9 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Responses;
 using AntiCaptchaApi.Net.Responses.Abstractions;
+using OpenQA.Selenium;
 using Selenium.AntiCaptcha;
 using Selenium.AntiCaptcha.Models;
 using Selenium.CaptchaIdentifier.Enums;
@@ -11,6 +13,8 @@ using Tests.Common.Config;
 using Tests.Common.Core;
 using Tests.Common.Core.Models;
 using Xunit;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace Selenium.Anticaptcha.Tests.Core.SolverTestBases;
 
@@ -23,7 +27,9 @@ public abstract class SolverTestBase<TSolution> : WebDriverBasedTestBase
     protected SolverArguments SolverArgumentsWithoutCaptchaType { get; set; }
     protected SolverArguments SolverArgumentsWithCaptchaType { get; set; }
 
-    protected SolverTestBase(WebDriverFixture fixture) : base(fixture)
+    protected Stopwatch _stopwatch = new Stopwatch();
+
+    protected SolverTestBase(WebDriverFixture fixture, ITestOutputHelper output) : base(fixture, output)
     {
         ValidateCaptchaUri();
         
@@ -73,21 +79,38 @@ public abstract class SolverTestBase<TSolution> : WebDriverBasedTestBase
 
     private async Task Solve_Generic(SolverArguments solverArguments)
     {
+        _stopwatch.Start();
         await SetDriverUrl(TestedUri);
+        DumpElapsedTimeToOutputAndRestartTimer(nameof(SetDriverUrl));
         await BeforeTestAction();
-        var result = await Driver.SolveCaptchaAsync<TSolution>(ClientKey, solverArguments, 
-            solverConfig: new DefaultSolverConfig(timeoutLimitInSeconds: 20*60));
+        DumpElapsedTimeToOutputAndRestartTimer(nameof(BeforeTestAction));
+        var result = await Driver.SolveCaptchaAsync<TSolution>(ClientKey, solverArguments,  solverConfig: new DefaultSolverConfig());
+        DumpElapsedTimeToOutputAndRestartTimer("Generic - SolveCaptchaAsync");
         AssertSolveCaptchaResult(result, expectedCaptchaType: CaptchaType);
+        DumpElapsedTimeToOutputAndRestartTimer(nameof(AssertSolveCaptchaResult));
         await AfterTestAction();
+        DumpElapsedTimeToOutputAndRestartTimer(nameof(AfterTestAction));
+    }
+
+    private void DumpElapsedTimeToOutputAndRestartTimer(string functionName)
+    {
+        _output.WriteLine("{0} took {1} ms", functionName, _stopwatch.ElapsedMilliseconds);
+        _stopwatch.Restart();
     }
 
     private async Task Solve_NonGeneric(SolverArguments solverArguments)
     {
+        _stopwatch.Start();
         await SetDriverUrl(TestedUri);
+        DumpElapsedTimeToOutputAndRestartTimer(nameof(SetDriverUrl));
         await BeforeTestAction();
+        DumpElapsedTimeToOutputAndRestartTimer(nameof(BeforeTestAction));
         var result = await Driver.SolveCaptchaAsync(ClientKey, solverArguments);
+        DumpElapsedTimeToOutputAndRestartTimer("NonGeneric - SolveCaptchaAsync");
         AssertSolveCaptchaResult(result, expectedCaptchaType: CaptchaType);
+        DumpElapsedTimeToOutputAndRestartTimer(nameof(AssertSolveCaptchaResult));
         await AfterTestAction();
+        DumpElapsedTimeToOutputAndRestartTimer(nameof(AfterTestAction));
     }
 
     private void ValidateCaptchaUri()
