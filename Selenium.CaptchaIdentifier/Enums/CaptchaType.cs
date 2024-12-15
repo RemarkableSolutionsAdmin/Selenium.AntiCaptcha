@@ -8,8 +8,6 @@ public enum CaptchaType
     ReCaptchaV2EnterpriseProxyless,
     ReCaptchaV3,
     ReCaptchaV3Enterprise,
-    HCaptcha,
-    HCaptchaProxyless,
     FunCaptcha,
     FunCaptchaProxyless,
     ImageToText,
@@ -19,6 +17,7 @@ public enum CaptchaType
     GeeTestV4Proxyless,
     AntiGate,
     Turnstile,
-    TurnstileProxyless
+    TurnstileProxyless,
+    ImageToCoordinates
 }
 

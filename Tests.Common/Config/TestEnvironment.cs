@@ -22,11 +22,12 @@ public static class TestEnvironment
         
     public static ProxyConfig GetCurrentTestProxyConfig()
     {
+        var proxyPortDefined = int.TryParse(ProxyPort, out var proxyPort2);
         return new ProxyConfig()
         {
             ProxyType = ProxyTypeOption.Http,
             ProxyAddress = ProxyAddress,
-            ProxyPort = int.Parse(ProxyPort),
+            ProxyPort = proxyPortDefined ? proxyPort2 : null,
             ProxyLogin = ProxyLogin,
             ProxyPassword = ProxyPassword
         };

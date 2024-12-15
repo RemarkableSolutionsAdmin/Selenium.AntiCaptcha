@@ -14,7 +14,6 @@ public static class TestUris
         Recaptcha.Uris()
             .Concat(FunCaptcha.Uris())
             .Concat(ImageToText.Uris())
-            .Concat(HCaptcha.Uris())
             .Concat(AntiGate.Uris())
             .Concat(GeeTest.Uris())
             .Concat(Turnstile.Uris());
@@ -22,14 +21,12 @@ public static class TestUris
     public static IEnumerable<object[]> TestableUris() =>        
         Recaptcha.Uris()
             .Concat(FunCaptcha.Uris())
-            .Concat(HCaptcha.Uris())
             .Concat(GeeTest.Uris())
             .Concat(ImageToText.Uris())
             .Concat(Turnstile.Uris());
 
     public static IEnumerable<object[]> TestableUrisWithoutRecaptcha() =>        
         FunCaptcha.Uris()
-            .Concat(HCaptcha.Uris())
             .Concat(GeeTest.Uris())
             .Concat(ImageToText.Uris())
             .Concat(Turnstile.Uris());
@@ -170,17 +167,4 @@ public static class TestUris
         }
         public const string AntiCaptchaTuttorialAntiGate = "https://anti-captcha.com/tutorials/v2-textarea";
     }
-
-    public static class HCaptcha
-    {
-        public const CaptchaType Type = CaptchaType.HCaptchaProxyless;         
-        public static IEnumerable<object[]> Uris()
-        {
-            //yield return new object[] { new CaptchaUri(EntiwicklerEbay, Type) };
-            yield return new object[] { new CaptchaUri(ChartBoost, Type) };
-        }
-        public const string EntiwicklerEbay = "https://entwickler.ebay.de/signin?tab=register"; //On this site there's also Recaptcha.
-        public const string ChartBoost = "https://www.chartboost.com/sign-up/";
-    }
-    
 }

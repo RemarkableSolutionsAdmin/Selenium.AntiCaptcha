@@ -52,7 +52,6 @@ public record SolverArguments(
           IFunCaptchaRequest,
           IGeeTestV3Request,
           IGeeTestV4Request,
-          IHCaptchaRequest,
           IImageToTextRequest,
           IRecaptchaV2EnterpriseRequest,
           IRecaptchaV2Request,

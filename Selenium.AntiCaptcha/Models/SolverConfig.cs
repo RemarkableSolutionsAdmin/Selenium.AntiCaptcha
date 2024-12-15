@@ -8,11 +8,11 @@ public class SolverConfig : ClientConfig
         int delayTimeBetweenCheckingTaskResultMs)
     {
         MaxWaitForTaskResultTimeMs = maxWaitForTaskResultTimeMs;
-        PageLoadTimeoutMs = pageLoadTimeoutMs;
         MaxHttpRequestTimeMs = maxHttpRequestTimeMs;
         SolveAsyncRetries = solveAsyncRetries;
         DelayTimeBetweenCheckingTaskResultMs = delayTimeBetweenCheckingTaskResultMs;
         DelayTimeBetweenElementValueRetrievalMs = delayTimeBetweenElementValueRetrievalMs;
+        PageLoadTimeoutMs = pageLoadTimeoutMs;
     }
     public int PageLoadTimeoutMs { get; set; }
     public int DelayTimeBetweenElementValueRetrievalMs { get; set; }

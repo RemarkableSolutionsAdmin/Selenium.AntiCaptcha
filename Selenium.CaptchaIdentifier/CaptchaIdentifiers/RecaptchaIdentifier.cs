@@ -21,34 +21,15 @@ public class RecaptchaIdentifier  : ProxyCaptchaIdentifier
         {
             var pageSource = driver.GetAllPageSource();
             var isEnterprise = IsRecaptchaEnterprise(pageSource);
-            var recaptchaFrame = GetRecaptchaIFrame(driver);
-
-            if (recaptchaFrame == null)
-            {
-                return null;
-            }
-
-            driver.SwitchTo().Frame(recaptchaFrame);
             var isInvisibleRecaptcha = IsInvisibleRecaptcha(driver);
-            var isV3Recaptcha = false;
-            var isV2Recaptcha = false;
 
-            if (isInvisibleRecaptcha) //Might be invisible V2 or V3.
-            {
-                driver.SwitchTo().DefaultContent();
-                var containsInteractableButtonWithSiteKey = HasInteractableButtonWithSiteKey(driver);
-                isV2Recaptcha = containsInteractableButtonWithSiteKey;
-            ;    isV3Recaptcha = !containsInteractableButtonWithSiteKey;
-            }
-            else
-            {
-                driver.SwitchTo().Frame(recaptchaFrame);
-                isV2Recaptcha = true;
-            }
+            var isV3Recaptcha = pageSource.DoesContainRegex(
+                @"https:\/\/www\.google\.com\/recaptcha\/(enterprise|api)\.js\?render=");
+            var isV2Recaptcha = pageSource.DoesContainRegex(@"<div class=""g-recaptcha"" data-sitekey=");
 
-            if (isV2Recaptcha == isV3Recaptcha)
+            if (isInvisibleRecaptcha && isV2Recaptcha)
             {
-                return null;
+                isV3Recaptcha = false; // Invisible reCAPTCHA with sitekey indicates v2.
             }
 
             CaptchaType result;
@@ -58,8 +39,14 @@ public class RecaptchaIdentifier  : ProxyCaptchaIdentifier
                 return await base.SpecifyCaptcha(result, driver, imageElement, proxyConfig, cancellationToken);
             }
 
-            result = isEnterprise ? CaptchaType.ReCaptchaV3Enterprise : CaptchaType.ReCaptchaV3;
-            return await base.SpecifyCaptcha(result, driver, imageElement, proxyConfig, cancellationToken);
+            if (isV3Recaptcha)
+            {
+                result = isEnterprise ? CaptchaType.ReCaptchaV3Enterprise : CaptchaType.ReCaptchaV3;
+                return await base.SpecifyCaptcha(result, driver, imageElement, proxyConfig, cancellationToken);
+            }
+
+            return null; // If neither v2 nor v3 detected.
+            
         }
         catch (Exception)
         {
@@ -121,8 +108,7 @@ public class RecaptchaIdentifier  : ProxyCaptchaIdentifier
     private static bool IsRecaptchaEnterprise(string pageSource)
     {
         return pageSource.DoesContainRegex( 
-            @"https:\/\/recaptcha.net\/recaptcha\/enterprise",
-            @"https:\/\/www.google.com\/recaptcha\/enterprise");
+            @"https:\/\/www\.google\.com\/recaptcha\/enterprise\.js");
     }
 
 }

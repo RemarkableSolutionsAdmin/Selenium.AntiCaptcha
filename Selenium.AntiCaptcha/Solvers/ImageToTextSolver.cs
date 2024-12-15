@@ -1,7 +1,6 @@
 ﻿using AntiCaptchaApi.Net.Models.Solutions;
 using AntiCaptchaApi.Net.Requests;
 using OpenQA.Selenium;
-using OpenQA.Selenium.DevTools.V99.Page;
 using Selenium.AntiCaptcha.Exceptions;
 using Selenium.AntiCaptcha.Models;
 using Selenium.AntiCaptcha.Solvers.Base;

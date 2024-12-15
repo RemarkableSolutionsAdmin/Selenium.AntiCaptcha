@@ -7,7 +7,6 @@ public static class CaptchaTypeGroups
     public static readonly IReadOnlyList<CaptchaType> ProxyCaptchaTypes = new List<CaptchaType>
     {
         CaptchaType.FunCaptcha,
-        CaptchaType.HCaptcha,
         CaptchaType.GeeTestV3,
         CaptchaType.GeeTestV4,
         CaptchaType.ReCaptchaV2,
@@ -21,13 +20,13 @@ public static class CaptchaTypeGroups
         CaptchaType.ReCaptchaV2EnterpriseProxyless,
         CaptchaType.ReCaptchaV3,
         CaptchaType.ReCaptchaV3Enterprise,
-        CaptchaType.HCaptchaProxyless,
         CaptchaType.FunCaptchaProxyless,
         CaptchaType.ImageToText,
         CaptchaType.GeeTestV3Proxyless,
         CaptchaType.GeeTestV4Proxyless,
         CaptchaType.AntiGate,
-        CaptchaType.TurnstileProxyless
+        CaptchaType.TurnstileProxyless,
+        CaptchaType.ImageToCoordinates
     };
     
     public static readonly IReadOnlyList<CaptchaType> ReCaptchaTypes = new List<CaptchaType>
@@ -44,12 +43,6 @@ public static class CaptchaTypeGroups
     {
         CaptchaType.Turnstile,
         CaptchaType.TurnstileProxyless,
-    };
-    
-    public static readonly IReadOnlyList<CaptchaType> HCaptchaTypes = new List<CaptchaType>
-    {
-        CaptchaType.HCaptchaProxyless,
-        CaptchaType.HCaptcha,
     };
     
     public static readonly IReadOnlyList<CaptchaType> GeeTestTypes = new List<CaptchaType>

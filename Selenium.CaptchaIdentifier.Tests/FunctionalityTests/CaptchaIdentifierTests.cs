@@ -272,14 +272,14 @@ public class CaptchaIdentifierTests : WebDriverBasedTestBase
 
         if (testFailed)
         {
-            Fail(GetTestFailReasonText(captchaUri, proxyConfig, string.Join(", ", identifiedTypes.Select(x => x.ToString()))));   
+            Assert.Fail(GetTestFailReasonText(captchaUri, proxyConfig, string.Join(", ", identifiedTypes.Select(x => x.ToString()))));   
         }
     }
 
     private static string GetTestFailReasonText(CaptchaUri captchaUri, ProxyConfig? proxyConfig, string foundTypesNames)
     {
         return $"Test non generic identifier failed for url: {captchaUri.Uri}. \n" +
-               $"Expected type {captchaUri.ExpectedType}, but found {foundTypesNames}\n" +
+               $"Expected type {captchaUri.ExpectedType}, but " + (string.IsNullOrEmpty(foundTypesNames) ? "found no matching types" : $"found {foundTypesNames}") + "\n" +
                $"ProxyConfig was {proxyConfig}";
     }
     
@@ -298,7 +298,7 @@ public class CaptchaIdentifierTests : WebDriverBasedTestBase
         var testFailed = type == null || type != captchaUri.ExpectedType;
         if (testFailed)
         {
-            Fail(GetTestFailReasonText(captchaUri, proxyConfig, type.ToString() ?? "null"));   
+            Assert.Fail(GetTestFailReasonText(captchaUri, proxyConfig, type.ToString() ?? "null"));   
         }
     }
     public CaptchaIdentifierTests(WebDriverFixture fixture, ITestOutputHelper output) : base(fixture, output) {}

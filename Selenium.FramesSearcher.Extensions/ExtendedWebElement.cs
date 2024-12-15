@@ -66,12 +66,6 @@ public class ExtendedWebElement : IWebElement
           return WebElement.GetDomAttribute(attributeName);
     }
 
-    [Obsolete("Obsolete")]
-    public string GetProperty(string propertyName)
-    {
-          return WebElement.GetProperty(propertyName);
-    }
-
     public string GetDomProperty(string propertyName)
     {
           return WebElement.GetDomProperty(propertyName);

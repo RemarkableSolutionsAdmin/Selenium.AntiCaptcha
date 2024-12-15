@@ -69,9 +69,4 @@ public abstract class WebDriverBasedTestBase : IClassFixture<WebDriverFixture>, 
         }
         await WaitForLoad();
     }
-
-    protected static void Fail(string message)
-    {
-        throw new XunitException(message);
-    }
 }

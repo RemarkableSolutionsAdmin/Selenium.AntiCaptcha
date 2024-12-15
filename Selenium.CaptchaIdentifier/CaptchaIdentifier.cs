@@ -13,11 +13,11 @@ public static class CaptchaIdentifier
     {
         new GeeTestIdentifier(),
         new RecaptchaIdentifier(),
-        new HCaptchaIdentifier(),
         new ImageToTextIdentifier(),
         new AntiGateIdentifier(),
         new FunCaptchaIdentifier(),
-        new TurnstileCaptchaIdentifier()
+        new TurnstileCaptchaIdentifier(),
+        new ImageToCoordinatesIdentifier()
     };
 
     public static async Task<List<CaptchaType>> IdentifyCaptchaAsync(IWebDriver driver, IWebElement? imageElement, ProxyConfig? proxyConfig, CancellationToken cancellationToken)

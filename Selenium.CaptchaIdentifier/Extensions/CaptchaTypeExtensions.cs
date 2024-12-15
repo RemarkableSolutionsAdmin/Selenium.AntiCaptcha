@@ -25,8 +25,7 @@ public static class CaptchaTypeExtensions
             CaptchaType.ReCaptchaV2Enterprise => CaptchaType.ReCaptchaV2Enterprise,
             CaptchaType.ReCaptchaV3 => CaptchaType.ReCaptchaV3,
             CaptchaType.ReCaptchaV2 => CaptchaType.ReCaptchaV2,
-            CaptchaType.HCaptcha => CaptchaType.HCaptcha,
-            CaptchaType.HCaptchaProxyless => CaptchaType.HCaptcha,
+            CaptchaType.ImageToCoordinates => CaptchaType.ImageToCoordinates,
             CaptchaType.FunCaptcha => CaptchaType.FunCaptcha,
             CaptchaType.FunCaptchaProxyless => CaptchaType.FunCaptcha,
             CaptchaType.ImageToText => CaptchaType.ImageToText,
@@ -62,8 +61,6 @@ public static class CaptchaTypeExtensions
             CaptchaType.ReCaptchaV2EnterpriseProxyless => typeof(RecaptchaSolution),
             CaptchaType.ReCaptchaV3 => typeof(RecaptchaSolution),
             CaptchaType.ReCaptchaV3Enterprise => typeof(RecaptchaSolution),
-            CaptchaType.HCaptcha => typeof(HCaptchaSolution),
-            CaptchaType.HCaptchaProxyless => typeof(HCaptchaSolution),
             CaptchaType.FunCaptcha => typeof(FunCaptchaSolution),
             CaptchaType.FunCaptchaProxyless => typeof(FunCaptchaSolution),
             CaptchaType.ImageToText => typeof(ImageToTextSolution),
@@ -74,6 +71,7 @@ public static class CaptchaTypeExtensions
             CaptchaType.AntiGate => typeof(AntiGateSolution),
             CaptchaType.Turnstile => typeof(TurnstileSolution),
             CaptchaType.TurnstileProxyless => typeof(TurnstileSolution),
+            CaptchaType.ImageToCoordinates => typeof(ImageToCoordinatesSolution),
             _ => throw new ArgumentOutOfRangeException(nameof(captchaType), captchaType, null)
         };
     }

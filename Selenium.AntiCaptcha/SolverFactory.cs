@@ -31,8 +31,6 @@ internal static class SolverFactory
             CaptchaType.ReCaptchaV2EnterpriseProxyless => new ReCaptchaV2EnterpriseProxylessSolver(clientKey, webDriver, solverConfig),
             CaptchaType.ReCaptchaV3 => new RecaptchaV3Solver(clientKey, webDriver, solverConfig),
             CaptchaType.ReCaptchaV3Enterprise => new ReCaptchaV3EnterpriseSolver(clientKey, webDriver, solverConfig),
-            CaptchaType.HCaptcha => new HCaptchaSolver(clientKey, webDriver, solverConfig),
-            CaptchaType.HCaptchaProxyless => new HCaptchaProxylessSolver(clientKey, webDriver, solverConfig),
             CaptchaType.FunCaptcha => new FunCaptchaSolver(clientKey, webDriver, solverConfig),
             CaptchaType.FunCaptchaProxyless => new FunCaptchaProxylessSolver(clientKey, webDriver, solverConfig),
             CaptchaType.ImageToText => new ImageToTextSolver(clientKey, webDriver, solverConfig),

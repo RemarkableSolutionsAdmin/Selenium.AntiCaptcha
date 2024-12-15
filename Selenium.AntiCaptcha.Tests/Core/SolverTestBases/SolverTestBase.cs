@@ -119,7 +119,7 @@ public abstract class SolverTestBase<TSolution> : WebDriverBasedTestBase
 
         if (testUri == null)
         {
-            Fail("Tested Uri not found in the Testable Uris.");
+            Assert.Fail("Tested Uri not found in the Testable Uris.");
         }
 
         var captchaUri = (CaptchaUri)testUri!;
@@ -127,7 +127,7 @@ public abstract class SolverTestBase<TSolution> : WebDriverBasedTestBase
         
         if (expectedType != CaptchaType)
         {
-            Fail("Tested captcha uri expected captcha type do not match expected tested captcha type.");
+            Assert.Fail("Tested captcha uri expected captcha type do not match expected tested captcha type.");
         }
     }
     protected static void AssertSolveCaptchaResult<TSolution>(TaskResultResponse<TSolution>? result, CaptchaType expectedCaptchaType)
@@ -136,7 +136,7 @@ public abstract class SolverTestBase<TSolution> : WebDriverBasedTestBase
         Assert.NotNull(result);
         if (!string.IsNullOrEmpty(result!.ErrorDescription))
         {
-            Fail(BuildErrorMessage(result));
+            Assert.Fail(BuildErrorMessage(result));
         }
         
         Assert.True(result.Solution.IsValid());
@@ -182,8 +182,6 @@ public abstract class SolverTestBase<TSolution> : WebDriverBasedTestBase
     {
         if (result is TaskResultResponse<RecaptchaSolution>)
             AssertSolveCaptchaResult((TaskResultResponse<RecaptchaSolution>?)result, expectedCaptchaType);
-        if (result is TaskResultResponse<HCaptchaSolution>)
-            AssertSolveCaptchaResult((TaskResultResponse<HCaptchaSolution>?)result, expectedCaptchaType);
         if (result is TaskResultResponse<FunCaptchaSolution>)
             AssertSolveCaptchaResult((TaskResultResponse<FunCaptchaSolution>?)result, expectedCaptchaType);
         if (result is TaskResultResponse<GeeTestV3Solution>)
@@ -196,5 +194,7 @@ public abstract class SolverTestBase<TSolution> : WebDriverBasedTestBase
             AssertSolveCaptchaResult((TaskResultResponse<ImageToTextSolution>?)result, expectedCaptchaType);
         if (result is TaskResultResponse<TurnstileSolution>)
             AssertSolveCaptchaResult((TaskResultResponse<TurnstileSolution>?)result, expectedCaptchaType);
+        if (result is TaskResultResponse<ImageToCoordinatesSolution>)
+            AssertSolveCaptchaResult((TaskResultResponse<ImageToCoordinatesSolution>?)result, expectedCaptchaType);
     }
 }

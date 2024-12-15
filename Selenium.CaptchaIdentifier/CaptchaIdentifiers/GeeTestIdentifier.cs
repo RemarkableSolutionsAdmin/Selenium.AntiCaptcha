@@ -18,18 +18,35 @@ public class GeeTestIdentifier : ProxyCaptchaIdentifier
     {
         try
         {
-            var geeScriptElement = GetGeeScriptElement(driver);
-            var scriptSrcText = geeScriptElement?.GetAttribute("src");
+            var pageSource = driver.GetAllPageSource();
+            if (pageSource.Contains("https://static.geetest.com/v4/gt.js"))
+            {
+                return await base.SpecifyCaptcha(CaptchaType.GeeTestV4Proxyless, driver, imageElement, proxyConfig, cancellationToken);
+            }
+            if (pageSource.Contains("https://static.geetest.com/static/gt.js"))
+            {
+                return await base.SpecifyCaptcha(CaptchaType.GeeTestV3Proxyless, driver, imageElement, proxyConfig, cancellationToken);
+            }
+            
+            // Check for iframes (commonly used in v3)
+            var iframes = driver.FindElements(By.TagName("iframe"));
+            foreach (var iframe in iframes)
+            {
+                var src = iframe.GetAttribute("src");
+                if (src != null && src.Contains("geetest"))
+                {
+                    return await base.SpecifyCaptcha(CaptchaType.GeeTestV3Proxyless, driver, imageElement, proxyConfig, cancellationToken);
+                }
+            }
 
-            var areChallengeAndGtInScriptSource = scriptSrcText
-                ?.DoesContainRegex("challenge=", "gt=");
-
-            if (!areChallengeAndGtInScriptSource.GetValueOrDefault())
-                return null;
-
-            var hasV4OnlyAttribute = scriptSrcText?.DoesContainRegex("captcha_id=\\w{32}");
-
-            return await base.SpecifyCaptcha(hasV4OnlyAttribute.GetValueOrDefault() ? CaptchaType.GeeTestV4Proxyless : CaptchaType.GeeTestV3Proxyless, driver, imageElement, proxyConfig, cancellationToken);
+            // Check for v4 container elements
+            var v4Elements = driver.FindElements(By.CssSelector("div.geetest-captcha-container"));
+            if (v4Elements.Count > 0)
+            {
+                return await base.SpecifyCaptcha(CaptchaType.GeeTestV4Proxyless, driver, imageElement, proxyConfig, cancellationToken);
+            }
+            
+            return null;
         }
         catch
         {
