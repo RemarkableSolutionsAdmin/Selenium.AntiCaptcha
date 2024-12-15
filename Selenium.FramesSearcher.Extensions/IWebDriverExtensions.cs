@@ -114,6 +114,7 @@ public static class IWebDriverExtensions
     {
         if (!xPathPatterns.Any())
             return new List<string>();
+        
         var currentFrame = driver.GetCurrentFrame();
         var result = new List<string>();
         try
